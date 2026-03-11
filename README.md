@@ -32,3 +32,4 @@ Foundation-first repository for a multi-tenant sailing club platform.
 ## Docs
 
 Start with `docs/README.md`.
+For day-to-day work, use `docs/developer-guide.md`.

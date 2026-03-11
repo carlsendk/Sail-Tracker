@@ -24,3 +24,7 @@ These documents define the baseline for:
 - the default platform stack
 
 Feature specifications and product slices can be added later under `docs/product/`.
+
+## Working Guide
+
+For practical repository workflow, setup, validation, and commit discipline, see `docs/developer-guide.md`.
