@@ -1,0 +1,4 @@
+interface:
+  display_name: "DDD Multi-Tenant Modeling"
+  short_description: "Model bounded contexts and tenant rules"
+  default_prompt: "Use $ddd-multi-tenant-modeling to model this multi-tenant domain before coding."

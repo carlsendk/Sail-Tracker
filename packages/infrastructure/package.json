@@ -1,0 +1,6 @@
+{
+  "name": "@sail-tracker/infrastructure",
+  "private": true,
+  "type": "module"
+}
+

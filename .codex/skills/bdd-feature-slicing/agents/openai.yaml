@@ -1,0 +1,4 @@
+interface:
+  display_name: "BDD Feature Slicing"
+  short_description: "Turn requests into testable feature slices"
+  default_prompt: "Use $bdd-feature-slicing to turn this product idea into Given/When/Then slices."
