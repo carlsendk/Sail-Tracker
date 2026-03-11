@@ -1,1 +1,32 @@
-# Sail-Tracker
+# Sail Tracker
+
+Foundation-first repository for a multi-tenant sailing club platform.
+
+## Current Baseline
+
+- `Next.js` with `React` and `TypeScript`
+- `pnpm` workspace
+- hello-world app under `apps/web`
+- package placeholders for domain, application, infrastructure, UI, and testkit
+- architecture docs under `docs/`
+- GitHub Actions CI
+- `Dockerfile` for runtime parity
+
+## Local Development
+
+1. Use Node.js `22` from `.nvmrc`.
+2. Install dependencies with `pnpm install`.
+3. Start the app with `pnpm dev`.
+4. Open `http://localhost:3000`.
+
+## Scripts
+
+- `pnpm dev`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
+- `pnpm build`
+
+## Docs
+
+Start with `docs/README.md`.

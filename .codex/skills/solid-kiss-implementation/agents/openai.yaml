@@ -1,0 +1,4 @@
+interface:
+  display_name: "SOLID KISS Implementation"
+  short_description: "Keep code simple, cohesive, and testable"
+  default_prompt: "Use $solid-kiss-implementation to implement this slice with SOLID and KISS constraints."

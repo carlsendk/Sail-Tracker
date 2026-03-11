@@ -1,0 +1,4 @@
+interface:
+  display_name: "React TS Supabase Platform"
+  short_description: "Default stack and account setup guidance"
+  default_prompt: "Use $react-typescript-supabase-platform to set up this app with React, TypeScript, Vercel, and Supabase."
