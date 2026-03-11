@@ -7,10 +7,11 @@ This repository starts with architecture and workflow decisions before feature c
 1. `docs/architecture/nfrs.md`
 2. `docs/architecture/tenant-model.md`
 3. `docs/architecture/permissions-model.md`
-4. `docs/architecture/i18n.md`
-5. `docs/architecture/environment-and-cloud.md`
-6. `docs/architecture/repo-workflow.md`
-7. `docs/decisions/001-platform-stack.md`
+4. `docs/architecture/tenant-bootstrap.md`
+5. `docs/architecture/i18n.md`
+6. `docs/architecture/environment-and-cloud.md`
+7. `docs/architecture/repo-workflow.md`
+8. `docs/decisions/001-platform-stack.md`
 
 ## Purpose
 

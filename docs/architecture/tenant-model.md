@@ -84,6 +84,8 @@ Seed data should include:
 
 Seed scripts and data structures should keep tenant data separate even in development.
 
+See `docs/architecture/tenant-bootstrap.md` for the concrete bootstrap baseline.
+
 ## Administrative Questions To Resolve Later
 
 - Whether tenant creation is self-serve or platform-admin approved.

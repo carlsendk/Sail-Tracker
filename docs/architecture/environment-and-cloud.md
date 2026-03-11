@@ -74,6 +74,8 @@ Initial tenant seed assumptions:
 
 These are placeholders and can be renamed once the first real club identity is finalized.
 
+See `docs/architecture/tenant-bootstrap.md` for the initial bootstrap sequence and ownership baseline.
+
 ## Language Baseline
 
 Initial supported locales:
