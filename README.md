@@ -15,9 +15,10 @@ Foundation-first repository for a multi-tenant sailing club platform.
 ## Local Development
 
 1. Use Node.js `22` from `.nvmrc`.
-2. Install dependencies with `pnpm install`.
-3. Start the app with `pnpm dev`.
-4. Open `http://localhost:3000`.
+2. Run `corepack enable` if `pnpm` is not already available on your machine.
+3. Install dependencies with `pnpm install`.
+4. Start the app with `pnpm dev`.
+5. Open `http://localhost:3000`.
 
 ## Scripts
 
