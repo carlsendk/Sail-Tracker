@@ -55,11 +55,14 @@ The local workflow should support:
 - installing dependencies
 - starting the web app
 - running lint and tests
+- loading documented environment variables
 - seeding local baseline tenant data later
 
 The first milestone is a working hello-world app with a documented setup path.
 
 Docker is a secondary workflow for parity and future deployment confidence, not the default inner loop.
+
+See `docs/architecture/environment-and-cloud.md` for the initial environment, Vercel, and Supabase conventions.
 
 ## Git Workflow
 
@@ -96,6 +99,7 @@ The first CI iteration can be minimal, but it should prove the end-to-end reposi
 4. Add initial GitHub Actions for build validation.
 5. Add preview deployment integration.
 6. Add local seed strategy for real and demo tenants.
+7. Add documented environment and cloud naming conventions.
 
 ## Non-Goals For The First Scaffold
 
