@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { lookupTenantByHostname } from "./supabase-admin";
+import { getServerEnv } from "./server-env";
 
 type TenantStatus = "active" | "suspended" | "archived";
 
@@ -21,14 +22,14 @@ function normalizeHostname(host: string): string {
 
 function getLocalFallbackSlug(hostname: string): string | null {
   const localhostFallbackEnabled =
-    (process.env.NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK ?? "true") === "true";
+    (getServerEnv("NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK") ?? "true") === "true";
 
   if (!localhostFallbackEnabled) {
     return null;
   }
 
   if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return process.env.NEXT_PUBLIC_REAL_TENANT_SLUG ?? "club";
+    return getServerEnv("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
   }
 
   const localhostMatch = hostname.match(/^([a-z0-9-]+)\.localhost$/);
@@ -40,9 +41,9 @@ function getLocalFallbackSlug(hostname: string): string | null {
 }
 
 function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fallback"): TenantContext["tenant"] | null {
-  const realSlug = process.env.NEXT_PUBLIC_REAL_TENANT_SLUG ?? "club";
-  const demoSlug = process.env.NEXT_PUBLIC_DEMO_TENANT_SLUG ?? "demo";
-  const defaultLocale = process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? "en";
+  const realSlug = getServerEnv("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
+  const demoSlug = getServerEnv("NEXT_PUBLIC_DEMO_TENANT_SLUG") ?? "demo";
+  const defaultLocale = getServerEnv("NEXT_PUBLIC_DEFAULT_LOCALE") ?? "en";
 
   if (slug === realSlug) {
     return {
