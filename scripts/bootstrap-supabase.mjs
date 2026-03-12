@@ -36,7 +36,7 @@ loadEnvFile(".env");
 
 const requiredEnv = [
   "NEXT_PUBLIC_SUPABASE_URL",
-  "SUPABASE_SERVICE_ROLE_KEY",
+  "SUPABASE_SECRET_KEY",
   "PLATFORM_ADMIN_EMAIL",
 ];
 
@@ -48,7 +48,7 @@ for (const key of requiredEnv) {
 }
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const secretKey = process.env.SUPABASE_SECRET_KEY;
 const platformAdminEmail = process.env.PLATFORM_ADMIN_EMAIL;
 const bootstrapDisplayName = process.env.SUPABASE_BOOTSTRAP_DISPLAY_NAME || "Platform Admin";
 
@@ -58,6 +58,17 @@ const tenantSlugs = [
 ];
 
 const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost";
+
+function isPrivilegedSupabaseKey(value) {
+  return Boolean(value && value.startsWith("sb_secret_"));
+}
+
+if (!isPrivilegedSupabaseKey(secretKey)) {
+  console.error(
+    "SUPABASE_SECRET_KEY must be a Supabase secret key in the form sb_secret_....",
+  );
+  process.exit(1);
+}
 
 function createUrl(pathname, searchParams = {}) {
   const url = new URL(pathname, supabaseUrl);
@@ -71,8 +82,8 @@ async function supabaseFetch(pathname, { method = "GET", searchParams, body, hea
   const response = await fetch(createUrl(pathname, searchParams), {
     method,
     headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
+      apikey: secretKey,
+      Authorization: `Bearer ${secretKey}`,
       "Content-Type": "application/json",
       Prefer: "return=representation",
       ...(headers || {}),
@@ -85,7 +96,12 @@ async function supabaseFetch(pathname, { method = "GET", searchParams, body, hea
     throw new Error(`${method} ${pathname} failed: ${response.status} ${text}`);
   }
 
-  return response.status === 204 ? null : response.json();
+  if (response.status === 204) {
+    return null;
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 }
 
 async function fetchSingle(pathname, searchParams) {

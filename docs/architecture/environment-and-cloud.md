@@ -30,6 +30,11 @@ They cover:
 - Supabase connection values
 - initial platform admin bootstrap
 
+Supabase key split:
+
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` stores the browser-safe Publishable key
+- `SUPABASE_SECRET_KEY` stores a backend-only Supabase Secret key
+
 See `docs/architecture/supabase-bootstrap.md` for how these values map to the first Supabase setup.
 
 ## Local Development Baseline

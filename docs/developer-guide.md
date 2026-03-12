@@ -161,6 +161,8 @@ Use them when shaping or implementing work so the repo stays internally consiste
 - do not commit secrets
 - local Supabase is not required yet
 - the first hosted bootstrap path uses `pnpm bootstrap:supabase`
+- use `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the browser-safe Publishable key
+- use `SUPABASE_SECRET_KEY` only for a backend-only Supabase Secret key
 
 ## Docker
 

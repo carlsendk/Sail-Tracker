@@ -17,15 +17,19 @@ function getRequiredEnv(name: string): string | null {
   return value && value.length > 0 ? value : null;
 }
 
+function isPrivilegedSupabaseKey(value: string): boolean {
+  return value.startsWith("sb_secret_");
+}
+
 function getSupabaseAdminConfig() {
   const url = getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL");
-  const serviceRoleKey = getRequiredEnv("SUPABASE_SERVICE_ROLE_KEY");
+  const secretKey = getRequiredEnv("SUPABASE_SECRET_KEY");
 
-  if (!url || !serviceRoleKey) {
+  if (!url || !secretKey || !isPrivilegedSupabaseKey(secretKey)) {
     return null;
   }
 
-  return { url, serviceRoleKey };
+  return { url, secretKey };
 }
 
 async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
@@ -38,8 +42,8 @@ async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
   return fetch(url, {
     ...init,
     headers: {
-      apikey: config.serviceRoleKey,
-      Authorization: `Bearer ${config.serviceRoleKey}`,
+      apikey: config.secretKey,
+      Authorization: `Bearer ${config.secretKey}`,
       ...(init?.headers ?? {}),
     },
     cache: "no-store",
