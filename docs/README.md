@@ -10,8 +10,9 @@ This repository starts with architecture and workflow decisions before feature c
 4. `docs/architecture/tenant-bootstrap.md`
 5. `docs/architecture/i18n.md`
 6. `docs/architecture/environment-and-cloud.md`
-7. `docs/architecture/repo-workflow.md`
-8. `docs/decisions/001-platform-stack.md`
+7. `docs/architecture/supabase-bootstrap.md`
+8. `docs/architecture/repo-workflow.md`
+9. `docs/decisions/001-platform-stack.md`
 
 ## Purpose
 

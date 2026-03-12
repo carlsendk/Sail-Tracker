@@ -30,6 +30,8 @@ They cover:
 - Supabase connection values
 - initial platform admin bootstrap
 
+See `docs/architecture/supabase-bootstrap.md` for how these values map to the first Supabase setup.
+
 ## Local Development Baseline
 
 For now:
