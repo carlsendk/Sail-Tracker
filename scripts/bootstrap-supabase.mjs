@@ -1,5 +1,39 @@
 #!/usr/bin/env node
 
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+
+function loadEnvFile(filename) {
+  const filepath = resolve(process.cwd(), filename);
+  if (!existsSync(filepath)) {
+    return;
+  }
+
+  const contents = readFileSync(filepath, "utf8");
+  for (const line of contents.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf("=");
+    if (separatorIndex === -1) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const rawValue = trimmed.slice(separatorIndex + 1).trim();
+    const value = rawValue.replace(/^['"]|['"]$/g, "");
+
+    if (!process.env[key]) {
+      process.env[key] = value;
+    }
+  }
+}
+
+loadEnvFile(".env.local");
+loadEnvFile(".env");
+
 const requiredEnv = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "SUPABASE_SERVICE_ROLE_KEY",
