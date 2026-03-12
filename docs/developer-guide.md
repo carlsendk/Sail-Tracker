@@ -89,6 +89,15 @@ If `pnpm` is not available globally, use:
 
 Commit often in logical units.
 
+Use Conventional Commits for changes that should participate in automated releases.
+
+Examples:
+
+- `feat: add tenant-aware trip draft form`
+- `fix: resolve Supabase tenant fallback on localhost`
+- `docs: clarify bootstrap flow`
+- `chore: update CI workflow`
+
 Good commit boundaries:
 
 - one architecture or docs decision
@@ -103,6 +112,25 @@ Avoid mixing these in one commit:
 - architecture decisions
 - feature implementation
 - broad formatting-only changes
+
+## Release Flow
+
+Releases use Semantic Versioning and are managed through GitHub with `release-please`.
+
+Version impact by commit type:
+
+- `feat:` -> minor release
+- `fix:` -> patch release
+- `feat!:` or `fix!:` or `BREAKING CHANGE:` -> major release
+
+Current release files:
+
+- `.release-please-config.json`
+- `release-please-manifest.json`
+- `.github/workflows/release-please.yml`
+- `CHANGELOG.md`
+
+Release notes and changelog updates are generated from merged commit history, so commit subjects matter.
 
 ## How To Add New Work
 

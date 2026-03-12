@@ -33,3 +33,8 @@ Foundation-first repository for a multi-tenant sailing club platform.
 
 Start with `docs/README.md`.
 For day-to-day work, use `docs/developer-guide.md`.
+
+## Releases
+
+This repository uses Semantic Versioning and GitHub-based release automation.
+See `docs/developer-guide.md` for commit and release conventions.
