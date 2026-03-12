@@ -34,7 +34,7 @@ export function parseEnvContents(contents: string): Map<string, string> {
 
 export function buildEnvLookup(
   fileValues: Iterable<Map<string, string>>,
-  runtimeEnv: NodeJS.ProcessEnv,
+  runtimeEnv: Record<string, string | undefined>,
 ) {
   return (name: string): string | null => {
     const runtimeValue = runtimeEnv[name];
