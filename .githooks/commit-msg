@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+commit_message_file="${1:?commit message file is required}"
+first_line="$(head -n 1 "$commit_message_file")"
+
+case "$first_line" in
+  Merge\ *|Revert\ *|fixup!\ *|squash!\ *)
+    exit 0
+    ;;
+esac
+
+pattern='^(feat|fix|docs|chore|refactor|test|ci|build|perf|style|revert)(\([a-z0-9._/-]+\))?(!)?: .+'
+
+if printf '%s\n' "$first_line" | grep -Eq "$pattern"; then
+  exit 0
+fi
+
+echo "Commit message must use Conventional Commits." >&2
+echo "Examples: feat: add trip draft form, fix(auth): resolve tenant lookup" >&2
+exit 1

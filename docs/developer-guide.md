@@ -118,15 +118,16 @@ Avoid mixing these in one commit:
 
 ## Git Hooks
 
-This repository uses a committed Git hook under `.githooks/pre-commit`.
+This repository uses committed Git hooks under `.githooks/`.
 
 Enable it once per clone:
 
 - `pnpm hooks:install`
 
-The pre-commit hook runs:
+The hooks enforce:
 
 - `pnpm validate`
+- Conventional Commit subjects such as `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`
 
 That keeps local commits aligned with the current CI baseline.
 

@@ -22,6 +22,10 @@ Foundation-first repository for a multi-tenant sailing club platform.
 6. Start the app with `pnpm dev`.
 7. Open `http://127.0.0.1:3002`.
 
+The installed hooks enforce:
+- `pnpm validate` before commit
+- Conventional Commit subjects in `git commit`
+
 ## Scripts
 
 - `pnpm dev`
