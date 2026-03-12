@@ -56,7 +56,7 @@ Current intent:
 4. Copy `.env.example` to `.env.local`.
 5. Fill in the environment values you currently need.
 6. Run `pnpm dev`.
-7. Open `http://localhost:3000`.
+7. Open `http://127.0.0.1:3002`.
 
 ## Validation Commands
 

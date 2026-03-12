@@ -19,7 +19,7 @@ Foundation-first repository for a multi-tenant sailing club platform.
 3. Install dependencies with `pnpm install`.
 4. Copy `.env.example` to `.env.local` and fill in the current values you need.
 5. Start the app with `pnpm dev`.
-6. Open `http://localhost:3000`.
+6. Open `http://127.0.0.1:3002`.
 
 ## Scripts
 
