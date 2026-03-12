@@ -55,6 +55,36 @@ body {
   padding: 2rem 2.25rem;
 }
 
+.details {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  margin-top: 1.25rem;
+}
+
+.details div {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.details dt {
+  margin: 0;
+  color: var(--accent-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.details dd {
+  margin: 0.5rem 0 0;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
 .eyebrow {
   margin: 0 0 1rem;
   text-transform: uppercase;
@@ -118,4 +148,3 @@ li + li {
     padding: 1.5rem;
   }
 }
-
