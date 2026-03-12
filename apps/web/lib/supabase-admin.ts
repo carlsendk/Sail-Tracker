@@ -1,3 +1,5 @@
+import { getServerEnv } from "./server-env";
+
 type TenantStatus = "active" | "suspended" | "archived";
 
 export type SupabaseTenant = {
@@ -12,24 +14,19 @@ type SupabaseTenantDomainRow = {
   tenants: SupabaseTenant | SupabaseTenant[] | null;
 };
 
-function getRequiredEnv(name: string): string | null {
-  const value = process.env[name];
-  return value && value.length > 0 ? value : null;
-}
+export function resolveSupabaseAdminConfig(readEnv: (name: string) => string | null) {
+  const url = readEnv("NEXT_PUBLIC_SUPABASE_URL");
+  const adminKey = readEnv("SUPABASE_SECRET_KEY") ?? readEnv("SUPABASE_SERVICE_ROLE_KEY");
 
-function isPrivilegedSupabaseKey(value: string): boolean {
-  return value.startsWith("sb_secret_");
-}
-
-function getSupabaseAdminConfig() {
-  const url = getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL");
-  const secretKey = getRequiredEnv("SUPABASE_SECRET_KEY");
-
-  if (!url || !secretKey || !isPrivilegedSupabaseKey(secretKey)) {
+  if (!url || !adminKey) {
     return null;
   }
 
-  return { url, secretKey };
+  return { url, adminKey };
+}
+
+function getSupabaseAdminConfig() {
+  return resolveSupabaseAdminConfig(getServerEnv);
 }
 
 async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
@@ -42,8 +39,8 @@ async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
   return fetch(url, {
     ...init,
     headers: {
-      apikey: config.secretKey,
-      Authorization: `Bearer ${config.secretKey}`,
+      apikey: config.adminKey,
+      Authorization: `Bearer ${config.adminKey}`,
       ...(init?.headers ?? {}),
     },
     cache: "no-store",
@@ -69,7 +66,7 @@ export async function lookupTenantByHostname(hostname: string): Promise<Supabase
 }
 
 export async function getBootstrapStatus() {
-  const platformAdminEmail = getRequiredEnv("PLATFORM_ADMIN_EMAIL");
+  const platformAdminEmail = getServerEnv("PLATFORM_ADMIN_EMAIL");
   const config = getSupabaseAdminConfig();
 
   if (!config || !platformAdminEmail) {
