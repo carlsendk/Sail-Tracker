@@ -13,7 +13,9 @@
     "lint": "pnpm --filter web lint",
     "typecheck": "pnpm --filter web typecheck",
     "test": "pnpm --filter web test",
-    "bootstrap:supabase": "node scripts/bootstrap-supabase.mjs"
+    "validate": "pnpm lint && pnpm typecheck && pnpm test",
+    "bootstrap:supabase": "node scripts/bootstrap-supabase.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs"
   },
   "devDependencies": {
     "supabase": "^2.78.1"

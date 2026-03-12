@@ -62,6 +62,7 @@ Current intent:
 
 Run these before pushing meaningful changes:
 
+- `pnpm validate`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
@@ -70,6 +71,7 @@ Run these before pushing meaningful changes:
 
 If `pnpm` is not available globally, use:
 
+- `corepack pnpm validate`
 - `corepack pnpm lint`
 - `corepack pnpm typecheck`
 - `corepack pnpm test`
@@ -81,9 +83,10 @@ If `pnpm` is not available globally, use:
 2. Create a small feature branch.
 3. Read the relevant docs before changing code.
 4. Make one logical change at a time.
-5. Validate locally.
-6. Commit in small units.
-7. Open a pull request.
+5. Run `pnpm hooks:install` once per clone to enable repository Git hooks.
+6. Validate locally.
+7. Commit in small units.
+8. Open a pull request.
 
 ## Commit Discipline
 
@@ -112,6 +115,20 @@ Avoid mixing these in one commit:
 - architecture decisions
 - feature implementation
 - broad formatting-only changes
+
+## Git Hooks
+
+This repository uses a committed Git hook under `.githooks/pre-commit`.
+
+Enable it once per clone:
+
+- `pnpm hooks:install`
+
+The pre-commit hook runs:
+
+- `pnpm validate`
+
+That keeps local commits aligned with the current CI baseline.
 
 ## Release Flow
 

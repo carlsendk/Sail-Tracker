@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm validate
+  exit 0
+fi
+
+if command -v corepack >/dev/null 2>&1; then
+  COREPACK_HOME="${COREPACK_HOME:-/tmp/corepack}" corepack pnpm validate
+  exit 0
+fi
+
+echo "pnpm or corepack is required to run pre-commit validation." >&2
+exit 1

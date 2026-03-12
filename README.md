@@ -18,12 +18,14 @@ Foundation-first repository for a multi-tenant sailing club platform.
 2. Run `corepack enable` if `pnpm` is not already available on your machine.
 3. Install dependencies with `pnpm install`.
 4. Copy `.env.example` to `.env.local` and fill in the current values you need.
-5. Start the app with `pnpm dev`.
-6. Open `http://127.0.0.1:3002`.
+5. Run `pnpm hooks:install` to enable repository Git hooks.
+6. Start the app with `pnpm dev`.
+7. Open `http://127.0.0.1:3002`.
 
 ## Scripts
 
 - `pnpm dev`
+- `pnpm validate`
 - `pnpm lint`
 - `pnpm typecheck`
 - `pnpm test`
