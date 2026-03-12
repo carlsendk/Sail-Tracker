@@ -38,6 +38,7 @@ Start with these tables:
 6. `permissions`
 7. `role_permissions`
 8. `membership_roles`
+9. `profile_roles`
 
 This is slightly more than the bare minimum, but it avoids repainting the foundation once permissions are wired in.
 
@@ -182,7 +183,17 @@ Initial fields:
 Notes:
 
 - for platform roles, either allow a platform-scoped membership record or introduce a later dedicated assignment table
-- for the minimal setup, a dedicated platform assignment table is optional if we seed the platform admin directly in a simple way
+
+### `profile_roles`
+
+Purpose:
+
+- assign platform-scoped role bundles directly to a profile
+
+Initial fields:
+
+- `profile_id`
+- `role_id`
 
 ## Minimal Seed Data
 
@@ -254,6 +265,10 @@ High-level flow:
 5. assign `tenant_owner` for the baseline tenants
 
 This keeps the environment-specific user creation outside static SQL seed files.
+
+The current bootstrap script is:
+
+- `pnpm bootstrap:supabase`
 
 ## Tenant Resolution
 

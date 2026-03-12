@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { lookupTenantByHostname } from "./supabase-admin";
 
 type TenantStatus = "active" | "suspended" | "archived";
 
@@ -13,23 +14,6 @@ export type TenantContext = {
     matchedBy: "domain" | "localhost-fallback";
   };
 };
-
-type SupabaseTenantRow = {
-  slug: string;
-  name: string;
-  status: TenantStatus;
-  default_locale: string;
-};
-
-type SupabaseDomainLookupRow = {
-  hostname: string;
-  tenants: SupabaseTenantRow | SupabaseTenantRow[] | null;
-};
-
-function getRequiredEnv(name: string): string | null {
-  const value = process.env[name];
-  return value && value.length > 0 ? value : null;
-}
 
 function normalizeHostname(host: string): string {
   return host.split(":")[0].trim().toLowerCase();
@@ -84,34 +68,7 @@ function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fal
 }
 
 async function lookupSupabaseTenantByHostname(hostname: string): Promise<TenantContext["tenant"] | null> {
-  const supabaseUrl = getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL");
-  const serviceRoleKey = getRequiredEnv("SUPABASE_SERVICE_ROLE_KEY");
-
-  if (!supabaseUrl || !serviceRoleKey) {
-    return null;
-  }
-
-  const url = new URL(`${supabaseUrl}/rest/v1/tenant_domains`);
-  url.searchParams.set("select", "hostname,tenants!inner(slug,name,status,default_locale)");
-  url.searchParams.set("hostname", `eq.${hostname}`);
-  url.searchParams.set("limit", "1");
-
-  const response = await fetch(url, {
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    return null;
-  }
-
-  const rows = (await response.json()) as SupabaseDomainLookupRow[];
-  const row = rows[0];
-  const tenantData = Array.isArray(row?.tenants) ? row.tenants[0] : row?.tenants;
-
+  const tenantData = await lookupTenantByHostname(hostname);
   if (!tenantData) {
     return null;
   }

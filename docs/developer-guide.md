@@ -66,6 +66,7 @@ Run these before pushing meaningful changes:
 - `pnpm typecheck`
 - `pnpm test`
 - `pnpm build`
+- `pnpm bootstrap:supabase` when the first Supabase project is configured
 
 If `pnpm` is not available globally, use:
 
@@ -159,6 +160,7 @@ Use them when shaping or implementing work so the repo stays internally consiste
 - `.env.local` is for local-only values
 - do not commit secrets
 - local Supabase is not required yet
+- the first hosted bootstrap path uses `pnpm bootstrap:supabase`
 
 ## Docker
 

@@ -70,7 +70,12 @@ create table if not exists public.membership_roles (
   primary key (membership_id, role_id)
 );
 
+create table if not exists public.profile_roles (
+  profile_id uuid not null references public.profiles(id) on delete cascade,
+  role_id uuid not null references public.roles(id) on delete cascade,
+  primary key (profile_id, role_id)
+);
+
 create index if not exists tenant_domains_tenant_id_idx on public.tenant_domains(tenant_id);
 create index if not exists memberships_tenant_id_idx on public.memberships(tenant_id);
 create index if not exists memberships_profile_id_idx on public.memberships(profile_id);
-

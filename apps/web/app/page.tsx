@@ -1,4 +1,5 @@
 import { getTenantContext, getTenantLabel } from "../lib/tenant-context";
+import { getBootstrapStatus } from "../lib/supabase-admin";
 
 const foundations = [
   "Multi-tenant platform with club subdomains",
@@ -9,6 +10,7 @@ const foundations = [
 
 export default async function HomePage() {
   const tenantContext = await getTenantContext();
+  const bootstrapStatus = await getBootstrapStatus();
 
   return (
     <main className="shell">
@@ -47,6 +49,14 @@ export default async function HomePage() {
           <div>
             <dt>Default locale</dt>
             <dd>{tenantContext?.tenant.defaultLocale ?? "Unknown"}</dd>
+          </div>
+          <div>
+            <dt>Bootstrap source</dt>
+            <dd>{bootstrapStatus.source}</dd>
+          </div>
+          <div>
+            <dt>Bootstrap ready</dt>
+            <dd>{bootstrapStatus.platformAdminReady ? "Yes" : "No"}</dd>
           </div>
         </dl>
       </section>
