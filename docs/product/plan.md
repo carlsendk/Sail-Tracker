@@ -51,7 +51,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/reporting-and-exports.md`
 - [x] deepen `modules/weather-in-trip-context.md`
 - [x] deepen `modules/route-planning-and-harbors.md`
-- [ ] deepen `modules/incidents.md`
+- [x] deepen `modules/incidents.md`
 - [ ] deepen `modules/media-gallery.md`
 - [ ] deepen `modules/trip-story.md`
 - [ ] `search-and-operational-views.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `modules/incidents.md`
+- deepen `modules/media-gallery.md`
 
 Why it comes next:
 
-- it is the next strongest safety-relevant trip-enrichment module after weather and route
-- it will force clearer boundaries between incident capture, trip completion, reporting, and follow-up
-- it helps evaluate what operational events must be structured rather than left in notes
+- it is the next remaining trip-enrichment module with clear boundaries to incidents, story, and asset/media ownership
+- it will force clearer decisions about who may upload, view, and reuse trip media
+- it helps evaluate privacy and sharing expectations before story and external reporting are expanded
 
 ## Current State
 
