@@ -49,7 +49,7 @@ Work from top to bottom unless a stronger dependency appears.
 ### Later
 
 - [x] deepen `modules/reporting-and-exports.md`
-- [ ] deepen `modules/weather-in-trip-context.md`
+- [x] deepen `modules/weather-in-trip-context.md`
 - [ ] deepen `modules/route-planning-and-harbors.md`
 - [ ] deepen `modules/incidents.md`
 - [ ] deepen `modules/media-gallery.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `modules/weather-in-trip-context.md`
+- deepen `modules/route-planning-and-harbors.md`
 
 Why it comes next:
 
-- it is the next strongest trip-enrichment module connected to planning and departure
-- it will force clearer boundaries between forecast context, observed trip conditions, and decision support
-- it helps evaluate how much trip detail belongs in the trip domain versus a supporting module
+- it is the next strongest trip-enrichment module after weather and sits directly in planning workflow
+- it will force clearer boundaries between route intent, trip detail, harbor context, and calendar scheduling
+- it helps evaluate what should stay lightweight in the minimum trip flow versus what belongs in richer club workflows
 
 ## Current State
 
