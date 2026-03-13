@@ -62,6 +62,7 @@ Use it to keep the system understandable as:
 
 ### System Guide
 
+- [`import-and-export-strategy.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/import-and-export-strategy.md)
 - [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
 - [`plan.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/plan.md)
 

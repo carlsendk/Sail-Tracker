@@ -58,19 +58,19 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `product-glossary.md`
 - [x] `seeded-catalog-adoption.md`
 - [x] `platform-support-and-impersonation.md`
-- [ ] import and export strategy detail
+- [x] `import-and-export-strategy.md`
 
 ## Current Focus
 
 Next recommended task:
 
-- `import and export strategy detail`
+- deepen `tenant-settings.md`
 
 Why it comes next:
 
-- it is the last broad cross-cutting gap currently listed in the catalog plan
-- it will force clearer boundaries between exports, data portability, reporting, and integrations
-- it helps turn the current product catalog into a more complete operational and platform reference
+- it is still a placeholder and now sits behind many completed detail docs that depend on it
+- it can absorb the product rules we have already established for modules, approvals, catalogs, and workflow configuration
+- it is the highest-value remaining area for turning the catalog from broad structure into a more implementation-ready product reference
 
 ## Current State
 
