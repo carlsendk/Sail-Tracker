@@ -97,6 +97,10 @@ Main concerns:
 - tenant trip workflow configuration
 - tenant reference data such as harbors and equipment
 
+Detailed permission model:
+
+- [`permissions-and-role-bundles.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/permissions-and-role-bundles.md)
+
 ### 3. Memberships And Identity
 
 Scope: who a person is, how they belong to a club, and how they participate operationally.

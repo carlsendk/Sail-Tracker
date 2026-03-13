@@ -131,6 +131,8 @@ This is the layer that answers:
 - what can they do here
 - are they active for current operational use
 
+See also [`permissions-and-role-bundles.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/permissions-and-role-bundles.md).
+
 ### 4. Operational Participation
 
 This is how a person appears in real workflows.

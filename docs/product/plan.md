@@ -40,7 +40,7 @@ Work from top to bottom unless a stronger dependency appears.
 
 ### Next
 
-- [ ] `permissions-and-role-bundles.md`
+- [x] `permissions-and-role-bundles.md`
 - [ ] `vessel-classes-and-restrictions.md`
 - [ ] `vessel-readiness-and-required-equipment.md`
 - [ ] `invitations-and-onboarding.md`
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `permissions-and-role-bundles.md`
+- `vessel-classes-and-restrictions.md`
 
 Why it comes next:
 
-- it defines the reusable permission bundles behind platform and tenant administration
-- it connects approval authority, trip operation, and tenant configuration
-- it will make later admin and onboarding docs much more coherent
+- it sharpens how vessels differ by class, limits, and operational meaning
+- it connects directly to qualifications, trip validation, and fleet modeling
+- it will make vessel readiness and approval scope easier to describe next
