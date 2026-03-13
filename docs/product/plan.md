@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `platform-administration.md`
+- review the remaining placeholder and coherence gaps across the catalog
 
 Why it comes next:
 
-- it is still a placeholder and now has enough surrounding detail to define clearly
-- it can absorb the completed support, bootstrap, seeded-catalog, and tenant-boundary rules
-- it is the most important remaining product-admin area for making the platform model coherent
+- the main placeholder admin areas are now covered
+- the next highest-value step is a coherence review against the draft material and the current DDD boundaries
+- that review should identify any missing product areas before implementation planning deepens
 
 ## Current State
 
