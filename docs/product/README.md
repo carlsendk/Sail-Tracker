@@ -33,11 +33,12 @@ Use it to keep the system understandable as:
 
 - [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
 - [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md)
+- [`invitations-and-onboarding.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/invitations-and-onboarding.md)
 - [`local-approvals-and-exceptions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/local-approvals-and-exceptions.md)
 - [`permissions-and-role-bundles.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/permissions-and-role-bundles.md)
+- [`tenant-bootstrap-and-setup.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-bootstrap-and-setup.md)
 - [`vessel-classes-and-restrictions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/vessel-classes-and-restrictions.md)
 - [`vessel-readiness-and-required-equipment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/vessel-readiness-and-required-equipment.md)
-- [`invitations-and-onboarding.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/invitations-and-onboarding.md)
 - [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md)
 - [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md)
 

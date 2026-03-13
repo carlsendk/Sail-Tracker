@@ -44,7 +44,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `vessel-classes-and-restrictions.md`
 - [x] `vessel-readiness-and-required-equipment.md`
 - [x] `invitations-and-onboarding.md`
-- [ ] `tenant-bootstrap-and-setup.md`
+- [x] `tenant-bootstrap-and-setup.md`
 
 ### Later
 
@@ -59,6 +59,18 @@ Work from top to bottom unless a stronger dependency appears.
 - [ ] `seeded-catalog-adoption.md`
 - [ ] `platform-support-and-impersonation.md`
 - [ ] import and export strategy detail
+
+## Current Focus
+
+Next recommended task:
+
+- deepen `modules/reporting-and-exports.md`
+
+Why it comes next:
+
+- it is the broadest remaining cross-domain module
+- it will force decisions about privacy, exports, and operational summaries
+- it helps evaluate whether the current core domains expose the right information
 
 ## Current State
 
