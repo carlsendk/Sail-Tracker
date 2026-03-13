@@ -55,7 +55,10 @@ Each tracked asset item should be able to carry:
 - category
 - tenant
 - identifier or serial number where useful
+- QR label or scannable identity where useful
 - notes
+- photos
+- storage or placement notes
 - service-relevant details where useful
 - current assignment
 - current lifecycle state
@@ -134,6 +137,39 @@ This matters because clubs often want to know both:
 
 The default assignment belongs in the asset domain.
 The temporary operational assignment should be linked to the trip or calendar item.
+
+## Physical Location Detail
+
+Assignment answers where an item belongs at a system level.
+Sometimes clubs also need a lighter physical placement hint.
+
+Examples:
+
+- shelf 3 in the clubhouse shed
+- port locker on vessel
+- engine rack in workshop
+- safety bin near slipway
+
+This should be optional but useful, especially for shared gear and safety items.
+
+## Asset Lookup And Scanning
+
+The system should support quick asset lookup from the physical world.
+
+Useful patterns include:
+
+- scanning a QR code on an item
+- opening the asset record from a printed label
+- showing the asset photo for confirmation
+- showing where the item normally belongs
+
+This helps with:
+
+- inspections
+- lending and return
+- seasonal setup
+- finding missing equipment
+- confirming the right item before maintenance or booking
 
 ## Vessel Assignment Rules
 
@@ -224,3 +260,5 @@ The product should make it easy to answer:
 - what is currently assigned to this vessel
 - what is in the shared pool
 - what is temporarily out on a trip
+- what is this scanned item
+- where should this item be returned

@@ -44,6 +44,8 @@ This area covers:
 - bookable non-vessel assets
 - asset ownership and assignment
 - asset-specific notes, identifiers, and characteristics
+- asset labels, QR codes, and physical lookup
+- asset photos and storage-location context
 
 This area does not own:
 
@@ -90,6 +92,34 @@ Some of these are primarily attached to vessels.
 Some live in a club-wide pool.
 Some are booked in time instead of being physically borrowed.
 
+## Asset Identity And Labels
+
+Tracked assets should have a clear identity in both the system and the physical world.
+
+That means the product should support:
+
+- internal asset ID
+- human-friendly asset code if the club uses one
+- QR code or similar scannable label
+- serial number where relevant
+
+The QR label matters because clubs often need to identify an item quickly:
+
+- on the boat
+- in storage
+- during inspection
+- during lending or return
+
+The system should make it easy to print labels that can be attached to:
+
+- engines
+- radios
+- trailers
+- safety kits
+- shared gear bins
+
+The label should lead to the asset record, not replace it.
+
 ## Relationship To Vessels
 
 Equipment is not the same thing as the vessel itself.
@@ -127,6 +157,43 @@ These assets may need:
 - service or inspection categories on the calendar
 - safety notes
 - replacement history later
+
+## Images And Physical Context
+
+Asset records should support images and simple physical-context information.
+
+Useful examples are:
+
+- what the item looks like
+- where it is normally stored
+- how it is mounted or attached
+- what compartment, locker, or shelf it belongs in
+- what a complete or correct setup looks like
+
+This is especially useful for:
+
+- shared club gear
+- safety equipment
+- engines and electrical components
+- items that are often moved between vessels or storage areas
+
+The goal is not just documentation.
+The goal is to help people find, identify, return, and inspect the right thing.
+
+## Storage And Location Context
+
+An asset may be assigned to a vessel, location, or shared pool, but the product should also support richer location context where useful.
+
+Examples:
+
+- clubhouse storage room
+- container or shed
+- shelf or locker
+- onboard compartment
+- trailer box
+
+This should stay lightweight.
+Clubs should be able to track a practical storage location without turning the product into warehouse software.
 
 ## Availability And Calendar Relationship
 
@@ -178,6 +245,9 @@ The product should make it easy to answer:
 - what is available to borrow or book
 - what shared assets are blocked in time
 - what engines, electrical systems, or safety items need attention
+- what this asset looks like
+- where this asset is normally kept
+- which physical item this QR label refers to
 
 See also [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md).
 See also [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md).
@@ -190,3 +260,4 @@ See also [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tr
 - booking flows
 - asset-specific inspection templates
 - how asset readiness contributes to trip validation
+- label printing and scanning flow
