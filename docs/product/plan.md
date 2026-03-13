@@ -57,20 +57,20 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `search-and-operational-views.md`
 - [x] `product-glossary.md`
 - [x] `seeded-catalog-adoption.md`
-- [ ] `platform-support-and-impersonation.md`
+- [x] `platform-support-and-impersonation.md`
 - [ ] import and export strategy detail
 
 ## Current Focus
 
 Next recommended task:
 
-- `platform-support-and-impersonation.md`
+- `import and export strategy detail`
 
 Why it comes next:
 
-- it is the next platform-level boundary that still needs explicit rules
-- it will force a clear support model across tenants without weakening isolation or auditability
-- it helps connect platform administration, permissions, and real-world support workflows
+- it is the last broad cross-cutting gap currently listed in the catalog plan
+- it will force clearer boundaries between exports, data portability, reporting, and integrations
+- it helps turn the current product catalog into a more complete operational and platform reference
 
 ## Current State
 
