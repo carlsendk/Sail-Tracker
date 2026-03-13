@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `tenant-settings.md`
+- deepen `platform-administration.md`
 
 Why it comes next:
 
-- it is still a placeholder and now sits behind many completed detail docs that depend on it
-- it can absorb the product rules we have already established for modules, approvals, catalogs, and workflow configuration
-- it is the highest-value remaining area for turning the catalog from broad structure into a more implementation-ready product reference
+- it is still a placeholder and now has enough surrounding detail to define clearly
+- it can absorb the completed support, bootstrap, seeded-catalog, and tenant-boundary rules
+- it is the most important remaining product-admin area for making the platform model coherent
 
 ## Current State
 
