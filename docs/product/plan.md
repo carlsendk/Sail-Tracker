@@ -55,7 +55,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/media-gallery.md`
 - [x] deepen `modules/trip-story.md`
 - [x] `search-and-operational-views.md`
-- [ ] `product-glossary.md`
+- [x] `product-glossary.md`
 - [ ] `seeded-catalog-adoption.md`
 - [ ] `platform-support-and-impersonation.md`
 - [ ] import and export strategy detail
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- `product-glossary.md`
+- `seeded-catalog-adoption.md`
 
 Why it comes next:
 
-- it will stabilize the domain language across the product before more cross-cutting docs are added
-- it helps reduce drift between product docs, future BDD slices, and implementation naming
-- it is now the highest-leverage document after most major product areas have been described
+- it is the next platform-level cross-cutting decision that affects qualifications, tenant setup, and seeded public reference data
+- it will force a clear adoption model for shared Denmark-oriented certification catalogs and other seeded platform data
+- it helps connect platform administration to tenant settings without blurring ownership
 
 ## Current State
 
