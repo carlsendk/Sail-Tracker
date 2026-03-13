@@ -42,7 +42,7 @@ Work from top to bottom unless a stronger dependency appears.
 
 - [x] `permissions-and-role-bundles.md`
 - [x] `vessel-classes-and-restrictions.md`
-- [ ] `vessel-readiness-and-required-equipment.md`
+- [x] `vessel-readiness-and-required-equipment.md`
 - [ ] `invitations-and-onboarding.md`
 - [ ] `tenant-bootstrap-and-setup.md`
 
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `vessel-readiness-and-required-equipment.md`
+- `invitations-and-onboarding.md`
 
 Why it comes next:
 
-- it defines what must be true on the vessel side before a trip can leave
-- it connects fleet, assets, tasks, and trip validation in one operational model
-- it will complete the vessel-side safety and readiness story
+- it defines how people actually enter the tenant and become usable in operations
+- it connects identity, permissions, memberships, and tenant bootstrap
+- it will make tenant setup and membership administration much more concrete
