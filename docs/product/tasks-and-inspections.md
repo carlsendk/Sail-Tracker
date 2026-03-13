@@ -54,6 +54,7 @@ This area covers:
 - seasonal work
 - due and overdue handling
 - resource blocking through the calendar
+- reminder-oriented subscriptions and feeds for time-bound work
 
 This area does not own:
 
@@ -120,8 +121,33 @@ That means:
 - due and overdue states are calendar-visible
 - planned work can block availability where relevant
 - users can filter operational work alongside trips
+- time-bound work can be subscribed to from reminder-capable tools where useful
 
 This area exists to make those calendar categories explicit and understandable.
+
+## Reminder And Subscription Model
+
+If work is time-bound, it should live in the calendar backbone.
+
+That does not mean users must only consume it inside Sail Tracker.
+
+The product should support subscriptions such as:
+
+- operational task feeds
+- inspection-only feeds
+- vessel-specific work feeds
+- personal reminder-oriented feeds later
+
+Examples:
+
+- a leader subscribes to overdue and due-soon inspection work
+- a vessel-responsible member subscribes to that vessel's service tasks
+- a club owner subscribes to seasonal preparation work
+
+The important rule is:
+
+- the calendar remains the source of truth
+- reminder tools consume subscribed views of that truth
 
 ## Relationship To Fleet
 
@@ -184,6 +210,7 @@ The important point is consistency:
 - Recurring and seasonal work should not require manual recreation every time.
 - Tasks and inspections may link to trips, vessels, and assets, but should not change ownership of those records.
 - Tenants may configure which operational categories they use, but the calendar should remain the shared owner of time-based state.
+- Reminder-oriented subscriptions should be derived from calendar-backed work, not from a separate reminder-only task model.
 
 ## Product Shape
 

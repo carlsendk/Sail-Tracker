@@ -28,6 +28,10 @@ Use it to keep the system understandable as:
 - [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
 - [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md)
 
+### Core Domain Detail Docs
+
+- [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
+
 ### Platform And Admin Areas
 
 - [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
@@ -36,6 +40,7 @@ Use it to keep the system understandable as:
 ### Supporting Modules
 
 - [`modules/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/README.md)
+- [`modules/reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
 
 ### Operating Modes
 

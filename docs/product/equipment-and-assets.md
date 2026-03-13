@@ -179,6 +179,8 @@ The product should make it easy to answer:
 - what shared assets are blocked in time
 - what engines, electrical systems, or safety items need attention
 
+See also [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md).
+
 ## To Define In More Detail
 
 - asset categories

@@ -79,8 +79,13 @@ Core domains:
 - [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
 - [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md)
 
+Core domain detail docs:
+
+- [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
+
 Supporting modules:
 
+- [`modules/reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
 - [`modules/weather-in-trip-context.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/weather-in-trip-context.md)
 - [`modules/route-planning-and-harbors.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/route-planning-and-harbors.md)
 - [`modules/incidents.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/incidents.md)
@@ -157,6 +162,7 @@ Examples:
 - route planning should describe intended movement, not own departure logic
 - incidents should record safety events, not redefine trip completion
 - media should attach evidence and memory, not drive scheduling
+- reporting should summarize domain data, not become a new source of truth
 
 ## Configuration Model
 

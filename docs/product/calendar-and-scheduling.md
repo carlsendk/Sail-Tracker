@@ -219,7 +219,10 @@ Likely feed scopes:
 - tenant-wide operational calendar
 - trips only
 - maintenance only
+- tasks and inspections only
 - vessel-specific schedule
+- vessel-specific operational work
+- due-soon operational reminders
 - optionally later, user-relevant personal feed
 
 The baseline delivery format should be:
@@ -242,6 +245,7 @@ The baseline delivery format should be:
 - Feed subscriptions must respect tenant boundaries and permissions.
 - Subscription URLs should be revocable and treated as secrets.
 - Feed contents should be scoped so clubs can share operational visibility without exposing unnecessary private data.
+- Reminder-oriented subscriptions should be derived from calendar-backed items rather than a separate task system.
 
 ## Relationship To Trips / Logbook
 
