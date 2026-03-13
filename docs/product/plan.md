@@ -52,7 +52,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/weather-in-trip-context.md`
 - [x] deepen `modules/route-planning-and-harbors.md`
 - [x] deepen `modules/incidents.md`
-- [ ] deepen `modules/media-gallery.md`
+- [x] deepen `modules/media-gallery.md`
 - [ ] deepen `modules/trip-story.md`
 - [ ] `search-and-operational-views.md`
 - [ ] `product-glossary.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `modules/media-gallery.md`
+- deepen `modules/trip-story.md`
 
 Why it comes next:
 
-- it is the next remaining trip-enrichment module with clear boundaries to incidents, story, and asset/media ownership
-- it will force clearer decisions about who may upload, view, and reuse trip media
-- it helps evaluate privacy and sharing expectations before story and external reporting are expanded
+- it is the last remaining trip-enrichment module in the current sequence
+- it will force clearer boundaries between operational record, narrative summary, and media reuse
+- it helps close the trip-enrichment catalog before moving back to broader cross-cutting areas
 
 ## Current State
 
