@@ -1,10 +1,12 @@
 # Identity, Access, And Configuration
 
-This document rewrites the older `admin` and `profile` concepts into a structure that fits Sail Tracker as a multi-tenant product.
+This document is the overview for the identity, access, and administration part of Sail Tracker.
 
-## Why This Structure Changes
+It should act as an index and framing document, not as the detailed specification for every sub-area.
 
-The old material treated "admin" as a single bucket for many unrelated concerns:
+## Why This Area Is Split
+
+The old material treated "admin" and "profile" as single buckets for many unrelated concerns:
 
 - platform administration
 - club setup
@@ -13,9 +15,9 @@ The old material treated "admin" as a single bucket for many unrelated concerns:
 - person qualifications
 - personal profile management
 
-For Sail Tracker, these must be split by responsibility and scope.
+For Sail Tracker, these need clearer boundaries so the product stays modular and multi-tenant-safe.
 
-## New Product Structure
+## Domain Family Overview
 
 Think about this area in four separate domains:
 
@@ -24,9 +26,16 @@ Think about this area in four separate domains:
 3. member profile
 4. qualifications and reference catalogs
 
-These are related, but they are not the same product area.
+These are related, but they are not the same product area and should not be documented as one merged feature.
 
-## 1. Platform Administration
+They also support the operational backbone and trip workflows already defined in:
+
+- [`Calendar And Scheduling`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
+- [`Trip Logging And Logbook`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
+
+## Sub-Areas
+
+### 1. Platform Administration
 
 Scope: global, above any individual club.
 
@@ -44,7 +53,11 @@ Main responsibilities:
 
 This area should not become a dumping ground for club-specific settings.
 
-### Example Future Areas
+Detailed document:
+
+- [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md)
+
+Typical concerns:
 
 - tenant directory
 - domain and subdomain management
@@ -52,7 +65,7 @@ This area should not become a dumping ground for club-specific settings.
 - environment and bootstrap tools
 - audit and support access
 
-## 2. Tenant Administration
+### 2. Tenant Administration
 
 Scope: one club only.
 
@@ -67,172 +80,83 @@ Main responsibilities:
 - manage members and memberships
 - manage club-specific catalogs and lookup data
 - manage boats, harbors, and club-level defaults
+- configure how trip workflows behave in the club
 - assign tenant-scoped permissions
 
 This is where most of the old `admin` document belongs.
 
-### Tenant Configuration Areas
+Detailed document:
 
-#### Membership And People Setup
+- [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
 
-- member records
-- emergency contact details
-- membership status
-- future invitation and join flows
+Main concerns:
 
-#### Qualification Catalogs
+- club settings
+- membership administration
+- tenant-scoped permissions
+- tenant trip workflow configuration
+- tenant reference data such as harbors and equipment
 
-These are tenant-scoped reference sets, not platform-global by default:
+### 3. Memberships And Identity
 
-- experience levels
-- certification types
-- specialized skills
-- boat qualification rules
+Scope: who a person is, how they belong to a club, and how they participate operationally.
 
-They exist because clubs may define their own sailing programs and approval standards.
+Detailed document:
 
-#### Operational Reference Data
+- [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md)
 
-These are also tenant-scoped unless proven otherwise:
+This is the real identity backbone for:
 
-- harbor locations
-- equipment categories
-- equipment library
+- account identity
+- personal profile
+- tenant memberships
+- guest handling
+- responsible-sailor identity
+- kiosk-mode identity
 
-The old admin draft was correct that these support many workflows, but they should live under club configuration, not a generic admin bucket.
-
-## 3. Member Profile
+### 4. Member Profile
 
 Scope: the logged-in user managing their own information and seeing their own status.
 
-Primary actor:
+This is a navigation and experience concern, not a separate identity model.
 
-- authenticated member
+Its detailed identity and membership rules should stay in:
 
-Main responsibilities:
+- [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md)
 
-- view and edit personal contact details
-- manage emergency contact information
-- manage profile picture
-- view membership and qualification status
-- view trip-related activity and future participation
-- manage future account preferences
+Typical profile concerns:
 
-This is not administration. It is self-service identity and participation context.
+- personal details
+- emergency contact
+- qualifications and eligibility summary
+- memberships
+- personal trip activity
 
-### Profile Areas
+### 5. Qualifications And Reference Catalogs
 
-#### Personal Identity
+Detailed document:
 
-- name
-- email
-- phone
-- avatar or profile picture
+- [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
 
-#### Safety And Contact
+This area owns:
 
-- emergency contact name
-- emergency contact phone
-- emergency contact relationship
+- qualification catalogs
+- member-held qualifications and skills
+- vessel eligibility and approval concepts
 
-#### Sailing Context
+It should stay separate from both profile UX and generic admin structure.
 
-- experience level
-- certifications
-- specialized skills
-- club memberships
-- future roles and permissions summary
+## Cross-Area Connections
 
-#### Personal Activity
+These areas support the product backbone and operational modules already defined in:
 
-- upcoming trips
-- recent activity
-- trip participation history
+- [`calendar-and-scheduling.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
+- [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
+- [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
 
-This keeps the useful parts of the old profile page while aligning them with the current product language.
+They also connect directly to:
 
-## 4. Qualifications And Reference Catalogs
-
-Some of the old admin concepts should be treated as a separate product concern because they affect multiple workflows.
-
-These include:
-
-- experience levels
-- certification types
-- skills
-- boat qualifications
-
-They support:
-
-- member qualification tracking
-- skipper eligibility
-- safety validation
-- trip planning rules
-
-### Important Distinction
-
-Separate:
-
-- catalog definitions
-- member-held certifications or skills
-- approvals and qualification records
-
-These are different concepts and should not collapse into one screen or one table without care.
-
-## Reframed Product Areas
-
-Here is how the old concepts map into the new product:
-
-### Old: Admin Dashboard
-
-Becomes:
-
-- `Platform Administration`
-- `Tenant Administration`
-- `Qualification Catalogs`
-
-### Old: Experience Levels
-
-Becomes:
-
-- tenant-scoped qualification catalog
-
-### Old: Certification Types
-
-Becomes:
-
-- tenant-scoped certification catalog
-
-### Old: Specialized Skills
-
-Becomes:
-
-- tenant-scoped skills catalog
-
-### Old: Boat Qualifications
-
-Becomes:
-
-- qualification approvals and eligibility records
-- likely part of qualifications and safety, not generic admin
-
-### Old: Harbor Locations
-
-Becomes:
-
-- tenant operational reference data
-
-### Old: Equipment
-
-Becomes:
-
-- tenant equipment catalog and fleet support data
-
-### Old: Profile
-
-Becomes:
-
-- member self-service profile and participation overview
+- [`operating-modes/kiosk-mode.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/kiosk-mode.md)
 
 ## Suggested Navigation Structure
 
@@ -263,25 +187,14 @@ This is much clearer than a single broad "Admin" section.
 - profile editing must stay separate from admin management
 - qualifications must support both reference definitions and member-specific records
 - permissions must control access to each area explicitly
+- club-specific trip configuration should live in tenant administration, not in platform-wide settings
+- the product must support members, responsible sailors, vessel-responsible users, and guests without collapsing them into one user type
+- kiosk mode should reuse the same permissions and trip rules, not invent a separate domain model
 
-## What We Should Design Later
+## Use This Document As
 
-These are implied by the old drafts, but should be designed deliberately:
+- the overview for identity/access/admin structure
+- the entry point into the more detailed sub-area docs
+- the place where boundaries between those sub-areas are kept clear
 
-- invitation and onboarding flow
-- user can belong to multiple clubs
-- owner can delegate narrow admin permissions
-- approval flow for boat qualification
-- audit trail for qualification and catalog changes
-- localization of qualification and catalog labels
-
-## Recommended Next Follow-Up
-
-The next product documents that would make this actionable are:
-
-1. `memberships-and-identity.md`
-2. `qualification-model.md`
-3. `tenant-settings.md`
-4. `platform-admin.md`
-
-Those would turn this structural rewrite into implementable product slices.
+Do not keep adding detailed rules here if a more specific sub-area document exists.

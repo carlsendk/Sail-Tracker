@@ -1,14 +1,57 @@
 # Product Docs
 
-Feature specifications and backlog-oriented documents should live here once product slicing begins.
+This folder describes the intended product shape of Sail Tracker.
 
-Suggested future additions:
+Use it to keep the system understandable as:
 
-- BDD feature files
-- scope documents
-- glossary and domain examples
-- identity, access, and configuration structure
+- one product
+- one tenant-aware platform
+- one calendar backbone
+- several clear domains and supporting modules
 
-Current product-facing draft:
+## Structure
 
-- `docs/product/identity-access-and-configuration.md`
+### Backbone Areas
+
+- [`calendar-and-scheduling.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
+- [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
+
+### Calendar Detail Docs
+
+- [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
+
+### Core Domains
+
+- [`fleet-management.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/fleet-management.md)
+- [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
+- [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md)
+- [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
+- [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md)
+
+### Platform And Admin Areas
+
+- [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
+- [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md)
+
+### Supporting Modules
+
+- [`modules/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/README.md)
+
+### Operating Modes
+
+- [`operating-modes/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/README.md)
+
+### System Guide
+
+- [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
+
+## Rule Of Thumb
+
+Not everything is a module.
+
+Use:
+
+- backbone areas for shared product foundations
+- core domains for major business areas
+- supporting modules for optional enrichments
+- operating modes for special ways of using the same workflows
