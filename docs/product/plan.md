@@ -43,7 +43,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `permissions-and-role-bundles.md`
 - [x] `vessel-classes-and-restrictions.md`
 - [x] `vessel-readiness-and-required-equipment.md`
-- [ ] `invitations-and-onboarding.md`
+- [x] `invitations-and-onboarding.md`
 - [ ] `tenant-bootstrap-and-setup.md`
 
 ### Later
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `invitations-and-onboarding.md`
+- `tenant-bootstrap-and-setup.md`
 
 Why it comes next:
 
-- it defines how people actually enter the tenant and become usable in operations
-- it connects identity, permissions, memberships, and tenant bootstrap
-- it will make tenant setup and membership administration much more concrete
+- it brings tenant creation, owner setup, demo data, and first usable configuration into one flow
+- it connects platform administration, invitations, and tenant settings
+- it is the natural next step after onboarding paths are defined
