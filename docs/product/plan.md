@@ -54,7 +54,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/incidents.md`
 - [x] deepen `modules/media-gallery.md`
 - [x] deepen `modules/trip-story.md`
-- [ ] `search-and-operational-views.md`
+- [x] `search-and-operational-views.md`
 - [ ] `product-glossary.md`
 - [ ] `seeded-catalog-adoption.md`
 - [ ] `platform-support-and-impersonation.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- `search-and-operational-views.md`
+- `product-glossary.md`
 
 Why it comes next:
 
-- it is the next broad cross-cutting area after the trip-enrichment modules are complete
-- it will force clearer decisions about entry points, filtering, saved views, and operational dashboards
-- it helps test whether the current domain structure can actually be navigated effectively in one product
+- it will stabilize the domain language across the product before more cross-cutting docs are added
+- it helps reduce drift between product docs, future BDD slices, and implementation naming
+- it is now the highest-leverage document after most major product areas have been described
 
 ## Current State
 

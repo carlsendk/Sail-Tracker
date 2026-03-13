@@ -20,6 +20,7 @@ Use it to keep the system understandable as:
 
 - [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
 - [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md)
+- [`search-and-operational-views.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/search-and-operational-views.md)
 
 ### Core Domains
 
