@@ -48,7 +48,7 @@ Work from top to bottom unless a stronger dependency appears.
 
 ### Later
 
-- [ ] deepen `modules/reporting-and-exports.md`
+- [x] deepen `modules/reporting-and-exports.md`
 - [ ] deepen `modules/weather-in-trip-context.md`
 - [ ] deepen `modules/route-planning-and-harbors.md`
 - [ ] deepen `modules/incidents.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `modules/reporting-and-exports.md`
+- deepen `modules/weather-in-trip-context.md`
 
 Why it comes next:
 
-- it is the broadest remaining cross-domain module
-- it will force decisions about privacy, exports, and operational summaries
-- it helps evaluate whether the current core domains expose the right information
+- it is the next strongest trip-enrichment module connected to planning and departure
+- it will force clearer boundaries between forecast context, observed trip conditions, and decision support
+- it helps evaluate how much trip detail belongs in the trip domain versus a supporting module
 
 ## Current State
 
