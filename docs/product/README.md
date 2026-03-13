@@ -33,6 +33,7 @@ Use it to keep the system understandable as:
 
 - [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
 - [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md)
+- [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md)
 
 ### Platform And Admin Areas
 

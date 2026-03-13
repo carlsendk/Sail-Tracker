@@ -259,6 +259,8 @@ The guest model should support:
 
 The product should avoid forcing a guest to become a full identity object too early.
 
+See also [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md).
+
 ## Ownership Of Data
 
 A key product rule is to separate:

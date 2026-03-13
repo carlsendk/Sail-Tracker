@@ -34,7 +34,7 @@ Work from top to bottom unless a stronger dependency appears.
 
 - [x] `notifications-and-reminders.md`
 - [x] `trip-validation-and-departure-rules.md`
-- [ ] `trip-manifest-and-guests.md`
+- [x] `trip-manifest-and-guests.md`
 - [ ] `asset-lending-and-booking.md`
 - [ ] `local-approvals-and-exceptions.md`
 
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `trip-manifest-and-guests.md`
+- `asset-lending-and-booking.md`
 
 Why it comes next:
 
-- it clarifies the real people model used on every trip
-- it affects guests, crew, responsible sailor handling, and kiosk flow
-- it will keep manifest rules from being scattered across trip, identity, and qualification docs
+- it completes the asset model around shared gear and bookable resources
+- it connects directly to calendar ownership of time-bound availability
+- it will keep booking logic separate from static assignment logic

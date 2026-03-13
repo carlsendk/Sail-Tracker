@@ -177,6 +177,8 @@ The emphasis is speed and correctness, not full reporting.
 
 In practice, the trip should move from `draft` to `planned` before it is treated as an operationally scheduled trip.
 
+See also [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md).
+
 ### 2. Prepare Trip For Departure
 
 Before a trip leaves, the club needs confidence that the trip is valid.
@@ -237,6 +239,8 @@ Users should be able to:
 - open a trip and see its full operational history
 - see a vessel's sailing timeline in calendar-backed history views
 - open a trip and see the richer details that do not belong in a generic calendar item
+
+Manifest behavior and guest handling are detailed in [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md).
 
 ## Business Rules
 
