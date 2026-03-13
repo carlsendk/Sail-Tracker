@@ -132,6 +132,8 @@ The product should model the actual permission meaning, for example:
 
 This area is the real operational bridge between identity and trips.
 
+See also [`local-approvals-and-exceptions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/local-approvals-and-exceptions.md).
+
 ### 3. Skills And Competencies
 
 These are tracked capabilities that may or may not grant direct operational permission.
@@ -277,6 +279,8 @@ Examples:
 - may lead overnight trips only with second adult onboard
 
 This is the layer the trip workflow should rely on most directly.
+
+Exceptions and one-off overrides are detailed in [`local-approvals-and-exceptions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/local-approvals-and-exceptions.md).
 
 ## Public Certificates Versus Local Approvals
 

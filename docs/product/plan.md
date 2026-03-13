@@ -36,7 +36,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `trip-validation-and-departure-rules.md`
 - [x] `trip-manifest-and-guests.md`
 - [x] `asset-lending-and-booking.md`
-- [ ] `local-approvals-and-exceptions.md`
+- [x] `local-approvals-and-exceptions.md`
 
 ### Next
 
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `local-approvals-and-exceptions.md`
+- `permissions-and-role-bundles.md`
 
 Why it comes next:
 
-- it defines how clubs handle one-off operational overrides
-- it connects directly to trip validation without turning normal use into approval workflow
-- it will sharpen the boundary between normal approvals and exceptional departures
+- it defines the reusable permission bundles behind platform and tenant administration
+- it connects approval authority, trip operation, and tenant configuration
+- it will make later admin and onboarding docs much more coherent
