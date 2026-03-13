@@ -23,6 +23,11 @@ Use it to keep the system understandable as:
 - [`search-and-operational-views.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/search-and-operational-views.md)
 - [`product-glossary.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/product-glossary.md)
 
+### Cross-Cutting Product Areas
+
+- [`dashboard-and-home.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/dashboard-and-home.md)
+- [`pwa-and-offline.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/pwa-and-offline.md)
+
 ### Core Domains
 
 - [`fleet-management.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/fleet-management.md)
@@ -55,10 +60,16 @@ Use it to keep the system understandable as:
 
 - [`modules/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/README.md)
 - [`modules/reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
+- [`modules/weather-in-trip-context.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/weather-in-trip-context.md)
+- [`modules/route-planning-and-harbors.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/route-planning-and-harbors.md)
+- [`modules/incidents.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/incidents.md)
+- [`modules/media-gallery.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/media-gallery.md)
+- [`modules/trip-story.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/trip-story.md)
 
 ### Operating Modes
 
 - [`operating-modes/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/README.md)
+- [`operating-modes/kiosk-mode.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/kiosk-mode.md)
 
 ### System Guide
 

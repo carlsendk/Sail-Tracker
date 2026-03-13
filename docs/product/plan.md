@@ -60,17 +60,23 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `platform-support-and-impersonation.md`
 - [x] `import-and-export-strategy.md`
 
+### Review Follow-Up
+
+- [x] `dashboard-and-home.md`
+- [x] `pwa-and-offline.md`
+- [ ] architecture context map
+
 ## Current Focus
 
 Next recommended task:
 
-- review the remaining placeholder and coherence gaps across the catalog
+- close the remaining product-structure gaps identified in the coherence review
 
 Why it comes next:
 
 - the main placeholder admin areas are now covered
-- the next highest-value step is a coherence review against the draft material and the current DDD boundaries
-- that review should identify any missing product areas before implementation planning deepens
+- the coherence review identified two missing product areas from the draft material
+- closing those gaps now keeps the catalog aligned before implementation planning deepens
 
 ## Current State
 
@@ -81,6 +87,12 @@ The current catalog already has a strong base:
   - [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
 - calendar detail:
   - [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
+  - [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md)
+  - [`search-and-operational-views.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/search-and-operational-views.md)
+  - [`product-glossary.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/product-glossary.md)
+- cross-cutting:
+  - [`dashboard-and-home.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/dashboard-and-home.md)
+  - [`pwa-and-offline.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/pwa-and-offline.md)
 - core domains:
   - [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
   - [`fleet-management.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/fleet-management.md)
@@ -105,47 +117,43 @@ The current catalog already has a strong base:
 
 ## What Is Still Missing
 
-The biggest remaining gaps are not top-level structure.
-They are detail depth and a few missing cross-cutting areas.
+The remaining gaps are now mostly implementation-facing rather than catalog-shape gaps.
 
 ### Backbone Detail Gaps
 
 - calendar feed scopes and privacy rules
-- reminder and notification behavior
 - subscription model for calendar, tasks, and reminders
-- search, filters, and dashboard entry points
+- task and inspection assignment depth if the product needs it later
 
 ### Core Domain Detail Gaps
 
-- trip validation rules against vessel and qualification constraints
-- trip manifest and guest model depth
-- fleet detail for vessel classes, restrictions, and readiness expectations
-- asset lending and booking flows
-- qualification local approvals and one-off exceptions
-- membership onboarding and invitation flows
+- trip completion and report-back detail as a standalone product area if needed
+- richer asset component and maintenance history depth if needed
+- qualification catalog detail for the first Denmark seed set
+- readiness evidence and checklist depth if clubs need stricter enforcement
 
 ### Platform And Admin Gaps
 
-- tenant bootstrap and setup flow from empty club to active use
-- permission bundles and admin capabilities at tenant level
-- seeded catalogs and how tenants adopt them
-- support/admin visibility model across tenants
+- tenant-level setup defaults by club type if that becomes important
+- public catalog governance and localization operations
+- support policy detail for sensitive data access
 
 ### Supporting Module Gaps
 
-- each module still needs to move from placeholder depth to evaluated product depth
-- reporting needs output types and privacy rules
-- route planning needs trip integration rules
-- incidents need follow-up and reporting relationship
-- weather needs planning versus observed context
+- module-level depth is now mostly present
+- remaining work is selective deepening where implementation pressure appears
 
 ### Cross-Cutting Gaps
 
-- notification model
-- glossary and canonical product language
 - audit and compliance expectations in product terms
-- mobile versus kiosk versus desktop usage emphasis
-- import and export strategy
+- device trust and shared-device policy depth
+- explicit landing-page composition by tenant type if clubs diverge strongly
+
+### Architecture Gaps
+
+- bounded-context map for implementation planning
+- allowed write ownership between calendar, trips, fleet, assets, and qualifications
+- explicit integration contracts for reporting and operational views
 
 ## Catalog Workstreams
 
@@ -161,6 +169,8 @@ Docs to deepen or add:
 - add `notifications-and-reminders.md`
 - add `search-and-operational-views.md`
 - add `product-glossary.md`
+- add `dashboard-and-home.md`
+- add `pwa-and-offline.md`
 
 ### 2. Trip Domain Completion
 
@@ -279,10 +289,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `tenant-bootstrap-and-setup.md`
+- architecture context mapping
 
 Why it comes next:
 
-- it brings tenant creation, owner setup, demo data, and first usable configuration into one flow
-- it connects platform administration, invitations, and tenant settings
-- it is the natural next step after onboarding paths are defined
+- the catalog is now strong enough at product level
+- the next risk is implementation drift between calendar, trips, fleet, assets, qualifications, reporting, and views
+- a bounded-context map is the next artifact needed to keep modules independently operable
