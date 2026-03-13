@@ -190,6 +190,8 @@ This workflow confirms:
 
 This is the point where the system prevents avoidable mistakes.
 
+See also [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md).
+
 ### 3. Start Trip
 
 Starting a trip changes it from a scheduled plan into an operational fact.

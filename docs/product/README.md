@@ -19,6 +19,7 @@ Use it to keep the system understandable as:
 ### Calendar Detail Docs
 
 - [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
+- [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md)
 
 ### Core Domains
 
@@ -31,6 +32,7 @@ Use it to keep the system understandable as:
 ### Core Domain Detail Docs
 
 - [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
+- [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md)
 
 ### Platform And Admin Areas
 
@@ -49,6 +51,7 @@ Use it to keep the system understandable as:
 ### System Guide
 
 - [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
+- [`plan.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/plan.md)
 
 ## Rule Of Thumb
 

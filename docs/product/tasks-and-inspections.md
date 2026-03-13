@@ -149,6 +149,8 @@ The important rule is:
 - the calendar remains the source of truth
 - reminder tools consume subscribed views of that truth
 
+See also [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md).
+
 ## Relationship To Fleet
 
 Fleet defines the vessel the work applies to.

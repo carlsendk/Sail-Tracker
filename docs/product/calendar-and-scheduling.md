@@ -286,6 +286,7 @@ Good candidates for calendar-backed tasks:
 - electrical inspection slot
 
 See also [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md).
+See also [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md).
 
 Poor candidates:
 
