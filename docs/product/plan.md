@@ -35,7 +35,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] `notifications-and-reminders.md`
 - [x] `trip-validation-and-departure-rules.md`
 - [x] `trip-manifest-and-guests.md`
-- [ ] `asset-lending-and-booking.md`
+- [x] `asset-lending-and-booking.md`
 - [ ] `local-approvals-and-exceptions.md`
 
 ### Next
@@ -267,10 +267,10 @@ If a doc cannot answer those questions, it is still a placeholder.
 
 Current task:
 
-- `asset-lending-and-booking.md`
+- `local-approvals-and-exceptions.md`
 
 Why it comes next:
 
-- it completes the asset model around shared gear and bookable resources
-- it connects directly to calendar ownership of time-bound availability
-- it will keep booking logic separate from static assignment logic
+- it defines how clubs handle one-off operational overrides
+- it connects directly to trip validation without turning normal use into approval workflow
+- it will sharpen the boundary between normal approvals and exceptional departures

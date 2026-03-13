@@ -32,6 +32,7 @@ Use it to keep the system understandable as:
 ### Core Domain Detail Docs
 
 - [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
+- [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md)
 - [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md)
 - [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md)
 

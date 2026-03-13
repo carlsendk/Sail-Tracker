@@ -180,6 +180,7 @@ The product should make it easy to answer:
 - what engines, electrical systems, or safety items need attention
 
 See also [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md).
+See also [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md).
 
 ## To Define In More Detail
 
