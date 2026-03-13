@@ -46,6 +46,7 @@ Use it to keep the system understandable as:
 
 ### Platform And Admin Areas
 
+- [`seeded-catalog-adoption.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/seeded-catalog-adoption.md)
 - [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
 - [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md)
 

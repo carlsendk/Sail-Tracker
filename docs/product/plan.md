@@ -56,7 +56,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/trip-story.md`
 - [x] `search-and-operational-views.md`
 - [x] `product-glossary.md`
-- [ ] `seeded-catalog-adoption.md`
+- [x] `seeded-catalog-adoption.md`
 - [ ] `platform-support-and-impersonation.md`
 - [ ] import and export strategy detail
 
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- `seeded-catalog-adoption.md`
+- `platform-support-and-impersonation.md`
 
 Why it comes next:
 
-- it is the next platform-level cross-cutting decision that affects qualifications, tenant setup, and seeded public reference data
-- it will force a clear adoption model for shared Denmark-oriented certification catalogs and other seeded platform data
-- it helps connect platform administration to tenant settings without blurring ownership
+- it is the next platform-level boundary that still needs explicit rules
+- it will force a clear support model across tenants without weakening isolation or auditability
+- it helps connect platform administration, permissions, and real-world support workflows
 
 ## Current State
 
