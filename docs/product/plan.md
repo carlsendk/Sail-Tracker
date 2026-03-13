@@ -53,7 +53,7 @@ Work from top to bottom unless a stronger dependency appears.
 - [x] deepen `modules/route-planning-and-harbors.md`
 - [x] deepen `modules/incidents.md`
 - [x] deepen `modules/media-gallery.md`
-- [ ] deepen `modules/trip-story.md`
+- [x] deepen `modules/trip-story.md`
 - [ ] `search-and-operational-views.md`
 - [ ] `product-glossary.md`
 - [ ] `seeded-catalog-adoption.md`
@@ -64,13 +64,13 @@ Work from top to bottom unless a stronger dependency appears.
 
 Next recommended task:
 
-- deepen `modules/trip-story.md`
+- `search-and-operational-views.md`
 
 Why it comes next:
 
-- it is the last remaining trip-enrichment module in the current sequence
-- it will force clearer boundaries between operational record, narrative summary, and media reuse
-- it helps close the trip-enrichment catalog before moving back to broader cross-cutting areas
+- it is the next broad cross-cutting area after the trip-enrichment modules are complete
+- it will force clearer decisions about entry points, filtering, saved views, and operational dashboards
+- it helps test whether the current domain structure can actually be navigated effectively in one product
 
 ## Current State
 
