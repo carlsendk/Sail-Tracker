@@ -167,7 +167,7 @@ Typical outcome:
 
 The owner should not need platform admin intervention for normal next steps after successful bootstrap.
 
-See also [`invitations-and-onboarding.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/invitations-and-onboarding.md).
+See also [`membership-and-onboarding.md`](../domains/members/membership-and-onboarding.md).
 
 ## Setup Milestones
 
@@ -197,7 +197,7 @@ Platform administration owns:
 
 This document focuses on the product flow after that platform action creates a tenant.
 
-See also [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md).
+See also [`platform-administration.md`](./platform-administration.md).
 
 ## Relationship To Tenant Settings
 
@@ -212,7 +212,7 @@ This includes:
 
 Bootstrap should establish the starting point, not replace tenant administration.
 
-See also [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md).
+See also [`tenant-settings.md`](./tenant-settings.md).
 
 ## Relationship To Permissions
 
@@ -224,7 +224,7 @@ That means:
 - owner permission bundle exists
 - bootstrap does not rely on ad hoc hidden access
 
-See also [`permissions-and-role-bundles.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/permissions-and-role-bundles.md).
+See also [`permissions-and-roles.md`](../domains/members/permissions-and-roles.md).
 
 ## Relationship To Seeded Data
 

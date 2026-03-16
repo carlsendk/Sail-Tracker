@@ -58,6 +58,27 @@ This area does not own:
 
 Those remain in their own areas.
 
+## Aggregate Root
+
+`manifest` -- the set of people on one trip, including the responsible sailor, member participants, and guest participants.
+
+## Who Uses It
+
+- responsible sailors building the crew list before departure
+- trip operators adding members and guests
+- kiosk users doing rapid manifest capture
+- club administrators reviewing who was onboard
+
+## Requires
+
+- [trip-planning-and-lifecycle.md](trip-planning-and-lifecycle.md) -- trip to attach the manifest to
+- [membership-and-onboarding.md](../members/membership-and-onboarding.md) -- member identity and guest model
+
+## Enhanced By
+
+- [trip-departure-and-validation.md](trip-departure-and-validation.md) -- manifest validation at departure (capacity, responsible sailor)
+- [trip-completion-and-reporting.md](trip-completion-and-reporting.md) -- crew return confirmation
+
 ## Core Principle
 
 The manifest should represent operational participation, not just user accounts.
@@ -195,7 +216,7 @@ Examples:
 - required participant details missing
 - required crew composition missing later if a tenant uses that
 
-See also [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md).
+See also [trip-departure-and-validation.md](trip-departure-and-validation.md).
 
 ## Relationship To Memberships And Identity
 

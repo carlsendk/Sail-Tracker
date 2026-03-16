@@ -1,4 +1,4 @@
-# Vessel Readiness And Required Equipment
+# Vessel Readiness
 
 ## Purpose
 
@@ -53,6 +53,27 @@ This area does not own:
 - qualification approval
 
 Those remain in the connected domains.
+
+## Aggregate Root
+
+`readiness_expectation` -- the set of required equipment and checks that define what "ready for departure" means for one vessel or vessel class.
+
+## Who Uses It
+
+- vessel-responsible members checking whether a vessel is departure-ready
+- trip operators seeing readiness blockers before departure
+- club administrators defining what equipment and checks are required per vessel or class
+
+## Requires
+
+- [vessel-registry.md](vessel-registry.md) -- vessel identity and class
+- [equipment-assignment.md](../equipment/equipment-assignment.md) -- what gear is actually assigned
+- [tasks-and-inspections.md](../../backbone/tasks-and-inspections.md) -- calendar-backed readiness work and overdue checks
+
+## Enhanced By
+
+- [trip-departure-and-validation.md](../trips/trip-departure-and-validation.md) -- readiness as a departure gate
+- [vessel-classes-and-restrictions.md](vessel-classes-and-restrictions.md) -- class-level readiness inheritance
 
 ## Core Principle
 
@@ -167,7 +188,7 @@ Examples:
 - a vessel may be selected and otherwise valid, but blocked because required readiness work is incomplete
 - a vessel may be allowed with warning if only non-blocking readiness issues remain
 
-See also [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md).
+See also [trip-departure-and-validation.md](../trips/trip-departure-and-validation.md).
 
 ## Class-Level Versus Vessel-Level Readiness
 

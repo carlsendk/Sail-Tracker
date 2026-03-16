@@ -6,4 +6,4 @@ An operating mode is not a separate domain and not just an optional enrichment m
 
 Current operating modes:
 
-- [`kiosk-mode.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/kiosk-mode.md)
+- [`kiosk-mode.md`](./kiosk-mode.md)

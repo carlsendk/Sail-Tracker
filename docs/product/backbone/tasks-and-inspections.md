@@ -66,6 +66,28 @@ This area does not own:
 
 Those belong to the connected domains.
 
+## Aggregate Root
+
+`operational_task` -- a planned piece of calendar-backed work applied to a vessel, asset, or facility, with a category, subject resource, and calendar state.
+
+## Who Uses It
+
+- vessel-responsible members scheduling and completing maintenance or inspections
+- club administrators planning seasonal and recurring work
+- trip operators seeing what readiness work is blocking departure
+- fleet managers tracking overdue service across the fleet
+
+## Requires
+
+- [calendar-and-scheduling.md](calendar-and-scheduling.md) -- owns the time-based state, schedule placement, and due/overdue transitions
+
+## Enhanced By
+
+- [vessel-registry.md](../domains/fleet/vessel-registry.md) -- vessel identity as subject resource
+- [equipment-registry.md](../domains/equipment/equipment-registry.md) -- asset identity as subject resource
+- [vessel-readiness.md](../domains/fleet/vessel-readiness.md) -- readiness expectations that generate required work
+- [notifications-and-reminders.md](notifications-and-reminders.md) -- delivery of due-soon and overdue signals
+
 ## Core Concepts
 
 - `operational task`
@@ -149,7 +171,7 @@ The important rule is:
 - the calendar remains the source of truth
 - reminder tools consume subscribed views of that truth
 
-See also [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md).
+See also [`notifications-and-reminders.md`](../backbone/notifications-and-reminders.md).
 
 ## Relationship To Fleet
 

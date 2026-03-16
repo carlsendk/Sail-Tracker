@@ -223,7 +223,7 @@ Examples:
 - choose real versus demo
 - attach baseline defaults
 
-See also [`tenant-bootstrap-and-setup.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-bootstrap-and-setup.md).
+See also [`tenant-bootstrap-and-setup.md`](./tenant-bootstrap-and-setup.md).
 
 ## Relationship To Tenant Settings
 
@@ -237,7 +237,7 @@ That distinction protects:
 - multi-tenant clarity
 - support auditability
 
-See also [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md).
+See also [`tenant-settings.md`](./tenant-settings.md).
 
 ## Relationship To Seeded Catalog Adoption
 
@@ -249,7 +249,7 @@ That means platform administration should:
 - publish and maintain shared reference data
 - not directly decide local operational meaning inside each club
 
-See also [`seeded-catalog-adoption.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/seeded-catalog-adoption.md).
+See also [`seeded-catalog-adoption.md`](./seeded-catalog-adoption.md).
 
 ## Relationship To Support And Impersonation
 
@@ -257,7 +257,7 @@ Platform administration governs who may perform support access and under what br
 
 The detailed support model, including impersonation and audit, belongs in the dedicated support document.
 
-See also [`platform-support-and-impersonation.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-support-and-impersonation.md).
+See also [`platform-support-and-impersonation.md`](./platform-support-and-impersonation.md).
 
 ## Audit Expectations
 

@@ -264,6 +264,41 @@ Offline support in kiosk mode must also be careful about:
 - what personal or sensitive data stays on-device
 - when a device should require reauthentication
 
+## Real-Time Subscription Model
+
+The product should support real-time updates for operational state that matters to multiple users at once.
+
+Examples:
+
+- a trip starts and the calendar should update for other users viewing the same schedule
+- a vessel becomes out of service and users planning trips should see it immediately
+- a trip is reported back and the active-trip view should clear for all users
+- a manifest changes on an active trip and other viewers should see the updated headcount
+
+The real-time model should:
+
+- use a subscription mechanism (such as WebSocket or server-sent events) for live operational views
+- fall back to polling or cached state when real-time is unavailable
+- respect tenant boundaries so updates are scoped to the correct club
+- not require real-time for every data type -- focus on operational state changes that affect safety or coordination
+
+### Subscription Scopes
+
+Useful real-time subscription scopes include:
+
+- `tenant.active_trips` -- live view of which vessels are out
+- `tenant.calendar_today` -- today's schedule changes
+- `vessel.status` -- vessel availability changes
+- `trip.{id}.state` -- state changes on a specific trip
+
+### Offline Fallback
+
+When real-time subscriptions are unavailable:
+
+- cached state should be used with clear staleness indicators
+- periodic polling may bridge the gap for important views
+- the user should always know whether they are seeing live or cached data
+
 ## Push And Background Behavior
 
 Later, the product may use:

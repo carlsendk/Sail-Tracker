@@ -1,4 +1,4 @@
-# Trip Validation And Departure Rules
+# Trip Departure And Validation
 
 ## Purpose
 
@@ -58,6 +58,32 @@ This area does not own:
 - task execution or inspection templates
 
 Those remain in their own areas.
+
+## Aggregate Root
+
+`departure_validation` -- the validation result for one trip's departure attempt, composed from schedule, vessel, sailor, manifest, and readiness checks.
+
+## Who Uses It
+
+- responsible sailors checking whether their trip is ready to go
+- trip operators resolving departure blockers
+- tenant administrators configuring which checks are blocking versus warning
+- kiosk users departing trips on a shared device
+
+## Requires
+
+- [trip-planning-and-lifecycle.md](trip-planning-and-lifecycle.md) -- trip to validate
+- [membership-and-onboarding.md](../members/membership-and-onboarding.md) -- responsible sailor identity
+- [vessel-registry.md](../fleet/vessel-registry.md) -- vessel constraints and status
+- [calendar-and-scheduling.md](../../backbone/calendar-and-scheduling.md) -- schedule state and conflicts
+- [local-approvals.md](../qualifications/local-approvals.md) -- responsible-sailor eligibility
+
+## Enhanced By
+
+- [vessel-readiness.md](../fleet/vessel-readiness.md) -- equipment and readiness checks as departure gate
+- [vessel-classes-and-restrictions.md](../fleet/vessel-classes-and-restrictions.md) -- class-level restriction enforcement
+- [weather-in-trip-context.md](../../modules/weather-in-trip-context.md) -- weather warnings before departure
+- [tasks-and-inspections.md](../../backbone/tasks-and-inspections.md) -- overdue blocking work
 
 ## Core Principle
 
@@ -132,6 +158,31 @@ Questions:
 - are required departure checks complete for this tenant or vessel
 
 This is mainly calendar-backed operational validation with fleet and asset context.
+
+### 6. Pre-Departure Safety Checklist
+
+Some clubs require a physical safety checklist before departure.
+
+The product should support a configurable pre-departure checklist with items such as:
+
+- `equipment_check` -- life jackets available for all crew
+- `communication_check` -- VHF radio present and working
+- `first_aid_check` -- first aid kit present
+- `fire_safety_check` -- fire extinguisher available
+
+Additional checklist items that tenants may enable later:
+
+- flares available
+- anchor and rode
+- charts and navigation tools
+- weather forecast reviewed
+
+The checklist should be:
+
+- tenant-configurable (which items are shown, which are required)
+- stored on the trip record as part of the departure context
+- blocking or advisory depending on tenant configuration
+- quick to complete on both desktop and kiosk/mobile interfaces
 
 ## Blocking Versus Warning
 
@@ -216,7 +267,7 @@ Important rule:
 - exceptions should be auditable later
 - exceptions do not silently rewrite the normal rule model
 
-This connects directly to the later `local-approvals-and-exceptions.md` work.
+This connects directly to the later `local-approvals.md` work.
 
 ## Relationship To Calendar
 

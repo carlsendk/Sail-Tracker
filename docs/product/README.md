@@ -9,73 +9,100 @@ Use it to keep the system understandable as:
 - one calendar backbone
 - several clear domains and supporting modules
 
+Each doc = one bounded context or sub-domain that can be independently implemented, tested, and shipped.
+
 ## Structure
 
-### Backbone Areas
+### Backbone (`backbone/`)
 
-- [`calendar-and-scheduling.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
-- [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
+- [calendar-and-scheduling.md](backbone/calendar-and-scheduling.md)
+- [tasks-and-inspections.md](backbone/tasks-and-inspections.md)
+- [notifications-and-reminders.md](backbone/notifications-and-reminders.md)
+- [search-and-operational-views.md](backbone/search-and-operational-views.md)
 
-### Calendar Detail Docs
+### Core Domains (`domains/`)
 
-- [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
-- [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md)
-- [`search-and-operational-views.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/search-and-operational-views.md)
-- [`product-glossary.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/product-glossary.md)
+**Trips** (`domains/trips/`)
 
-### Cross-Cutting Product Areas
+- [trip-planning-and-lifecycle.md](domains/trips/trip-planning-and-lifecycle.md)
+- [trip-departure-and-validation.md](domains/trips/trip-departure-and-validation.md)
+- [trip-manifest-and-guests.md](domains/trips/trip-manifest-and-guests.md)
+- [trip-completion-and-reporting.md](domains/trips/trip-completion-and-reporting.md)
+- [trip-series-and-recurring.md](domains/trips/trip-series-and-recurring.md)
 
-- [`dashboard-and-home.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/dashboard-and-home.md)
-- [`pwa-and-offline.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/pwa-and-offline.md)
+**Fleet** (`domains/fleet/`)
 
-### Core Domains
+- [vessel-registry.md](domains/fleet/vessel-registry.md)
+- [vessel-classes-and-restrictions.md](domains/fleet/vessel-classes-and-restrictions.md)
+- [vessel-readiness.md](domains/fleet/vessel-readiness.md)
 
-- [`fleet-management.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/fleet-management.md)
-- [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
-- [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md)
-- [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
-- [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md)
+**Members** (`domains/members/`)
 
-### Core Domain Detail Docs
+- [membership-and-onboarding.md](domains/members/membership-and-onboarding.md)
+- [permissions-and-roles.md](domains/members/permissions-and-roles.md)
 
-- [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
-- [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md)
-- [`invitations-and-onboarding.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/invitations-and-onboarding.md)
-- [`local-approvals-and-exceptions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/local-approvals-and-exceptions.md)
-- [`permissions-and-role-bundles.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/permissions-and-role-bundles.md)
-- [`tenant-bootstrap-and-setup.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-bootstrap-and-setup.md)
-- [`vessel-classes-and-restrictions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/vessel-classes-and-restrictions.md)
-- [`vessel-readiness-and-required-equipment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/vessel-readiness-and-required-equipment.md)
-- [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md)
-- [`trip-manifest-and-guests.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-manifest-and-guests.md)
+**Qualifications** (`domains/qualifications/`)
 
-### Platform And Admin Areas
+- [certifications-and-catalog.md](domains/qualifications/certifications-and-catalog.md)
+- [local-approvals.md](domains/qualifications/local-approvals.md)
+- [skills-and-recognition.md](domains/qualifications/skills-and-recognition.md)
 
-- [`platform-support-and-impersonation.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-support-and-impersonation.md)
-- [`seeded-catalog-adoption.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/seeded-catalog-adoption.md)
-- [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
-- [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md)
+**Equipment** (`domains/equipment/`)
 
-### Supporting Modules
+- [equipment-registry.md](domains/equipment/equipment-registry.md)
+- [equipment-assignment.md](domains/equipment/equipment-assignment.md)
+- [equipment-lending-and-booking.md](domains/equipment/equipment-lending-and-booking.md)
 
-- [`modules/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/README.md)
-- [`modules/reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
-- [`modules/weather-in-trip-context.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/weather-in-trip-context.md)
-- [`modules/route-planning-and-harbors.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/route-planning-and-harbors.md)
-- [`modules/incidents.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/incidents.md)
-- [`modules/media-gallery.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/media-gallery.md)
-- [`modules/trip-story.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/trip-story.md)
+### Cross-Cutting (`cross-cutting/`)
 
-### Operating Modes
+- [dashboard-and-home.md](cross-cutting/dashboard-and-home.md)
+- [pwa-and-offline.md](cross-cutting/pwa-and-offline.md)
+- [profile-and-account.md](cross-cutting/profile-and-account.md)
+- [harbors-and-locations.md](cross-cutting/harbors-and-locations.md)
 
-- [`operating-modes/README.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/README.md)
-- [`operating-modes/kiosk-mode.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/kiosk-mode.md)
+### Platform (`platform/`)
 
-### System Guide
+- [platform-administration.md](platform/platform-administration.md)
+- [platform-support-and-impersonation.md](platform/platform-support-and-impersonation.md)
+- [tenant-settings.md](platform/tenant-settings.md)
+- [tenant-bootstrap-and-setup.md](platform/tenant-bootstrap-and-setup.md)
+- [seeded-catalog-adoption.md](platform/seeded-catalog-adoption.md)
+- [import-and-export-strategy.md](platform/import-and-export-strategy.md)
 
-- [`import-and-export-strategy.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/import-and-export-strategy.md)
-- [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
-- [`plan.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/plan.md)
+### Supporting Modules (`modules/`)
+
+- [modules/README.md](modules/README.md)
+- [reporting-and-exports.md](modules/reporting-and-exports.md)
+- [weather-in-trip-context.md](modules/weather-in-trip-context.md)
+- [route-planning-and-harbors.md](modules/route-planning-and-harbors.md)
+- [incidents.md](modules/incidents.md)
+- [media-gallery.md](modules/media-gallery.md)
+- [trip-story.md](modules/trip-story.md)
+
+### Operating Modes (`operating-modes/`)
+
+- [operating-modes/README.md](operating-modes/README.md)
+- [kiosk-mode.md](operating-modes/kiosk-mode.md)
+
+### Root Files
+
+- [product-glossary.md](product-glossary.md)
+- [system-composition.md](system-composition.md)
+- [plan.md](plan.md)
+
+## Doc Standard
+
+Each product doc should answer:
+
+1. **What problem does this solve?** -- user guide
+2. **Who uses it?** -- user guide
+3. **What does it own?** -- aggregate root, entities, rules
+4. **What does it NOT own?** -- explicit boundaries
+5. **Requires** -- hard dependencies, won't work without
+6. **Enhanced by** -- works alone but gets better with these
+7. **Key concepts** -- user guide + architecture
+8. **Business rules** -- architecture + implementation
+9. **Cross-references** -- links to related docs
 
 ## Rule Of Thumb
 

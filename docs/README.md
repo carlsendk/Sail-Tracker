@@ -25,6 +25,7 @@ These documents define the baseline for:
 - the default platform stack
 
 Feature specifications and product slices can be added later under `docs/product/`.
+Plans for implementation sequencing can be added under `docs/plans/`.
 
 ## Working Guide
 

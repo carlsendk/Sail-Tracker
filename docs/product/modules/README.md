@@ -11,10 +11,9 @@ They are not the same thing as:
 
 They should plug into:
 
-- [`calendar-and-scheduling.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
-- [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
-- [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
-- [`system-composition.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/system-composition.md)
+- [`calendar-and-scheduling.md`](../backbone/calendar-and-scheduling.md)
+- [`trip-planning-and-lifecycle.md`](../domains/trips/trip-planning-and-lifecycle.md)
+- [`system-composition.md`](../system-composition.md)
 
 ## Module Versus Sub-Module
 
@@ -40,12 +39,12 @@ The goal is to avoid both:
 
 ## Current Supporting Modules
 
-- [`reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
+- [`reporting-and-exports.md`](./reporting-and-exports.md)
 
 ## Current Trip-Enrichment Sub-Modules
 
-- [`weather-in-trip-context.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/weather-in-trip-context.md)
-- [`route-planning-and-harbors.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/route-planning-and-harbors.md)
-- [`incidents.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/incidents.md)
-- [`media-gallery.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/media-gallery.md)
-- [`trip-story.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/trip-story.md)
+- [`weather-in-trip-context.md`](./weather-in-trip-context.md)
+- [`route-planning-and-harbors.md`](./route-planning-and-harbors.md)
+- [`incidents.md`](./incidents.md)
+- [`media-gallery.md`](./media-gallery.md)
+- [`trip-story.md`](./trip-story.md)

@@ -1,4 +1,4 @@
-# Asset Lending And Booking
+# Equipment Lending And Booking
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This document defines how Sail Tracker should handle:
 - booking shared assets or facilities in time
 - temporary operational use of assets on trips
 
-It is a detail document for [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md).
+It is a detail document for [equipment-registry.md](equipment-registry.md).
 
 The goal is to keep these three concepts separate:
 
@@ -58,6 +58,27 @@ This area does not own:
 - calendar backbone itself
 
 Those remain in the connected docs and domains.
+
+## Aggregate Root
+
+`lending_record` -- a custody event for a physical asset, tracking who took it, when, expected return, and return status. For bookable assets, `booking` is the time-bound calendar reservation.
+
+## Who Uses It
+
+- members borrowing shared gear from the club pool
+- trip leaders taking equipment for a trip
+- club administrators booking shared facilities like the clubhouse
+- fleet managers tracking overdue returns of scarce equipment
+
+## Requires
+
+- [equipment-registry.md](equipment-registry.md) -- asset identity and shared-pool membership
+- [calendar-and-scheduling.md](../../backbone/calendar-and-scheduling.md) -- time-based booking windows and conflict visibility
+
+## Enhanced By
+
+- [trip-planning-and-lifecycle.md](../trips/trip-planning-and-lifecycle.md) -- temporary trip use of assets
+- [equipment-assignment.md](equipment-assignment.md) -- default assignment context for return expectations
 
 ## Core Principle
 
@@ -202,7 +223,7 @@ Examples:
 
 At no point should the system need to pretend the tent permanently changed home just because it was borrowed.
 
-See also [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md).
+See also [equipment-assignment.md](equipment-assignment.md).
 
 ## Return Model
 

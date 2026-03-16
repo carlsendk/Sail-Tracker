@@ -1,4 +1,4 @@
-# Fleet Management
+# Vessel Registry
 
 ## Area Purpose
 
@@ -62,6 +62,27 @@ This area does not own:
 - generic booking of non-vessel assets
 
 It provides the vessel domain that those areas depend on.
+
+## Aggregate Root
+
+`vessel` -- one named operational boat or watercraft managed by a tenant, with its own identity, status, class, capacity, and vessel-side requirements.
+
+## Who Uses It
+
+- club administrators registering and managing the fleet
+- trip operators selecting vessels during trip planning
+- vessel-responsible members maintaining vessel information
+- members browsing available vessels
+
+## Requires
+
+- [membership-and-onboarding.md](../members/membership-and-onboarding.md) -- tenant membership for vessel managers and vessel responsibility
+
+## Enhanced By
+
+- [equipment-assignment.md](../equipment/equipment-assignment.md) -- gear and components assigned to vessels
+- [vessel-classes-and-restrictions.md](vessel-classes-and-restrictions.md) -- class grouping and operational restrictions
+- [vessel-readiness.md](vessel-readiness.md) -- readiness expectations and required equipment checks
 
 ## Core Concepts
 
@@ -317,6 +338,19 @@ These permissions should stay separate from:
 - qualification grant permissions
 - generic tenant administration
 
+## Business Rules
+
+- Every vessel belongs to exactly one tenant.
+- Every vessel should have a stable identity with at least a name and capacity.
+- A vessel may belong to zero or one class.
+- Vessel status (active, retired, out_of_service) is a static fact owned by fleet, not by the calendar.
+- Schedule-driven availability is owned by the calendar backbone, not by fleet.
+- Vessel responsibility (the person locally responsible for a vessel) is not the same as trip responsibility (the responsible sailor on a trip).
+- Vessel-side requirements (capacity, approval type, restrictions) must be exposed clearly for trip validation to consume.
+- Not all equipment belongs inside fleet -- vessel-mounted components and shared club gear belong to the equipment domain.
+- A vessel detail page is a composed view across fleet, calendar, trips, equipment, and qualifications -- fleet does not own every fact displayed there.
+- Vessel class and vessel-level rules should both be supported without collapsing one into the other.
+
 ## Product Risks
 
 - If vessel state is unclear, trip planning will not be trusted.
@@ -325,11 +359,3 @@ These permissions should stay separate from:
 - If all equipment is pushed into fleet, the domain will become too broad and hard to use.
 - If vessel responsibility is confused with trip responsibility, operational accountability will become muddy.
 - If a vessel detail page is treated as if Fleet owns every displayed fact, domain boundaries will erode over time.
-
-## Evaluation Questions
-
-- Is the boundary between fleet and equipment/assets clear enough?
-- Can the model support both vessel-specific and class-level rules?
-- Will clubs be able to understand why a vessel is unavailable?
-- Is maintenance visible enough to affect real planning decisions?
-- Can the trip workflow rely on fleet without fleet taking over trip logic?

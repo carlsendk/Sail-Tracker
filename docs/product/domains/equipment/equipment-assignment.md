@@ -1,10 +1,10 @@
-# Asset Categories And Assignment
+# Equipment Assignment
 
 ## Purpose
 
 This document defines how assets should be categorized and how they should be assigned within Sail Tracker.
 
-It is a detail document for [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md).
+It is a detail document for [equipment-registry.md](equipment-registry.md).
 
 The goal is to keep the asset model simple enough for daily club use, while still supporting:
 
@@ -13,6 +13,27 @@ The goal is to keep the asset model simple enough for daily club use, while stil
 - lendable items
 - bookable resources
 - safety-critical tracked equipment
+
+## Aggregate Root
+
+`assignment` -- the current relationship between an asset item and its target (vessel, location, shared pool, or trip), with a mode and optional physical placement context.
+
+## Who Uses It
+
+- vessel-responsible members checking what is assigned to their vessel
+- club administrators organizing assets across vessels, locations, and shared pools
+- trip operators temporarily assigning gear to a trip
+- members scanning QR labels to find where an item belongs
+
+## Requires
+
+- [equipment-registry.md](equipment-registry.md) -- asset identity and categories
+- [vessel-registry.md](../fleet/vessel-registry.md) -- vessel identity as assignment target
+
+## Enhanced By
+
+- [vessel-readiness.md](../fleet/vessel-readiness.md) -- required equipment checks against assigned assets
+- [calendar-and-scheduling.md](../../backbone/calendar-and-scheduling.md) -- time-bound booking distinct from static assignment
 
 ## Core Principle
 

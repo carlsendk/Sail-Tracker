@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document describes how Sail Tracker should be shaped as a set of product areas that fit together into one coherent app.
+This document describes how Sail Tracker is shaped as a set of product areas that fit together into one coherent app.
 
 The goal is:
 
@@ -12,115 +12,121 @@ The goal is:
 - one calendar backbone
 - several focused domains and supporting modules
 
-This should avoid both extremes:
-
-- one monolithic feature blob
-- a set of disconnected mini-apps
-
-## Product Backbone
-
-The main structural spine is:
-
-1. `Calendar And Scheduling`
-2. `Identity, Access, And Configuration`
-3. core domains that plug into the backbone
-
-In practice:
-
-- calendar provides shared operational time, state, and visibility
-- identity and permissions decide who can do what
-- core domains contribute their own rules, detail screens, and data
-- supporting modules enrich those domains where needed
+Each product doc owns one bounded context with clear aggregate roots and explicit boundaries.
 
 ## Product Shape
 
-Not everything in the product should be called a module.
+Use these categories:
 
-Use these categories instead:
-
-- `backbone areas`
-- `core domains`
-- `supporting modules`
-- `operating modes`
-- `platform/admin areas`
+- `backbone areas` -- shared product foundations
+- `core domains` -- major business areas with their own aggregate roots
+- `supporting modules` -- optional enrichments
+- `cross-cutting areas` -- surfaces that read from multiple domains
+- `operating modes` -- specialized ways of using the same workflows
+- `platform areas` -- tenant lifecycle and platform administration
 
 ## Design Principle
 
-Each area or module should have:
+Each area should have:
 
 - one clear purpose
 - one primary domain language
 - one owned set of business rules
 - one obvious integration point with the rest of the system
 
-Each area or module should not own:
+Each area should not own:
 
-- another module's internal rules
+- another domain's internal rules
 - global navigation policy
 - cross-tenant behavior
 - duplicated permission logic
 
 ## Current Product Structure
 
-Backbone areas:
+### Backbone Areas
 
-- [`calendar-and-scheduling.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/calendar-and-scheduling.md)
-- [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
+- [calendar-and-scheduling.md](backbone/calendar-and-scheduling.md) -- shared operational timeline, scheduling, conflicts, feeds
+- [tasks-and-inspections.md](backbone/tasks-and-inspections.md) -- calendar-backed operational work
+- [notifications-and-reminders.md](backbone/notifications-and-reminders.md) -- delivery of operational signals
+- [search-and-operational-views.md](backbone/search-and-operational-views.md) -- search, logbook browsing, composed read views
 
-Calendar detail docs:
+### Core Domains
 
-- [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md)
+**Trips**
 
-Core domains:
+- [trip-planning-and-lifecycle.md](domains/trips/trip-planning-and-lifecycle.md) -- trip identity, lifecycle states, vessel/sailor assignment
+- [trip-departure-and-validation.md](domains/trips/trip-departure-and-validation.md) -- pre-departure validation layers
+- [trip-manifest-and-guests.md](domains/trips/trip-manifest-and-guests.md) -- crew and guest handling
+- [trip-completion-and-reporting.md](domains/trips/trip-completion-and-reporting.md) -- report-back, safety checklists, post-trip data
+- [trip-series-and-recurring.md](domains/trips/trip-series-and-recurring.md) -- recurring trip patterns and instance generation
 
-- [`fleet-management.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/fleet-management.md)
-- [`trip-logging-and-logbook.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-logging-and-logbook.md)
-- [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md)
-- [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md)
-- [`equipment-and-assets.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/equipment-and-assets.md)
+**Fleet**
 
-Core domain detail docs:
+- [vessel-registry.md](domains/fleet/vessel-registry.md) -- vessel identity, status, ownership
+- [vessel-classes-and-restrictions.md](domains/fleet/vessel-classes-and-restrictions.md) -- class grouping and operational restrictions
+- [vessel-readiness.md](domains/fleet/vessel-readiness.md) -- readiness expectations, required equipment checks
 
-- [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md)
+**Members**
 
-Supporting modules:
+- [membership-and-onboarding.md](domains/members/membership-and-onboarding.md) -- person identity, tenant membership, entry paths, guest model
+- [permissions-and-roles.md](domains/members/permissions-and-roles.md) -- authorization model, permission bundles
 
-- [`modules/reporting-and-exports.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/reporting-and-exports.md)
-- [`modules/weather-in-trip-context.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/weather-in-trip-context.md)
-- [`modules/route-planning-and-harbors.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/route-planning-and-harbors.md)
-- [`modules/incidents.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/incidents.md)
-- [`modules/media-gallery.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/media-gallery.md)
-- [`modules/trip-story.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/modules/trip-story.md)
+**Qualifications** (own bounded context, spans members + fleet, consumed by trips)
 
-Operating modes:
+- [certifications-and-catalog.md](domains/qualifications/certifications-and-catalog.md) -- external certs, seeded catalog, person-held records
+- [local-approvals.md](domains/qualifications/local-approvals.md) -- club-specific operational permissions, approval dimensions, exceptions
+- [skills-and-recognition.md](domains/qualifications/skills-and-recognition.md) -- tracked skills + badges, recognition only
 
-- [`operating-modes/kiosk-mode.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/operating-modes/kiosk-mode.md)
+**Equipment**
 
-Platform and admin areas:
+- [equipment-registry.md](domains/equipment/equipment-registry.md) -- asset identity, categories, lifecycle, QR labels
+- [equipment-assignment.md](domains/equipment/equipment-assignment.md) -- assignment modes (vessel/location/pool/trip)
+- [equipment-lending-and-booking.md](domains/equipment/equipment-lending-and-booking.md) -- lending, booking, temporary trip use
 
-- [`tenant-settings.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tenant-settings.md)
-- [`platform-administration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/platform-administration.md)
-- [`identity-access-and-configuration.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/identity-access-and-configuration.md)
+### Cross-Cutting Areas
+
+- [dashboard-and-home.md](cross-cutting/dashboard-and-home.md) -- operational landing page, composed from all domains
+- [pwa-and-offline.md](cross-cutting/pwa-and-offline.md) -- installable app, offline support, real-time subscriptions
+- [profile-and-account.md](cross-cutting/profile-and-account.md) -- self-service profile, emergency contacts, my trips
+- [harbors-and-locations.md](cross-cutting/harbors-and-locations.md) -- harbor reference data, location picker
+
+### Platform Areas
+
+- [platform-administration.md](platform/platform-administration.md) -- tenant lifecycle, platform admins
+- [platform-support-and-impersonation.md](platform/platform-support-and-impersonation.md) -- support access, impersonation
+- [tenant-settings.md](platform/tenant-settings.md) -- club-level configuration
+- [tenant-bootstrap-and-setup.md](platform/tenant-bootstrap-and-setup.md) -- new tenant creation
+- [seeded-catalog-adoption.md](platform/seeded-catalog-adoption.md) -- platform-provided reference data
+- [import-and-export-strategy.md](platform/import-and-export-strategy.md) -- data portability
+
+### Supporting Modules
+
+- [reporting-and-exports.md](modules/reporting-and-exports.md) -- operational summaries and data export
+- [weather-in-trip-context.md](modules/weather-in-trip-context.md) -- forecast and conditions for trips
+- [route-planning-and-harbors.md](modules/route-planning-and-harbors.md) -- waypoints and navigation context
+- [incidents.md](modules/incidents.md) -- structured safety event capture
+- [media-gallery.md](modules/media-gallery.md) -- photos and videos
+- [trip-story.md](modules/trip-story.md) -- trip narrative and sharing
+
+### Operating Modes
+
+- [kiosk-mode.md](operating-modes/kiosk-mode.md) -- shared-device operating surface
 
 ## How The Pieces Fit Together
 
 ### Calendar Backbone
 
-The calendar is the shared operational schedule.
-
-Core domains and supporting modules connect to it by:
+The calendar is the shared operational schedule. Core domains and modules connect to it by:
 
 - creating scheduled items
-- updating schedule state
-- contributing time-bound operational categories
-- exposing time-based conflicts
+- blocking time on a resource
+- contributing time-based state
 - appearing in filters and subscriptions
+- reacting to rescheduling
 
-### Identity Backbone
+### Identity And Permissions
 
-Identity and permissions are shared across the product.
-
-Core domains and supporting modules should consume:
+Identity and permissions are shared across the product. Core domains consume:
 
 - tenant context
 - memberships
@@ -131,21 +137,34 @@ They should not each invent their own access model.
 
 ### Trip As An Operational Hub
 
-Trips are not the whole product, but they are one of the richest operational domains.
-
 Trips connect to:
 
 - calendar for schedule and status visibility
 - fleet for vessel assignment and availability
-- equipment and assets for gear and asset context where relevant
+- equipment for gear context
 - identity for responsible sailor and manifest participants
-- safety for readiness and return rules
+- qualifications for eligibility validation
 - weather, route, incidents, media, and story as optional modules
 - kiosk mode as a specialized operating mode
 
-Trips should not become the owner of all time-based operational history.
-The calendar should own the timeline.
-Trips should own the richer trip-specific detail attached to that timeline.
+Trips should not become the owner of all time-based operational history. The calendar should own the timeline. Trips should own the richer trip-specific detail.
+
+### Qualifications As A Spanning Domain
+
+Qualifications span members and fleet. They are consumed by trips at departure validation time. They are their own bounded context because:
+
+- they have their own aggregate roots (certification catalog, local approval, skill/badge catalog)
+- they serve multiple consumers (trip departure, profile views, fleet eligibility)
+- they have their own lifecycle (grant, review, renew, revoke, expire)
+
+## Product Rules
+
+- Platform configuration must stay separate from tenant configuration.
+- Tenant-scoped data must not leak across clubs.
+- Profile editing must stay separate from admin management.
+- Permissions must control access to each area explicitly.
+- Club-specific trip configuration should live in tenant administration, not in platform-wide settings.
+- Kiosk mode should reuse the same permissions and trip rules, not invent a separate domain model.
 
 ## Supporting Module Rules
 
@@ -155,14 +174,6 @@ To keep supporting modules small and composable:
 - optional enrichments should stay optional
 - shared concepts should live in one place only
 - modules should integrate through clear domain facts, not UI hacks
-
-Examples:
-
-- weather should provide trip context, not own trip state
-- route planning should describe intended movement, not own departure logic
-- incidents should record safety events, not redefine trip completion
-- media should attach evidence and memory, not drive scheduling
-- reporting should summarize domain data, not become a new source of truth
 
 ## Configuration Model
 
@@ -181,28 +192,6 @@ Bad configuration:
 - invent separate permission semantics per tenant
 - allow the same core event to be modeled differently in every club
 
-## Recommended Boundaries In The App
-
-At application level, prefer:
-
-- one route area per product area
-- one use case per user action
-- one clear owner for each rule
-- composed read views when one screen needs facts from multiple domains
-
-At domain level, prefer:
-
-- `Calendar / Scheduling` owns schedule placement, time-based state visibility, and operational history in time
-- `Calendar / Scheduling` owns schedule-driven availability and conflicts
-- `Calendar / Scheduling` owns categories such as trips, maintenance, inspections, readiness tasks, and seasonal work as time-based operational items
-- `Fleet Management` owns vessel identity, vessel status, and vessel-facing constraints
-- `Trip Logging` owns trip-specific metadata, validations, and detailed record content
-- `Identity / Membership` owns who the actors are
-- `Qualifications` owns who is allowed to do what with vessels
-- `Equipment And Assets` owns club-shared gear, vessel-assigned components, and non-vessel bookable resources
-
-A vessel page, trip page, or dashboard may therefore be a composed read model across several areas without changing ownership of the underlying facts.
-
 ## Integration Heuristics
 
 When deciding whether something should be its own supporting module, ask:
@@ -213,14 +202,3 @@ When deciding whether something should be its own supporting module, ask:
 4. Can it be explained without talking about screens first?
 
 If the answer is no, it may just be part of an existing area, not a new module.
-
-## Product Review Standard
-
-A good product area or supporting module in this system should be:
-
-- understandable on its own
-- clearly connected to the backbone
-- tenant-safe
-- permission-safe
-- optional where appropriate
-- hard to misunderstand in implementation

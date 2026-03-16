@@ -1,4 +1,4 @@
-# Equipment And Assets
+# Equipment Registry
 
 ## Area Purpose
 
@@ -56,6 +56,28 @@ This area does not own:
 - maintenance, inspection, or readiness scheduling
 
 Those time-based concerns belong to the calendar backbone.
+
+## Aggregate Root
+
+`asset` -- a tracked physical thing or bookable resource managed by a tenant, with a name, category, lifecycle state, identity labels, and current assignment.
+
+## Who Uses It
+
+- club administrators registering and categorizing equipment
+- vessel-responsible members checking what is assigned to their vessel
+- members browsing shared gear or scanning QR labels
+- maintenance users identifying assets for service or inspection
+
+## Requires
+
+- [membership-and-onboarding.md](../members/membership-and-onboarding.md) -- tenant membership for asset managers
+
+## Enhanced By
+
+- [equipment-assignment.md](equipment-assignment.md) -- assignment modes and vessel/location/pool targeting
+- [equipment-lending-and-booking.md](equipment-lending-and-booking.md) -- lending, booking, and temporary trip use
+- [vessel-readiness.md](../fleet/vessel-readiness.md) -- required equipment expectations per vessel
+- [calendar-and-scheduling.md](../../backbone/calendar-and-scheduling.md) -- time-based bookings, inspections, and maintenance slots
 
 ## Core Concepts
 
@@ -249,15 +271,21 @@ The product should make it easy to answer:
 - where this asset is normally kept
 - which physical item this QR label refers to
 
-See also [`asset-categories-and-assignment.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-categories-and-assignment.md).
-See also [`asset-lending-and-booking.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/asset-lending-and-booking.md).
+See also [equipment-assignment.md](equipment-assignment.md).
+See also [equipment-lending-and-booking.md](equipment-lending-and-booking.md).
 
-## To Define In More Detail
+## Business Rules
 
-- asset categories
-- assignment history
-- lending flows
-- booking flows
-- asset-specific inspection templates
-- how asset readiness contributes to trip validation
-- label printing and scanning flow
+- Every asset belongs to exactly one tenant.
+- Every asset should have a name, a category, and a current lifecycle state.
+- Asset identity (name, serial number, QR label) is owned by this area, not by fleet or calendar.
+- Asset lifecycle states (active, inactive, retired, lost, out_of_service) are static facts, not time-based calendar states.
+- Time-based concerns (bookings, inspections, maintenance slots, overdue work) belong to the calendar backbone.
+- Vessel-mounted equipment is tracked here but displayed on vessel pages as a composed view -- fleet does not own asset records.
+- QR labels should lead to the asset record, not replace it.
+- Asset photos and storage-location context should help people find, identify, return, and inspect the right thing.
+- Tenants should be able to extend the category catalog without breaking the shared model.
+- Assets may move between vessels, locations, shared pools, and trips without changing their identity.
+
+See [equipment-assignment.md](equipment-assignment.md) for category, assignment, and scanning details.
+See [equipment-lending-and-booking.md](equipment-lending-and-booking.md) for lending, booking, and temporary trip use.

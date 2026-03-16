@@ -56,6 +56,22 @@ This area replaces that fragmentation with one tenant-scoped schedule.
 These are working personas, not fixed platform roles.
 The actual access model should still be permission-based.
 
+## Aggregate Root
+
+`calendar_item` -- a time-bound operational item shown in the shared schedule, with a schedule window, activity type, resource allocation, and calendar state.
+
+## Requires
+
+No hard dependencies. Calendar is a foundation-layer backbone that other domains connect to.
+
+## Enhanced By
+
+- [trip-planning-and-lifecycle.md](../domains/trips/trip-planning-and-lifecycle.md) -- trips as one activity type
+- [tasks-and-inspections.md](tasks-and-inspections.md) -- operational work categories
+- [vessel-registry.md](../domains/fleet/vessel-registry.md) -- vessel identity for resource allocation
+- [equipment-registry.md](../domains/equipment/equipment-registry.md) -- bookable assets
+- [notifications-and-reminders.md](notifications-and-reminders.md) -- delivery of calendar-derived signals
+
 ## Core Product Outcome
 
 A club should be able to open the calendar and understand:
@@ -285,8 +301,8 @@ Good candidates for calendar-backed tasks:
 - engine service slot
 - electrical inspection slot
 
-See also [`tasks-and-inspections.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/tasks-and-inspections.md).
-See also [`notifications-and-reminders.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/notifications-and-reminders.md).
+See also [`tasks-and-inspections.md`](../backbone/tasks-and-inspections.md).
+See also [`notifications-and-reminders.md`](../backbone/notifications-and-reminders.md).
 
 Poor candidates:
 

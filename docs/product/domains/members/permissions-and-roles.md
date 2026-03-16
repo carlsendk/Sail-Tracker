@@ -1,4 +1,4 @@
-# Permissions And Role Bundles
+# Permissions And Roles
 
 ## Purpose
 
@@ -63,6 +63,26 @@ This area does not own:
 - tenant configuration details themselves
 
 Those remain in their own areas.
+
+## Aggregate Root
+
+`permission_bundle` -- a named, reusable group of permissions that can be assigned to a platform identity or tenant membership.
+
+## Who Uses It
+
+- tenant owners assigning permission bundles to members
+- platform administrators managing platform-scoped access
+- club administrators deciding which bundles to adopt or customize
+- all users implicitly, as every action is gated by permissions
+
+## Requires
+
+- [membership-and-onboarding.md](membership-and-onboarding.md) -- tenant membership to attach permissions to
+
+## Enhanced By
+
+- [tenant-settings.md](../../platform/tenant-settings.md) -- bundle adoption and label customization
+- [local-approvals.md](../qualifications/local-approvals.md) -- operational eligibility (distinct from workflow permission)
 
 ## Core Principle
 
@@ -275,7 +295,7 @@ Memberships and identity define who the person is and which tenant they belong t
 
 This area defines what those memberships are allowed to do.
 
-See also [`memberships-and-identity.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/memberships-and-identity.md).
+See also [membership-and-onboarding.md](membership-and-onboarding.md).
 
 ## Relationship To Tenant Settings
 
@@ -297,7 +317,7 @@ Important rule:
 - the permission to grant an approval is authorization
 - the approval itself is operational eligibility
 
-See also [`local-approvals-and-exceptions.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/local-approvals-and-exceptions.md).
+See also [local-approvals.md](../qualifications/local-approvals.md).
 
 ## Business Rules
 

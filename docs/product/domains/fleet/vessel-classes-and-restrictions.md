@@ -53,6 +53,27 @@ This area does not own:
 
 Those remain in their own areas.
 
+## Aggregate Root
+
+`vessel_class` -- a named grouping of similar vessels with shared operational restrictions and approval requirements.
+
+## Who Uses It
+
+- club administrators defining vessel groupings and shared rules
+- qualification managers setting class-level approval scope
+- trip operators seeing which restrictions apply to a vessel
+- responsible sailors understanding what approvals are needed
+
+## Requires
+
+- [vessel-registry.md](vessel-registry.md) -- vessels to classify
+
+## Enhanced By
+
+- [local-approvals.md](../qualifications/local-approvals.md) -- class-level qualification rules
+- [trip-departure-and-validation.md](../trips/trip-departure-and-validation.md) -- restriction enforcement at departure
+- [vessel-readiness.md](vessel-readiness.md) -- class-level readiness expectations
+
 ## Core Principle
 
 The product should treat vessel class as an operational grouping, not only a label.
@@ -149,7 +170,7 @@ Examples:
 
 This is one of the main reasons class modeling matters.
 
-See also [`qualification-model.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/qualification-model.md).
+See also [certifications-and-catalog.md](../qualifications/certifications-and-catalog.md).
 
 ## Relationship To Trip Validation
 
@@ -166,7 +187,7 @@ This means the trip validator should be able to answer:
 - does this named vessel add stricter limits
 - is this trip type blocked by class or vessel restrictions
 
-See also [`trip-validation-and-departure-rules.md`](/Users/joncarlsen/code/private/Sail-Tracker/docs/product/trip-validation-and-departure-rules.md).
+See also [trip-departure-and-validation.md](../trips/trip-departure-and-validation.md).
 
 ## Relationship To Fleet
 
@@ -190,7 +211,7 @@ Examples:
 - all safety boats require a specific checklist
 - one named vessel requires extra pre-departure attention
 
-This is why this document should come before `vessel-readiness-and-required-equipment.md`.
+This is why this document should come before `vessel-readiness.md`.
 
 ## Business Rules
 

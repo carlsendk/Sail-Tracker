@@ -30,6 +30,25 @@ They need to answer questions such as:
 
 This area gives the product its operational entry points.
 
+## Aggregate Root
+
+`operational_view` -- a composed, filtered read model that presents attention-driven information from multiple domains, such as active trips, overdue work, or blocked vessels.
+
+## Who Uses It
+
+- club administrators getting a daily operational overview
+- trip operators checking active and overdue trips
+- vessel-responsible members seeing fleet status and blocked vessels
+- any member searching for a vessel, trip, person, or asset
+
+## Requires
+
+- [calendar-and-scheduling.md](calendar-and-scheduling.md) -- time-based operational state as the primary data source
+
+## Enhanced By
+
+- Every domain -- search and operational views compose facts from trips, fleet, equipment, qualifications, tasks, and membership
+
 ## Scope
 
 This area covers:

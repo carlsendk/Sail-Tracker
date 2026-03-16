@@ -53,6 +53,29 @@ This area does not own:
 
 Those remain in the connected domains.
 
+## Aggregate Root
+
+`notification` -- a delivery of an operational signal to a recipient, derived from a calendar-backed event or domain state change, with a category, channel, and timing rule.
+
+## Who Uses It
+
+- responsible sailors receiving trip reminders and overdue alerts
+- vessel-responsible members receiving maintenance and inspection signals
+- club administrators monitoring operational attention across the tenant
+- members subscribing to calendar feeds in external tools
+
+## Requires
+
+- [calendar-and-scheduling.md](calendar-and-scheduling.md) -- source of truth for time-bound state, due/overdue transitions, and scheduled items
+
+## Enhanced By
+
+- [trip-planning-and-lifecycle.md](../domains/trips/trip-planning-and-lifecycle.md) -- trip context for departure and return reminders
+- [tasks-and-inspections.md](tasks-and-inspections.md) -- operational work as a major source of reminder demand
+- [vessel-registry.md](../domains/fleet/vessel-registry.md) -- vessel context for fleet notifications
+- [equipment-registry.md](../domains/equipment/equipment-registry.md) -- asset context for equipment notifications
+- [certifications-and-catalog.md](../domains/qualifications/certifications-and-catalog.md) -- expiry signals for qualification notifications
+
 ## Core Principle
 
 Notifications and reminders should be derived from product facts that already exist.
@@ -68,17 +91,41 @@ The app should not maintain a parallel reminder-only model with separate operati
 
 ## Notification Categories
 
-Useful notification categories include:
+### Trip Notifications
 
-- trip due soon
-- trip overdue
-- trip completed
-- inspection due soon
-- inspection overdue
-- maintenance slot approaching
-- recurring seasonal work coming up
-- asset or vessel work blocked or rescheduled
-- follow-up required after incident
+- `trip.departure_reminder` -- reminder before planned start time (e.g. 30 min before)
+- `trip.return_approaching` -- expected return time is approaching
+- `trip.overdue` -- trip has not been reported back after expected return
+- `trip.completed` -- trip has been completed successfully
+- `trip.cancelled` -- a planned trip has been cancelled
+- `trip.manifest_changed` -- crew or guest manifest has been updated on an active trip
+
+### Task And Inspection Notifications
+
+- `inspection.due_soon` -- scheduled inspection is approaching
+- `inspection.overdue` -- inspection due date has passed without completion
+- `maintenance.approaching` -- maintenance slot is coming up
+- `maintenance.overdue` -- maintenance work is past due
+- `task.assigned` -- a task has been assigned to a member later if task assignment is added
+- `seasonal.upcoming` -- recurring seasonal work is approaching
+
+### Fleet Notifications
+
+- `vessel.out_of_service` -- a vessel has been marked out of service
+- `vessel.readiness_blocked` -- required readiness work is blocking departure
+- `vessel.available` -- a vessel that was blocked is now available again
+
+### Equipment Notifications
+
+- `equipment.overdue_return` -- a lent item has not been returned by the expected date
+- `equipment.booking_reminder` -- a booked resource is coming up
+- `equipment.service_due` -- equipment service or inspection is due
+
+### Qualification Notifications
+
+- `approval.expiring_soon` -- a local approval or certification is approaching expiry
+- `approval.expired` -- an approval or certification has expired
+- `approval.granted` -- a new approval has been granted
 
 Not every category needs the same delivery channel or urgency.
 
