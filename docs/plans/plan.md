@@ -29,14 +29,14 @@ Establish the code-quality bar that every subsequent change must clear before th
 Scope:
 
 - TypeScript strict mode at the most aggressive level the codebase tolerates (`noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitOverride`, `noPropertyAccessFromIndexSignature`)
-- ESLint flat config with type-aware rules: typescript-eslint strict + stylistic, react, react-hooks, jsx-a11y/strict, @next/next, import, unicorn, sonarjs, promise, deprecation, regexp, security, no-secrets, anti-trojan-source, jsdoc, perfectionist, no-only-tests, react-refresh, mdx
+- ESLint flat config with type-aware rules: typescript-eslint strict + stylistic, react, react-hooks, jsx-a11y/strict, @next/next, import, unicorn, sonarjs, promise, deprecation, regexp, security, no-secrets, anti-trojan-source, jsdoc, perfectionist, no-only-tests, react-refresh, mdx, vitest, testing-library, jest-dom, playwright, @eslint-community/eslint-comments, unused-imports, package-json, yml
 - Architectural-boundary enforcement via `eslint-plugin-boundaries` matching the `packages/{domain,application,infrastructure,ui,testkit}` + `apps/web` layout
 - Custom rules: no inline SVG (use `packages/ui/src/icons/`), `data-testid` required on interactive elements outside test files
 - Prettier (formatting) and Stylelint (CSS) configured and enforced
 - markdownlint + cspell + markdown-link-check on the `/docs` tree
 - syncpack + manypkg for monorepo dependency consistency
 - Pre-commit hooks via husky + lint-staged
-- Conventional Commits enforced via commitlint
+- Conventional Commits enforced via commitlint, which feeds the existing Release Please workflow (`.github/workflows/release-please.yml` + `.release-please-config.json`) — every `feat:`/`fix:` commit on `main` updates `CHANGELOG.md` and bumps `release-please-manifest.json` automatically. Future product code in `packages/*` may need release-please's monorepo mode; address that when product-tier work begins, not in Phase 0.
 - Vitest + React Testing Library + Playwright wired up; coverage thresholds set
 - knip + dependency-cruiser for unused-export and circular-dep detection
 - gitleaks + audit-ci + CodeQL for secrets, vuln, and security scanning in CI

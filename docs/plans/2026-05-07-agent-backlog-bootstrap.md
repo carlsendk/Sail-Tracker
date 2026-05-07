@@ -2,7 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute this plan. Phase A is sequential (one task at a time). Phases B–D dispatch parallel subagents per tier/phase. Steps use checkbox (`- [ ]`) syntax.
 
-**Goal:** Stand up a complete, agent-consumable GitHub backlog (labels + 12 milestones + project board + ~150 issues) generated from `docs/plans/plan.md` and `docs/product/plan.md`, plus a hard code-quality bar that every agent-produced PR must clear, plus the conventions that let any Claude Code agent pull → implement → test → PR an issue without human ceremony.
+**Goal:** Stand up a complete, agent-consumable GitHub backlog (labels + 8 milestones + project board + ~150 issues) generated from `docs/plans/plan.md` and `docs/product/plan.md`, plus a hard code-quality bar that every agent-produced PR must clear, plus the conventions that let any Claude Code agent pull → implement → test → PR an issue without human ceremony.
+
+> **Milestone restructure (2026-05-07):** Phase 0 + Infra-1..4 were collapsed into a single `Foundations` milestone. Per-phase granularity (Phase-0, Infra-1..4) lives on the project board's Tier custom field rather than separate milestones. Task A3 below is historical (it created 12 milestones); current state is 8 (Foundations + Tier-1..7). Phase B sections still describe per-phase scope, but the `--milestone` flag for every infra issue is `--milestone "Foundations"`.
 
 **Architecture:**
 - `gh` CLI for all GitHub operations; no custom backend
@@ -66,7 +68,7 @@
 
 ### GitHub state created
 - ~25 labels across `state:`, `type:`, `domain:`, `agent:`, `priority:` namespaces
-- 12 milestones: Phase 0, Infra-1..4, Tier-1..7
+- 8 milestones: Foundations + Tier-1..7 (per-phase granularity for Phase 0 + Infra-1..4 lives on the project board's Tier field; see milestone restructure note above)
 - 1 Projects v2 board (`Sail-Tracker Backlog`) with 5 views
 - Branch protection rule on `main`
 - ~150 issues (Phase 0: ~14, Infra: ~18, Product: ~120)
@@ -955,35 +957,31 @@ git commit -m "chore(gh): record Phase 0 issue body sources"
 
 ## Phase B: Generate Infra Issues (Phases 1–4 of `docs/plans/plan.md`)
 
-Mirror Phase 0's pattern. One issue per scope bullet. Body bodies in `scripts/issue-bodies/infra/<phase>/<n>.md`.
+Mirror Phase 0's pattern. One issue per scope bullet. Body bodies in `scripts/issue-bodies/infra/<phase>/<n>.md`. **All issues created in this phase use milestone `Foundations` and project Tier `Infra-1` … `Infra-4` for granularity.**
 
-### Task C1: Phase 1 issues — Local Supabase (4)
+### Task C1: Phase 1 issues — Local Supabase (4) — Tier=`Infra-1`
 
-Milestone "Infra-1: Local Supabase":
 1. `[infra] add supabase start/stop/status/db reset scripts`
 2. `[infra] document local ports + Studio usage`
 3. `[infra] document migrations + seed.sql application locally`
 4. `[infra] make bootstrap flow work against local Supabase`
 
-### Task C2: Phase 2 issues — Env Contract (4)
+### Task C2: Phase 2 issues — Env Contract (4) — Tier=`Infra-2`
 
-Milestone "Infra-2: Env Contract Cleanup":
 1. `[infra] hosted env contract`
 2. `[infra] local env contract`
 3. `[infra] env resolver layer`
 4. `[infra] remove legacy env fallbacks`
 
-### Task C3: Phase 3 issues — CI DB Validation (4)
+### Task C3: Phase 3 issues — CI DB Validation (4) — Tier=`Infra-3`
 
-Milestone "Infra-3: CI Database Validation":
 1. `[infra] install Supabase CLI in Actions`
 2. `[infra] start local Supabase in CI`
 3. `[infra] run migrations + seed on fresh local DB in CI`
 4. `[infra] DB-backed app checks in CI`
 
-### Task C4: Phase 4 issues — Production Deploy (6)
+### Task C4: Phase 4 issues — Production Deploy (6) — Tier=`Infra-4`
 
-Milestone "Infra-4: Production Deploy Flow":
 1. `[infra] define promotion rule (merge-to-main)`
 2. `[infra] pre-deploy validation gate`
 3. `[infra] apply Supabase migrations in pipeline`
@@ -991,14 +989,16 @@ Milestone "Infra-4: Production Deploy Flow":
 5. `[infra] Vercel deploy after DB success`
 6. `[docs] rollback expectations for migrations + web`
 
-- [ ] **Step 1: Author body files for each task above**
-- [ ] **Step 2: Create each issue via `gh issue create`** with `--label "type:infra,state:ready,agent:auto-pickable,priority:p1"` (or `p2` for the rollback docs)
-- [ ] **Step 3: Verify totals**
+- [ ] **Step 1: Author body files for each task above** under `scripts/issue-bodies/infra/<phase>/<n>.md` matching the agent-task template
+- [ ] **Step 2: Create each issue via `gh issue create`** with `--milestone "Foundations" --label "type:infra,state:ready,agent:auto-pickable,priority:p1,domain:infra"` (or `p2` and `type:docs` for the rollback docs entry)
+- [ ] **Step 3: After creation, set the project Tier field on each item** — see `docs/architecture/issue-authoring-learnings.md` for the bash idiom; option IDs in `scripts/.gh-project.env` (`TIER_OPT_INFRA1` … `TIER_OPT_INFRA4`)
+- [ ] **Step 4: Verify totals** by listing each Tier value via the project item-list:
 
 ```bash
-for m in "Infra-1: Local Supabase" "Infra-2: Env Contract Cleanup" "Infra-3: CI Database Validation" "Infra-4: Production Deploy Flow"; do
-  count=$(gh issue list --repo carlsendk/Sail-Tracker --milestone "$m" --json number --jq 'length')
-  echo "$m: $count"
+for tier in Infra-1 Infra-2 Infra-3 Infra-4; do
+  count=$(gh project item-list 1 --owner carlsendk --format json --limit 200 \
+    --jq "[.items[] | select(.[\"tier\"]? == \"$tier\")] | length")
+  echo "$tier: $count"
 done
 ```
 
