@@ -5,7 +5,7 @@
     "dev": "next dev --hostname 127.0.0.1 --port 3002",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1 --port 3002",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "vitest run"
   },
@@ -19,7 +19,7 @@
     "@types/node": "22.13.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "eslint": "9.22.0",
+    "eslint": "^9.38.0",
     "eslint-config-next": "15.2.2",
     "typescript": "5.8.2",
     "vitest": "3.0.8"
