@@ -48,5 +48,13 @@
     "globals": "^17.6.0",
     "supabase": "^2.78.1",
     "typescript-eslint": "^8.59.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "supabase",
+      "unrs-resolver"
+    ]
   }
 }
