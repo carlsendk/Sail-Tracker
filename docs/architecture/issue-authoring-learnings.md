@@ -102,6 +102,18 @@ For each new milestone batch, the operator must:
 - Do Infra (Phase 1–4) issues use `domain:infra` or do we add `domain:database`, `domain:deploy`? **Tentative**: keep `domain:infra` until cardinality justifies splitting.
 - Should `priority:*` reflect dependency depth or operator urgency? **Tentative**: dependency depth (root deps = p0, leaf-most = p2) so that breadth-first pickup naturally drains the bottom of the graph.
 
+## Lint policy: zero warnings, no rules disabled at config level
+
+When an issue introduces or extends a static-analysis ruleset (ESLint, Stylelint, markdownlint, cspell, commitlint, etc.), the issue MUST end with the linter exiting **0 warnings AND 0 errors**, all enabled rules at `'error'` severity, and no rule set to `'off'` in config to silence violations.
+
+**Curation = choose which rules to enable** before enabling them. If a plugin's `recommended` preset includes rules that don't apply to the codebase (e.g. `react/react-in-jsx-scope` under Next 15's automatic JSX runtime), use a more specific preset that already excludes them (`react.configs['jsx-runtime']`) or hand-curate the rule list. Don't apply the noisy preset and then override individual rules to `'off'`.
+
+**Don't split "wiring" from "fixing".** Each lint/quality issue owns both: enabling its rules AND clearing every violation those rules surface. If the violation count from a pre-flight check is too large for one issue, escalate scope to the operator BEFORE dispatching the implementer — propose splitting the rule set into multiple issues, each with their own clean-to-zero contract.
+
+**Inline `// eslint-disable-next-line <rule> -- <justification>` IS acceptable** when a specific violation reflects intentional design (e.g. `react-hooks/rules-of-hooks` violation in test code that explicitly tests hook misuse). Blanket config-level `'rule': 'off'` is not.
+
+This was learned the hard way during B2 (#6): the original issue body said "violations are expected; this issue is about wiring not a clean run." That framing produced a config with 620 surfaced warnings, all rules at `'warn'` severity, which the operator rejected. The reauthored B2 body curates which rules to enable up-front (drops `react/react-in-jsx-scope` as wrong-for-stack, defers Prettier-overlap formatting rules to B7, enables the rest at `'error'`) and requires the implementer to clean up to zero. The `agent-task.yml` Definition of Done now spells out this contract.
+
 ## End-to-end workflow validation (issue #5, B1, PR #20)
 
 The first run of the `work-next → subagent-driven-development` pipeline succeeded on the first try — implementer + spec reviewer + code reviewer each approved without re-dispatch. Captured outcomes worth carrying forward:

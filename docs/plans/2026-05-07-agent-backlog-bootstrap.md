@@ -6,6 +6,8 @@
 
 > **Milestone restructure (2026-05-07):** Phase 0 + Infra-1..4 were collapsed into a single `Foundations` milestone. Per-phase granularity (Phase-0, Infra-1..4) lives on the project board's Tier custom field rather than separate milestones. Task A3 below is historical (it created 12 milestones); current state is 8 (Foundations + Tier-1..7). Phase B sections still describe per-phase scope, but the `--milestone` flag for every infra issue is `--milestone "Foundations"`.
 
+> **Lint policy (2026-05-07):** Every issue that introduces or extends a lint/static-analysis ruleset (ESLint, Stylelint, markdownlint, cspell, commitlint, etc.) MUST end with `pnpm lint` (or the equivalent) exiting **0 warnings + 0 errors**, all enabled rules at `'error'` severity, and no rule disabled at the config level to silence violations. Curation = choose which rules to enable; "warn-as-deferral" is not allowed. If a rule's violations are too large to fix in the same issue, escalate scope to operator BEFORE dispatching the implementer (split the rule set or invest in cleanup). Inline `// eslint-disable-next-line` with a justification IS acceptable when the violation is intentional design; blanket config overrides are not. Applies retroactively to B2 (which originally read "violations are expected — addressed in follow-ups").
+
 **Architecture:**
 - `gh` CLI for all GitHub operations; no custom backend
 - Each issue body is a self-contained mini-plan (embedded spec, files, TDD steps, acceptance criteria) so the agent never needs to fetch the source doc
