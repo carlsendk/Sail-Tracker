@@ -1,73 +1,69 @@
 /**
  * Root ESLint flat config for the Sail-Tracker monorepo.
  *
- * Phase B2 — strict, type-aware config covering the full plugin set.
- * Newly-introduced rule families are set to "warn" so violations are
- * visible without failing CI. Pre-existing next/core-web-vitals errors
- * remain at error severity. B3-B6 will progressively tighten specific
- * rule families to "error" as each one is cleaned up.
+ * Phase B2 — strict, preset-based config covering the full plugin set.
+ * Rules are kept at "warn" severity until all violations are resolved,
+ * then flipped to "error" in the final commit to establish the
+ * zero-warning baseline.
+ *
+ * Curated-out rules (NOT disabled via 'off', simply never applied):
+ *   - react/react-in-jsx-scope  — Next 15 uses automatic JSX runtime
+ *   - react/jsx-indent          — Prettier (B7) owns indentation
+ *   - react/jsx-newline         — Prettier owns newlines
+ *   - react/jsx-one-expression-per-line — Prettier owns line composition
+ *
+ * Plugin presets used instead of applying every rule:
+ *   - react:          flat.recommended + flat.jsx-runtime
+ *   - unicorn:        recommended
+ *   - sonarjs:        recommended
+ *   - regexp:         flat/recommended
+ *   - perfectionist:  recommended-alphabetical
  *
  * Substitution note — eslint-plugin-deprecation:
  *   The legacy eslint-plugin-deprecation does not work with the
  *   typescript-eslint v8 flat-config API. We use the built-in
- *   @typescript-eslint/no-deprecated rule instead (typescript-eslint v8+),
- *   which covers the same intent with current tooling support.
- *
- * ESLint version note:
- *   ESLint was upgraded from 9.22 → 9.39.x to satisfy peer requirements
- *   from eslint-plugin-unicorn@64, eslint-plugin-regexp@3, and
- *   eslint-plugin-yml@3, all of which require eslint >=9.38.
+ *   @typescript-eslint/no-deprecated rule instead (typescript-eslint v8+).
  */
-
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-
-import jseslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import globals from "globals";
-
-// React / JSX
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import jsxA11y from "eslint-plugin-jsx-a11y";
-import reactRefresh from "eslint-plugin-react-refresh";
-
-// Next.js
-import nextPlugin from "@next/eslint-plugin-next";
-
-// Import / module hygiene
-import importPlugin from "eslint-plugin-import";
-import unusedImports from "eslint-plugin-unused-imports";
-
-// General quality
-import unicorn from "eslint-plugin-unicorn";
-import sonarjs from "eslint-plugin-sonarjs";
-import promise from "eslint-plugin-promise";
-import regexp from "eslint-plugin-regexp";
-import perfectionist from "eslint-plugin-perfectionist";
-import jsdoc from "eslint-plugin-jsdoc";
-
-// Security
-import security from "eslint-plugin-security";
-import noSecrets from "eslint-plugin-no-secrets";
-import trojan from "eslint-plugin-anti-trojan-source";
-
-// Test quality
-import vitest from "eslint-plugin-vitest";
-import testingLibrary from "eslint-plugin-testing-library";
-import jestDom from "eslint-plugin-jest-dom";
-import playwright from "eslint-plugin-playwright";
-import noOnlyTests from "eslint-plugin-no-only-tests";
-
-// File-type specific
-import * as mdx from "eslint-plugin-mdx";
-import yml from "eslint-plugin-yml";
-import packageJsonPlugin from "eslint-plugin-package-json";
 
 // Hygiene / monorepo
 import eslintComments from "@eslint-community/eslint-plugin-eslint-comments";
+import jseslint from "@eslint/js";
+// Next.js
+import nextPlugin from "@next/eslint-plugin-next";
+import trojan from "eslint-plugin-anti-trojan-source";
+// Import / module hygiene
+import importPlugin from "eslint-plugin-import";
+import jestDom from "eslint-plugin-jest-dom";
+import jsdoc from "eslint-plugin-jsdoc";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+// File-type specific
+import * as mdx from "eslint-plugin-mdx";
+import noOnlyTests from "eslint-plugin-no-only-tests";
+import noSecrets from "eslint-plugin-no-secrets";
+import packageJsonPlugin from "eslint-plugin-package-json";
+import perfectionist from "eslint-plugin-perfectionist";
+import playwright from "eslint-plugin-playwright";
+import promise from "eslint-plugin-promise";
+// React / JSX
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import regexp from "eslint-plugin-regexp";
+// Security
+import security from "eslint-plugin-security";
+import sonarjs from "eslint-plugin-sonarjs";
+import testingLibrary from "eslint-plugin-testing-library";
+// General quality
+import unicorn from "eslint-plugin-unicorn";
+import unusedImports from "eslint-plugin-unused-imports";
+// Test quality
+import vitest from "eslint-plugin-vitest";
+import yml from "eslint-plugin-yml";
+import globals from "globals";
+import path from "node:path";
+import tseslint from "typescript-eslint";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 
 // Paths to tsconfigs that ESLint's type-aware rules should use.
 // Type-aware linting is scoped to apps/web only — packages/* currently
@@ -75,7 +71,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const webTsconfig = path.resolve(__dirname, "apps/web/tsconfig.json");
 
 // Files that should be parsed as TypeScript (all TS in workspace)
-const tsFiles = ["apps/web/**/*.{ts,tsx}", "packages/**/*.ts"];
+// const tsFiles = ["apps/web/**/*.{ts,tsx}", "packages/**/*.ts"];
 
 // Files in apps/web that can participate in type-aware linting
 const webTsFiles = ["apps/web/**/*.{ts,tsx}"];
@@ -92,33 +88,32 @@ const testFiles = [
 const playwrightFiles = ["**/e2e/**/*.{ts,tsx}", "**/*.playwright.{ts,tsx}"];
 
 // All @typescript-eslint rules from strictTypeChecked that we want to
-// downgrade from "error" to "warn" in the B2 baseline. B3–B6 will
-// re-tighten specific sub-families to "error".
+// keep at "warn" in the B2 baseline while violations are being cleaned up.
 const tsStrictRulesToWarn = {
-  "@typescript-eslint/no-unsafe-argument": "warn",
-  "@typescript-eslint/no-unsafe-assignment": "warn",
-  "@typescript-eslint/no-unsafe-call": "warn",
-  "@typescript-eslint/no-unsafe-member-access": "warn",
-  "@typescript-eslint/no-unsafe-return": "warn",
-  "@typescript-eslint/no-unsafe-enum-comparison": "warn",
+  "@typescript-eslint/array-type": "warn",
+  "@typescript-eslint/consistent-indexed-object-style": "warn",
+  "@typescript-eslint/consistent-type-assertions": "warn",
+  // stylistic
+  "@typescript-eslint/consistent-type-definitions": "warn",
+  "@typescript-eslint/consistent-type-imports": "warn",
+  "@typescript-eslint/no-deprecated": "warn",
   "@typescript-eslint/no-explicit-any": "warn",
   "@typescript-eslint/no-floating-promises": "warn",
   "@typescript-eslint/no-misused-promises": "warn",
   "@typescript-eslint/no-misused-spread": "warn",
-  "@typescript-eslint/require-await": "warn",
-  "@typescript-eslint/restrict-template-expressions": "warn",
-  "@typescript-eslint/restrict-plus-operands": "warn",
-  "@typescript-eslint/no-deprecated": "warn",
-  // stylistic
-  "@typescript-eslint/consistent-type-definitions": "warn",
-  "@typescript-eslint/prefer-optional-chain": "warn",
-  "@typescript-eslint/array-type": "warn",
-  "@typescript-eslint/prefer-regexp-exec": "warn",
-  "@typescript-eslint/consistent-indexed-object-style": "warn",
   "@typescript-eslint/no-redundant-type-constituents": "warn",
+  "@typescript-eslint/no-unsafe-argument": "warn",
+  "@typescript-eslint/no-unsafe-assignment": "warn",
+  "@typescript-eslint/no-unsafe-call": "warn",
+  "@typescript-eslint/no-unsafe-enum-comparison": "warn",
+  "@typescript-eslint/no-unsafe-member-access": "warn",
+  "@typescript-eslint/no-unsafe-return": "warn",
   "@typescript-eslint/prefer-nullish-coalescing": "warn",
-  "@typescript-eslint/consistent-type-imports": "warn",
-  "@typescript-eslint/consistent-type-assertions": "warn",
+  "@typescript-eslint/prefer-optional-chain": "warn",
+  "@typescript-eslint/prefer-regexp-exec": "warn",
+  "@typescript-eslint/require-await": "warn",
+  "@typescript-eslint/restrict-plus-operands": "warn",
+  "@typescript-eslint/restrict-template-expressions": "warn",
 };
 
 export default [
@@ -152,7 +147,7 @@ export default [
       },
     },
     rules: {
-      // No-undef from recommended fires on Node globals — muted at file level
+      // no-undef from recommended fires on Node globals — muted at file level
       "no-undef": "off",
     },
   },
@@ -161,23 +156,23 @@ export default [
   // packages/* have no tsconfig, so we parse them as TS but skip type rules.
   {
     files: ["packages/**/*.ts"],
-    plugins: {
-      "@typescript-eslint": tseslint.plugin,
-    },
     languageOptions: {
+      globals: {
+        ...globals.node,
+      },
       parser: tseslint.parser,
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
       },
-      globals: {
-        ...globals.node,
-      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
       // Basic non-type-aware TS rules only
       "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 
@@ -208,13 +203,38 @@ export default [
   },
 
   // ─── React ────────────────────────────────────────────────────────────────
+  // Use flat.recommended preset — this does NOT include jsx-indent, jsx-newline,
+  // or jsx-one-expression-per-line (those are opinionated/all-rules only).
+  // Then apply flat.jsx-runtime which sets react-in-jsx-scope to off via curation.
+  {
+    ...react.configs.flat.recommended,
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      ...react.configs.flat.recommended.languageOptions,
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(react.configs.flat.recommended.rules ?? {}).map(
+          ([rule, _severity]) => [rule, "warn"]
+        )
+      ),
+    },
+    settings: {
+      react: { version: "detect" },
+    },
+  },
+  // jsx-runtime: turns off react/react-in-jsx-scope and react/jsx-uses-react
+  // (automatic JSX transform in Next 15 — no import needed)
+  {
+    ...react.configs.flat["jsx-runtime"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
+  },
+  // Additional curated react rules from spec (not in recommended preset)
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
-    plugins: {
-      react,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
-    },
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -223,22 +243,23 @@ export default [
         ecmaFeatures: { jsx: true },
       },
     },
-    settings: {
-      react: { version: "detect" },
+    plugins: {
+      react,
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
     },
     rules: {
-      // Apply react rules as warnings
-      ...Object.fromEntries(
-        Object.keys(react.rules ?? {}).map((rule) => [
-          `react/${rule}`,
-          "warn",
-        ])
-      ),
+      "react-hooks/exhaustive-deps": "warn",
       // react-hooks — rules-of-hooks is always an error
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
       // react-refresh
       "react-refresh/only-export-components": "warn",
+      "react/jsx-max-depth": ["warn", { max: 5 }],
+      // Spec: enable + clean up
+      "react/jsx-no-literals": "warn",
+    },
+    settings: {
+      react: { version: "detect" },
     },
   },
 
@@ -284,68 +305,133 @@ export default [
       "unused-imports": unusedImports,
     },
     rules: {
-      "import/no-duplicates": "warn",
       "import/no-cycle": "warn",
+      "import/no-duplicates": "warn",
       "import/no-unresolved": "off", // TypeScript handles this
-      "unused-imports/no-unused-imports": "warn",
-      "unused-imports/no-unused-vars": "warn",
       // Turn off base no-unused-vars in favour of unused-imports version
       "no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "warn",
+      "unused-imports/no-unused-vars": "warn",
     },
   },
 
-  // ─── General quality plugins ──────────────────────────────────────────────
+  // ─── Unicorn ──────────────────────────────────────────────────────────────
+  // Use the recommended preset — naturally includes no-null and prevent-abbreviations.
+  // Does NOT include unicorn/prefer-import-meta-properties at error by default
+  // since it's not in recommended, so violations are only from recommended rules.
+  {
+    ...unicorn.configs.recommended,
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(unicorn.configs.recommended.rules ?? {}).map(
+          ([rule, _severity]) => [rule, "warn"]
+        )
+      ),
+    },
+  },
+
+  // ─── SonarJS ──────────────────────────────────────────────────────────────
+  // Use recommended preset — includes arrow-function-convention, declarations-in-global-scope, file-header.
+  {
+    ...sonarjs.configs.recommended,
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
+    plugins: {
+      sonarjs,
+    },
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(sonarjs.configs.recommended.rules ?? {}).map(
+          ([rule, _severity]) => [rule, "warn"]
+        )
+      ),
+    },
+  },
+
+  // ─── Promise ──────────────────────────────────────────────────────────────
   {
     files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
     plugins: {
-      unicorn,
-      sonarjs,
       promise,
-      regexp,
+    },
+    rules: {
+      "promise/always-return": "warn",
+      "promise/catch-or-return": "warn",
+      "promise/no-return-wrap": "warn",
+      "promise/param-names": "warn",
+    },
+  },
+
+  // ─── Regexp ───────────────────────────────────────────────────────────────
+  // Use flat/recommended preset. Spec-listed rules are in recommended.
+  {
+    ...regexp.configs["flat/recommended"],
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(regexp.configs["flat/recommended"].rules ?? {}).map(
+          ([rule, _severity]) => [rule, "warn"]
+        )
+      ),
+      // Spec-listed: explicitly enable (may not be in recommended)
+      "regexp/require-unicode-regexp": "warn",
+      // require-unicode-sets-regexp (v flag) is NOT enabled: the TypeScript
+      // target is ES2022 which does not support the RegExp v flag. The u flag
+      // (require-unicode-regexp) is the correct choice at this target level.
+      "regexp/sort-character-class-elements": "warn",
+    },
+  },
+
+  // ─── Perfectionist ────────────────────────────────────────────────────────
+  // Use recommended-alphabetical preset. Includes sort-imports, sort-objects,
+  // sort-modules, sort-union-types, sort-object-types per spec.
+  {
+    ...perfectionist.configs["recommended-alphabetical"],
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
+    plugins: {
       perfectionist,
+    },
+    rules: {
+      ...Object.fromEntries(
+        Object.entries(
+          perfectionist.configs["recommended-alphabetical"].rules ?? {}
+        ).map(([rule, _severity]) => [rule, "warn"])
+      ),
+    },
+  },
+
+  // ─── JSDoc ────────────────────────────────────────────────────────────────
+  // Apply only the specific rules from the spec. Avoid enabling rules that
+  // require additional configuration options (e.g., match-name, no-restricted-syntax,
+  // require-tags, check-examples — they fire misconfigured without option objects).
+  {
+    files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
+    plugins: {
       jsdoc,
     },
     rules: {
-      // unicorn — all at warn
-      ...Object.fromEntries(
-        Object.keys(unicorn.rules ?? {}).map((rule) => [
-          `unicorn/${rule}`,
-          "warn",
-        ])
-      ),
-      // sonarjs — all at warn
-      ...Object.fromEntries(
-        Object.keys(sonarjs.rules ?? {}).map((rule) => [
-          `sonarjs/${rule}`,
-          "warn",
-        ])
-      ),
-      // promise
-      "promise/always-return": "warn",
-      "promise/no-return-wrap": "warn",
-      "promise/param-names": "warn",
-      "promise/catch-or-return": "warn",
-      // regexp
-      ...Object.fromEntries(
-        Object.keys(regexp.rules ?? {}).map((rule) => [
-          `regexp/${rule}`,
-          "warn",
-        ])
-      ),
-      // perfectionist — all at warn
-      ...Object.fromEntries(
-        Object.keys(perfectionist.rules ?? {}).map((rule) => [
-          `perfectionist/${rule}`,
-          "warn",
-        ])
-      ),
-      // jsdoc — all at warn
-      ...Object.fromEntries(
-        Object.keys(jsdoc.rules ?? {}).map((rule) => [
-          `jsdoc/${rule}`,
-          "warn",
-        ])
-      ),
+      // Standard recommended jsdoc rules (stable, no required options)
+      "jsdoc/check-alignment": "warn",
+      "jsdoc/check-param-names": "warn",
+      "jsdoc/check-property-names": "warn",
+      "jsdoc/check-tag-names": "warn",
+      "jsdoc/check-types": "warn",
+      "jsdoc/empty-tags": "warn",
+      "jsdoc/implements-on-classes": "warn",
+      "jsdoc/multiline-blocks": "warn",
+      "jsdoc/no-bad-blocks": "warn",
+      "jsdoc/no-blank-blocks": "warn",
+      "jsdoc/no-multi-asterisks": "warn",
+      "jsdoc/require-asterisk-prefix": "warn",
+      "jsdoc/require-description": "warn",
+      "jsdoc/require-file-overview": "warn",
+      // Spec-listed
+      "jsdoc/require-jsdoc": "warn",
+      "jsdoc/require-param-name": "warn",
+      "jsdoc/require-returns-check": "warn",
+      "jsdoc/require-yields-check": "warn",
+      "jsdoc/tag-lines": "warn",
+      "jsdoc/valid-types": "warn",
     },
   },
 
@@ -353,19 +439,29 @@ export default [
   {
     files: ["**/*.{js,mjs,cjs,jsx,ts,tsx}"],
     plugins: {
-      security,
-      "no-secrets": noSecrets,
       "anti-trojan-source": trojan,
+      "no-secrets": noSecrets,
+      security,
     },
     rules: {
-      ...Object.fromEntries(
-        Object.keys(security.rules ?? {}).map((rule) => [
-          `security/${rule}`,
-          "warn",
-        ])
-      ),
-      "no-secrets/no-secrets": "warn",
       "anti-trojan-source/no-bidi": "error",
+      "no-secrets/no-secrets": "warn",
+      "security/detect-bidi-characters": "warn",
+      "security/detect-buffer-noassert": "warn",
+      "security/detect-child-process": "warn",
+      "security/detect-disable-mustache-escape": "warn",
+      "security/detect-eval-with-expression": "warn",
+      "security/detect-new-buffer": "warn",
+      "security/detect-no-csrf-before-method-override": "warn",
+      "security/detect-non-literal-fs-filename": "warn",
+      "security/detect-non-literal-regexp": "warn",
+      "security/detect-non-literal-require": "warn",
+      // Spec-listed security rules
+      "security/detect-object-injection": "warn",
+      "security/detect-possible-timing-attacks": "warn",
+      "security/detect-pseudoRandomBytes": "warn",
+      // Other recommended security rules
+      "security/detect-unsafe-regex": "warn",
     },
   },
 
@@ -384,28 +480,30 @@ export default [
   // ─── Test files — vitest + testing-library + jest-dom ────────────────────
   {
     files: testFiles,
-    plugins: {
-      vitest,
-      "testing-library": testingLibrary,
-      "jest-dom": jestDom,
-      "no-only-tests": noOnlyTests,
-    },
     languageOptions: {
       globals: {
         ...vitest.environments?.env?.globals,
         ...globals.node,
       },
     },
+    plugins: {
+      "jest-dom": jestDom,
+      "no-only-tests": noOnlyTests,
+      "testing-library": testingLibrary,
+      vitest,
+    },
     rules: {
-      // vitest rules at warn
+      // vitest recommended rules
       ...Object.fromEntries(
-        Object.keys(vitest.rules ?? {}).map((rule) => [
-          `vitest/${rule}`,
-          "warn",
-        ])
+        Object.entries(vitest.configs.recommended.rules ?? {}).map(
+          ([rule, _severity]) => [rule, "warn"]
+        )
       ),
+      // Spec-listed vitest rules not in recommended
+      "vitest/prefer-expect-assertions": "warn",
+      "vitest/require-hook": "warn",
       // testing-library rules at warn
-      // consistent-data-testid requires testIdPattern option (B5 will configure it)
+      // consistent-data-testid requires testIdPattern option
       // no-dom-import requires a framework argument — off for now
       ...Object.fromEntries(
         Object.keys(testingLibrary.rules ?? {})
@@ -465,7 +563,7 @@ export default [
     ...cfg,
     files: ["**/*.{yml,yaml}"],
     rules: {
-      ...(cfg.rules ?? {}),
+      ...cfg.rules,
       // Downgrade all yml rules to warn
       ...Object.fromEntries(
         Object.entries(cfg.rules ?? {}).map(([rule]) => [rule, "warn"])
@@ -496,6 +594,8 @@ export default [
           ([rule, _]) => [rule, "warn"]
         )
       ),
+      // Spec-listed
+      "package-json/require-description": "warn",
     },
   },
 ];

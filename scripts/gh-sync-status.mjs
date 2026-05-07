@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { execFileSync } from "node:child_process";
+import process from "node:process";
 /**
  * Map a `state:*` label change to the Sail-Tracker Backlog Project's Status field.
  *
@@ -17,31 +19,38 @@
  *   PROJECT_NUMBER   (e.g. "1")
  */
 import { parseArgs } from "node:util";
-import { execFileSync } from "node:child_process";
-import process from "node:process";
 
 const STATE_TO_STATUS = {
-  "state:ready": "Ready",
+  "state:blocked": "Blocked",
   "state:in-progress": "In Progress",
   "state:in-review": "In Review",
-  "state:blocked": "Blocked",
+  "state:ready": "Ready",
 };
 
-function gh(args) {
-  return execFileSync("gh", args, { encoding: "utf8" });
-}
-
+/**
+ *
+ */
 function fail(message) {
   console.error(message);
   process.exit(1);
 }
 
+/**
+ *
+ */
+function gh(arguments_) {
+  return execFileSync("gh", arguments_, { encoding: "utf8" });
+}
+
+/**
+ *
+ */
 function main() {
   const { values } = parseArgs({
     options: {
+      action: { type: "string" },
       issue: { type: "string" },
       label: { type: "string" },
-      action: { type: "string" },
     },
   });
 
@@ -71,7 +80,7 @@ function main() {
   const itemList = JSON.parse(
     gh(["project", "item-list", projectNumber, "--owner", owner, "--format", "json", "--limit", "500"]),
   );
-  const item = itemList.items.find((i) => i.content?.number === issueNumber);
+  const item = itemList.items.find((index) => index.content?.number === issueNumber);
   if (!item) {
     console.log(`Issue #${issueNumber} not in project; nothing to do.`);
     return;

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { getTenantLabel } from "../lib/tenant-context";
 
 describe("tenant context", () => {
@@ -8,11 +9,11 @@ describe("tenant context", () => {
         hostname: "club.localhost",
         lookup: "environment",
         tenant: {
-          slug: "club",
-          name: "Club",
-          status: "active",
           defaultLocale: "en",
           matchedBy: "localhost-fallback",
+          name: "Club",
+          slug: "club",
+          status: "active",
         },
       }),
     ).toBe("Club (club)");

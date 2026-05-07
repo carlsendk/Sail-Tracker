@@ -1,98 +1,26 @@
 import { headers } from "next/headers";
+
+import { getServerEnv as getServerEnvironment } from "./server-env";
 import { lookupTenantByHostname } from "./supabase-admin";
-import { getServerEnv } from "./server-env";
 
-type TenantStatus = "active" | "suspended" | "archived";
-
-export type TenantContext = {
+export interface TenantContext {
   hostname: string;
-  lookup: "supabase" | "environment";
+  lookup: "environment" | "supabase";
   tenant: {
-    slug: string;
-    name: string;
-    status: TenantStatus;
     defaultLocale: string;
     matchedBy: "domain" | "localhost-fallback";
-  };
-};
-
-function normalizeHostname(host: string): string {
-  return (host.split(":")[0] ?? host).trim().toLowerCase();
-}
-
-function getLocalFallbackSlug(hostname: string): string | null {
-  const localhostFallbackEnabled =
-    (getServerEnv("NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK") ?? "true") === "true";
-
-  if (!localhostFallbackEnabled) {
-    return null;
-  }
-
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return getServerEnv("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
-  }
-
-  const localhostMatch = hostname.match(/^([a-z0-9-]+)\.localhost$/);
-  if (localhostMatch) {
-    return localhostMatch[1] ?? null;
-  }
-
-  return null;
-}
-
-function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fallback"): TenantContext["tenant"] | null {
-  const realSlug = getServerEnv("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
-  const demoSlug = getServerEnv("NEXT_PUBLIC_DEMO_TENANT_SLUG") ?? "demo";
-  const defaultLocale = getServerEnv("NEXT_PUBLIC_DEFAULT_LOCALE") ?? "en";
-
-  if (slug === realSlug) {
-    return {
-      slug: realSlug,
-      name: "Club",
-      status: "active",
-      defaultLocale,
-      matchedBy,
-    };
-  }
-
-  if (slug === demoSlug) {
-    return {
-      slug: demoSlug,
-      name: "Demo Club",
-      status: "active",
-      defaultLocale,
-      matchedBy,
-    };
-  }
-
-  return null;
-}
-
-async function lookupSupabaseTenantByHostname(hostname: string): Promise<TenantContext["tenant"] | null> {
-  const tenantData = await lookupTenantByHostname(hostname);
-  if (!tenantData) {
-    return null;
-  }
-
-  return {
-    slug: tenantData.slug,
-    name: tenantData.name,
-    status: tenantData.status,
-    defaultLocale: tenantData.default_locale,
-    matchedBy: "domain",
+    name: string;
+    slug: string;
+    status: TenantStatus;
   };
 }
 
-async function resolveTenantFromEnvironment(hostname: string): Promise<TenantContext["tenant"] | null> {
-  const localhostFallbackSlug = getLocalFallbackSlug(hostname);
-  if (localhostFallbackSlug) {
-    return getEnvironmentTenant(localhostFallbackSlug, "localhost-fallback");
-  }
+type TenantStatus = "active" | "archived" | "suspended";
 
-  return getEnvironmentTenant(hostname.split(".")[0] ?? "", "domain");
-}
-
-export async function getTenantContext(): Promise<TenantContext | null> {
+/**
+ *
+ */
+export async function getTenantContext(): Promise<null | TenantContext> {
   const requestHeaders = await headers();
   const rawHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
 
@@ -123,10 +51,104 @@ export async function getTenantContext(): Promise<TenantContext | null> {
   };
 }
 
-export function getTenantLabel(context: TenantContext | null): string {
+/**
+ *
+ */
+export function getTenantLabel(context: null | TenantContext): string {
   if (!context) {
     return "No tenant resolved";
   }
 
   return `${context.tenant.name} (${context.tenant.slug})`;
+}
+
+/**
+ *
+ */
+function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fallback"): null | TenantContext["tenant"] {
+  const realSlug = getServerEnvironment("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
+  const demoSlug = getServerEnvironment("NEXT_PUBLIC_DEMO_TENANT_SLUG") ?? "demo";
+  const defaultLocale = getServerEnvironment("NEXT_PUBLIC_DEFAULT_LOCALE") ?? "en";
+
+  if (slug === realSlug) {
+    return {
+      defaultLocale,
+      matchedBy,
+      name: "Club",
+      slug: realSlug,
+      status: "active",
+    };
+  }
+
+  if (slug === demoSlug) {
+    return {
+      defaultLocale,
+      matchedBy,
+      name: "Demo Club",
+      slug: demoSlug,
+      status: "active",
+    };
+  }
+
+  return null;
+}
+
+/**
+ *
+ */
+function getLocalFallbackSlug(hostname: string): null | string {
+  const localhostFallbackEnabled =
+    (getServerEnvironment("NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK") ?? "true") === "true";
+
+  if (!localhostFallbackEnabled) {
+    return null;
+  }
+
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return getServerEnvironment("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
+  }
+
+  const localhostMatch = /^([a-z\d-]+)\.localhost$/u.exec(hostname);
+  if (localhostMatch) {
+    return localhostMatch[1] ?? null;
+  }
+
+  return null;
+}
+
+/**
+ *
+ */
+async function lookupSupabaseTenantByHostname(hostname: string): Promise<null | TenantContext["tenant"]> {
+  const tenantData = await lookupTenantByHostname(hostname);
+  if (!tenantData) {
+    return null;
+  }
+
+  return {
+    defaultLocale: tenantData.default_locale,
+    matchedBy: "domain",
+    name: tenantData.name,
+    slug: tenantData.slug,
+    status: tenantData.status,
+  };
+}
+
+/**
+ *
+ */
+function normalizeHostname(host: string): string {
+  return (host.split(":")[0] ?? host).trim().toLowerCase();
+}
+
+/**
+ *
+ */
+async function resolveTenantFromEnvironment(hostname: string): Promise<null | TenantContext["tenant"]> {
+  const localhostFallbackSlug = getLocalFallbackSlug(hostname);
+  if (localhostFallbackSlug) {
+    return getEnvironmentTenant(localhostFallbackSlug, "localhost-fallback");
+  }
+
+  return getEnvironmentTenant(hostname.split(".")[0] ?? "", "domain");
 }

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { resolveSupabaseAdminConfig } from "../lib/supabase-admin";
 
 describe("supabase admin config", () => {
@@ -13,8 +14,8 @@ describe("supabase admin config", () => {
     });
 
     expect(config).toEqual({
-      url: "https://example.supabase.co",
       adminKey: "sb_secret_example",
+      url: "https://example.supabase.co",
     });
   });
 
@@ -29,8 +30,8 @@ describe("supabase admin config", () => {
     });
 
     expect(config).toEqual({
-      url: "https://example.supabase.co",
       adminKey: "service-role-example",
+      url: "https://example.supabase.co",
     });
   });
 

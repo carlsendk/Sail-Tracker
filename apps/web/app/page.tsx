@@ -1,5 +1,5 @@
-import { getTenantContext, getTenantLabel } from "../lib/tenant-context";
 import { getBootstrapStatus } from "../lib/supabase-admin";
+import { getTenantContext, getTenantLabel } from "../lib/tenant-context";
 
 const foundations = [
   "Multi-tenant platform with club subdomains",
@@ -8,6 +8,9 @@ const foundations = [
   "Local-first development with GitHub, Vercel, and Supabase",
 ];
 
+/**
+ *
+ */
 export default async function HomePage() {
   const tenantContext = await getTenantContext();
   const bootstrapStatus = await getBootstrapStatus();

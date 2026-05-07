@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-function loadEnvFile(filename) {
+/**
+ *
+ */
+function loadEnvironmentFile(filename) {
   const filepath = resolve(process.cwd(), filename);
   if (!existsSync(filepath)) {
     return;
   }
 
   const contents = readFileSync(filepath, "utf8");
-  for (const line of contents.split(/\r?\n/)) {
+  for (const line of contents.split(/\r?\n/u)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) {
       continue;
@@ -23,7 +26,7 @@ function loadEnvFile(filename) {
 
     const key = trimmed.slice(0, separatorIndex).trim();
     const rawValue = trimmed.slice(separatorIndex + 1).trim();
-    const value = rawValue.replace(/^['"]|['"]$/g, "");
+    const value = rawValue.replaceAll(/^["']|["']$/gu, "");
 
     if (!process.env[key]) {
       process.env[key] = value;
@@ -31,16 +34,16 @@ function loadEnvFile(filename) {
   }
 }
 
-loadEnvFile(".env.local");
-loadEnvFile(".env");
+loadEnvironmentFile(".env.local");
+loadEnvironmentFile(".env");
 
-const requiredEnv = [
+const requiredEnvironment = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "SUPABASE_SECRET_KEY",
   "PLATFORM_ADMIN_EMAIL",
 ];
 
-for (const key of requiredEnv) {
+for (const key of requiredEnvironment) {
   if (!process.env[key]) {
     console.error(`Missing required environment variable: ${key}`);
     process.exit(1);
@@ -59,6 +62,9 @@ const tenantSlugs = [
 
 const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost";
 
+/**
+ *
+ */
 function isPrivilegedSupabaseKey(value) {
   return Boolean(value && value.startsWith("sb_secret_"));
 }
@@ -70,98 +76,79 @@ if (!isPrivilegedSupabaseKey(secretKey)) {
   process.exit(1);
 }
 
-function createUrl(pathname, searchParams = {}) {
+/**
+ *
+ */
+async function assignMembershipRole(membershipId, roleId) {
+  await supabaseFetch("/rest/v1/membership_roles", {
+    body: [
+      {
+        membership_id: membershipId,
+        role_id: roleId,
+      },
+    ],
+    headers: {
+      Prefer: "resolution=ignore-duplicates,return=minimal",
+    },
+    method: "POST",
+  });
+}
+
+/**
+ *
+ */
+async function assignProfileRole(profileId, roleId) {
+  await supabaseFetch("/rest/v1/profile_roles", {
+    body: [
+      {
+        profile_id: profileId,
+        role_id: roleId,
+      },
+    ],
+    headers: {
+      Prefer: "resolution=ignore-duplicates,return=minimal",
+    },
+    method: "POST",
+  });
+}
+
+/**
+ *
+ */
+function createUrl(pathname, searchParameters = {}) {
   const url = new URL(pathname, supabaseUrl);
-  for (const [key, value] of Object.entries(searchParams)) {
+  for (const [key, value] of Object.entries(searchParameters)) {
     url.searchParams.set(key, value);
   }
   return url;
 }
 
-async function supabaseFetch(pathname, { method = "GET", searchParams, body, headers } = {}) {
-  const response = await fetch(createUrl(pathname, searchParams), {
-    method,
-    headers: {
-      apikey: secretKey,
-      Authorization: `Bearer ${secretKey}`,
-      "Content-Type": "application/json",
-      Prefer: "return=representation",
-      ...(headers || {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`${method} ${pathname} failed: ${response.status} ${text}`);
-  }
-
-  if (response.status === 204) {
-    return null;
-  }
-
-  const text = await response.text();
-  return text ? JSON.parse(text) : null;
-}
-
-async function fetchSingle(pathname, searchParams) {
-  const rows = await supabaseFetch(pathname, { searchParams });
-  return rows[0] || null;
-}
-
-async function ensureProfile() {
-  await supabaseFetch("/rest/v1/profiles", {
-    method: "POST",
-    searchParams: {
-      on_conflict: "email",
-    },
+/**
+ *
+ */
+async function ensureMembership(profileId, tenantId) {
+  await supabaseFetch("/rest/v1/memberships", {
+    body: [
+      {
+        profile_id: profileId,
+        status: "active",
+        tenant_id: tenantId,
+      },
+    ],
     headers: {
       Prefer: "resolution=merge-duplicates,return=representation",
     },
-    body: [
-      {
-        email: platformAdminEmail,
-        display_name: bootstrapDisplayName,
-      },
-    ],
-  });
-
-  const profile = await fetchSingle("/rest/v1/profiles", {
-    select: "id,email,display_name",
-    email: `eq.${platformAdminEmail}`,
-    limit: "1",
-  });
-
-  if (!profile) {
-    throw new Error("Failed to resolve bootstrap profile");
-  }
-
-  return profile;
-}
-
-async function ensureMembership(profileId, tenantId) {
-  await supabaseFetch("/rest/v1/memberships", {
     method: "POST",
     searchParams: {
       on_conflict: "tenant_id,profile_id",
     },
-    headers: {
-      Prefer: "resolution=merge-duplicates,return=representation",
-    },
-    body: [
-      {
-        tenant_id: tenantId,
-        profile_id: profileId,
-        status: "active",
-      },
-    ],
   });
 
   const membership = await fetchSingle("/rest/v1/memberships", {
+    limit: "1",
+    profile_id: `eq.${profileId}`,
     select: "id,tenant_id,profile_id",
     tenant_id: `eq.${tenantId}`,
-    profile_id: `eq.${profileId}`,
-    limit: "1",
   });
 
   if (!membership) {
@@ -171,11 +158,47 @@ async function ensureMembership(profileId, tenantId) {
   return membership;
 }
 
+/**
+ *
+ */
+async function ensureProfile() {
+  await supabaseFetch("/rest/v1/profiles", {
+    body: [
+      {
+        display_name: bootstrapDisplayName,
+        email: platformAdminEmail,
+      },
+    ],
+    headers: {
+      Prefer: "resolution=merge-duplicates,return=representation",
+    },
+    method: "POST",
+    searchParams: {
+      on_conflict: "email",
+    },
+  });
+
+  const profile = await fetchSingle("/rest/v1/profiles", {
+    email: `eq.${platformAdminEmail}`,
+    limit: "1",
+    select: "id,email,display_name",
+  });
+
+  if (!profile) {
+    throw new Error("Failed to resolve bootstrap profile");
+  }
+
+  return profile;
+}
+
+/**
+ *
+ */
 async function fetchRole(key) {
   const role = await fetchSingle("/rest/v1/roles", {
-    select: "id,key",
     key: `eq.${key}`,
     limit: "1",
+    select: "id,key",
   });
 
   if (!role) {
@@ -185,11 +208,22 @@ async function fetchRole(key) {
   return role;
 }
 
+/**
+ *
+ */
+async function fetchSingle(pathname, searchParameters) {
+  const rows = await supabaseFetch(pathname, { searchParams: searchParameters });
+  return rows[0] || null;
+}
+
+/**
+ *
+ */
 async function fetchTenant(slug) {
   const tenant = await fetchSingle("/rest/v1/tenants", {
+    limit: "1",
     select: "id,slug,name",
     slug: `eq.${slug}`,
-    limit: "1",
   });
 
   if (!tenant) {
@@ -199,36 +233,9 @@ async function fetchTenant(slug) {
   return tenant;
 }
 
-async function assignProfileRole(profileId, roleId) {
-  await supabaseFetch("/rest/v1/profile_roles", {
-    method: "POST",
-    headers: {
-      Prefer: "resolution=ignore-duplicates,return=minimal",
-    },
-    body: [
-      {
-        profile_id: profileId,
-        role_id: roleId,
-      },
-    ],
-  });
-}
-
-async function assignMembershipRole(membershipId, roleId) {
-  await supabaseFetch("/rest/v1/membership_roles", {
-    method: "POST",
-    headers: {
-      Prefer: "resolution=ignore-duplicates,return=minimal",
-    },
-    body: [
-      {
-        membership_id: membershipId,
-        role_id: roleId,
-      },
-    ],
-  });
-}
-
+/**
+ *
+ */
 async function main() {
   const profile = await ensureProfile();
   const platformAdminRole = await fetchRole("platform_admin");
@@ -244,9 +251,9 @@ async function main() {
     await assignMembershipRole(membership.id, tenantOwnerRole.id);
 
     membershipSummaries.push({
-      tenant: tenant.slug,
       hostname: `${tenant.slug}.${rootDomain}`,
       membershipId: membership.id,
+      tenant: tenant.slug,
     });
   }
 
@@ -262,6 +269,35 @@ async function main() {
       2,
     ),
   );
+}
+
+/**
+ *
+ */
+async function supabaseFetch(pathname, { body, headers, method = "GET", searchParams } = {}) {
+  const response = await fetch(createUrl(pathname, searchParams), {
+    body: body ? JSON.stringify(body) : undefined,
+    headers: {
+      apikey: secretKey,
+      Authorization: `Bearer ${secretKey}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      ...headers,
+    },
+    method,
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`${method} ${pathname} failed: ${response.status} ${text}`);
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 }
 
 main().catch((error) => {

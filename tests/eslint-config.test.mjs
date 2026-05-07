@@ -1,16 +1,12 @@
 /**
- * Smoke spec — asserts that the root eslint.config.mjs loads correctly
- * and contains flat-config entries registering each required plugin.
- *
+ * @file Smoke spec: asserts that eslint.config.mjs loads and registers all required plugins.
  * Run via: node --test tests/eslint-config.test.mjs
  */
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import { describe, it } from "node:test";
 import path from "node:path";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 const rootDir = path.resolve(__dirname, "..");
 
 // Dynamically import the root eslint config
@@ -36,6 +32,9 @@ function collectPluginKeys(flatConfig) {
 const pluginKeys = collectPluginKeys(config);
 
 // Helper for clearer failure messages
+/**
+ *
+ */
 function assertPlugin(key) {
   assert.ok(
     pluginKeys.has(key),

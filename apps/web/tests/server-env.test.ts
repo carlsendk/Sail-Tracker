@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildEnvLookup, parseEnvContents } from "../lib/server-env";
+
+import { buildEnvLookup as buildEnvironmentLookup, parseEnvContents as parseEnvironmentContents } from "../lib/server-env";
 
 describe("server env", () => {
   it("parses env content and strips quotes", () => {
-    const parsed = parseEnvContents(`
+    const parsed = parseEnvironmentContents(`
       # comment
       NEXT_PUBLIC_SUPABASE_URL="https://example.supabase.co"
       PLATFORM_ADMIN_EMAIL=test@example.com
@@ -14,7 +15,7 @@ describe("server env", () => {
   });
 
   it("prefers runtime env over file values", () => {
-    const lookup = buildEnvLookup(
+    const lookup = buildEnvironmentLookup(
       [
         new Map([
           ["NEXT_PUBLIC_SUPABASE_URL", "https://file.example"],
@@ -31,7 +32,7 @@ describe("server env", () => {
   });
 
   it("falls back across multiple file sources", () => {
-    const lookup = buildEnvLookup(
+    const lookup = buildEnvironmentLookup(
       [
         new Map([["NEXT_PUBLIC_ROOT_DOMAIN", "localhost"]]),
         new Map([["PLATFORM_ADMIN_EMAIL", "root@example.com"]]),

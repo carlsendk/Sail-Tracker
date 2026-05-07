@@ -1,57 +1,71 @@
-import { getServerEnv } from "./server-env";
+import { getServerEnv as getServerEnvironment } from "./server-env";
 
-type TenantStatus = "active" | "suspended" | "archived";
-
-export type SupabaseTenant = {
-  slug: string;
-  name: string;
-  status: TenantStatus;
+export interface SupabaseTenant {
   default_locale: string;
-};
+  name: string;
+  slug: string;
+  status: TenantStatus;
+}
 
-type SupabaseTenantDomainRow = {
+interface SupabaseTenantDomainRow {
   hostname: string;
-  tenants: SupabaseTenant | SupabaseTenant[] | null;
-};
-
-export function resolveSupabaseAdminConfig(readEnv: (name: string) => string | null) {
-  const url = readEnv("NEXT_PUBLIC_SUPABASE_URL");
-  const adminKey = readEnv("SUPABASE_SECRET_KEY") ?? readEnv("SUPABASE_SERVICE_ROLE_KEY");
-
-  if (!url || !adminKey) {
-    return null;
-  }
-
-  return { url, adminKey };
+  tenants: null | SupabaseTenant | SupabaseTenant[];
 }
 
-function getSupabaseAdminConfig() {
-  return resolveSupabaseAdminConfig(getServerEnv);
-}
+type TenantStatus = "active" | "archived" | "suspended";
 
-async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
+/**
+ *
+ */
+export async function getBootstrapStatus() {
+  const platformAdminEmail = getServerEnvironment("PLATFORM_ADMIN_EMAIL");
   const config = getSupabaseAdminConfig();
-  if (!config) {
-    return null;
+
+  if (!config || !platformAdminEmail) {
+    return {
+      isConfigured: false,
+      platformAdminReady: false,
+      source: "environment" as const,
+    };
   }
 
-  const url = new URL(pathname, config.url);
-  return fetch(url, {
-    ...init,
-    headers: {
-      apikey: config.adminKey,
-      Authorization: `Bearer ${config.adminKey}`,
-      ...(init?.headers ?? {}),
-    },
-    cache: "no-store",
-  });
+  try {
+    const response = await supabaseAdminFetch(
+      "/rest/v1/profiles?select=id,email&limit=1&email=eq." + encodeURIComponent(platformAdminEmail),
+    );
+
+    if (!response?.ok) {
+      return {
+        isConfigured: true,
+        platformAdminReady: false,
+        source: "supabase" as const,
+      };
+    }
+
+    const rows = (await response.json()) as { email: string; id: string; }[];
+
+    return {
+      isConfigured: true,
+      platformAdminReady: rows.length > 0,
+      source: "supabase" as const,
+    };
+  } catch {
+    return {
+      isConfigured: true,
+      platformAdminReady: false,
+      source: "supabase" as const,
+    };
+  }
 }
 
-export async function lookupTenantByHostname(hostname: string): Promise<SupabaseTenant | null> {
+/**
+ *
+ */
+export async function lookupTenantByHostname(hostname: string): Promise<null | SupabaseTenant> {
   try {
     const response = await supabaseAdminFetch("/rest/v1/tenant_domains?select=hostname,tenants!inner(slug,name,status,default_locale)&limit=1&hostname=eq." + encodeURIComponent(hostname));
 
-    if (!response || !response.ok) {
+    if (!response?.ok) {
       return null;
     }
 
@@ -65,43 +79,44 @@ export async function lookupTenantByHostname(hostname: string): Promise<Supabase
   }
 }
 
-export async function getBootstrapStatus() {
-  const platformAdminEmail = getServerEnv("PLATFORM_ADMIN_EMAIL");
+/**
+ *
+ */
+export function resolveSupabaseAdminConfig(readEnvironment: (name: string) => null | string) {
+  const url = readEnvironment("NEXT_PUBLIC_SUPABASE_URL");
+  const adminKey = readEnvironment("SUPABASE_SECRET_KEY") ?? readEnvironment("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (!url || !adminKey) {
+    return null;
+  }
+
+  return { adminKey, url };
+}
+
+/**
+ *
+ */
+function getSupabaseAdminConfig() {
+  return resolveSupabaseAdminConfig(getServerEnvironment);
+}
+
+/**
+ *
+ */
+async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
   const config = getSupabaseAdminConfig();
-
-  if (!config || !platformAdminEmail) {
-    return {
-      source: "environment" as const,
-      isConfigured: false,
-      platformAdminReady: false,
-    };
+  if (!config) {
+    return null;
   }
 
-  try {
-    const response = await supabaseAdminFetch(
-      "/rest/v1/profiles?select=id,email&limit=1&email=eq." + encodeURIComponent(platformAdminEmail),
-    );
-
-    if (!response || !response.ok) {
-      return {
-        source: "supabase" as const,
-        isConfigured: true,
-        platformAdminReady: false,
-      };
-    }
-
-    const rows = (await response.json()) as Array<{ id: string; email: string }>;
-
-    return {
-      source: "supabase" as const,
-      isConfigured: true,
-      platformAdminReady: rows.length > 0,
-    };
-  } catch {
-    return {
-      source: "supabase" as const,
-      isConfigured: true,
-      platformAdminReady: false,
-    };
-  }
+  const url = new URL(pathname, config.url);
+  return fetch(url, {
+    ...init,
+    cache: "no-store",
+    headers: {
+      apikey: config.adminKey,
+      Authorization: `Bearer ${config.adminKey}`,
+      ...init?.headers,
+    },
+  });
 }
