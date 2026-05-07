@@ -20,7 +20,7 @@ type TenantStatus = "active" | "archived" | "suspended";
  * Checks whether the platform admin profile exists in Supabase.
  * @returns An object describing the bootstrap source and readiness state.
  */
-export async function getBootstrapStatus() {
+export const getBootstrapStatus = async () => {
   const platformAdminEmail = getServerEnvironment("PLATFORM_ADMIN_EMAIL");
   const config = getSupabaseAdminConfig();
 
@@ -66,7 +66,7 @@ export async function getBootstrapStatus() {
  * @param hostname - The fully-qualified hostname to look up.
  * @returns The matched tenant, or null if not found or on error.
  */
-export async function lookupTenantByHostname(hostname: string): Promise<null | SupabaseTenant> {
+export const lookupTenantByHostname = async (hostname: string): Promise<null | SupabaseTenant> => {
   try {
     const response = await supabaseAdminFetch("/rest/v1/tenant_domains?select=hostname,tenants!inner(slug,name,status,default_locale)&limit=1&hostname=eq." + encodeURIComponent(hostname));
 
@@ -92,7 +92,7 @@ export async function lookupTenantByHostname(hostname: string): Promise<null | S
  * @param readEnvironment - A function to read an environment variable by name.
  * @returns An object with url and adminKey, or null if either is missing.
  */
-export function resolveSupabaseAdminConfig(readEnvironment: (name: string) => null | string) {
+export const resolveSupabaseAdminConfig = (readEnvironment: (name: string) => null | string) => {
   const url = readEnvironment("NEXT_PUBLIC_SUPABASE_URL");
   const adminKey = readEnvironment("SUPABASE_SECRET_KEY") ?? readEnvironment("SUPABASE_SERVICE_ROLE_KEY");
 
@@ -108,9 +108,7 @@ export function resolveSupabaseAdminConfig(readEnvironment: (name: string) => nu
  * Retrieves the Supabase admin config from the server environment.
  * @returns The resolved admin config, or null if env vars are missing.
  */
-function getSupabaseAdminConfig() {
-  return resolveSupabaseAdminConfig(getServerEnvironment);
-}
+const getSupabaseAdminConfig = () => resolveSupabaseAdminConfig(getServerEnvironment);
 
 /**
  * Issues an authenticated fetch request to the Supabase REST API.
@@ -118,7 +116,7 @@ function getSupabaseAdminConfig() {
  * @param init - Optional fetch init options (method, headers, body).
  * @returns The fetch Response, or null if admin config is unavailable.
  */
-async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
+const supabaseAdminFetch = async (pathname: string, init?: RequestInit) => {
   const config = getSupabaseAdminConfig();
   if (!config) {
     // eslint-disable-next-line unicorn/no-null -- returning null to signal unavailable config (callers check for null)

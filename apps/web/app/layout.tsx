@@ -24,10 +24,12 @@ interface RootLayoutProperties {
  * @param props.children - The active page content to render inside the body.
  * @returns The HTML document shell.
  */
-export default function RootLayout({ children }: Readonly<RootLayoutProperties>) {
+const RootLayout = ({ children }: Readonly<RootLayoutProperties>) => {
   return (
     <html lang="en">
       <body suppressHydrationWarning>{children}</body>
     </html>
   );
-}
+};
+
+export default RootLayout;

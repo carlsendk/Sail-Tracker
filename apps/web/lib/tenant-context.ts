@@ -23,7 +23,7 @@ type TenantStatus = "active" | "archived" | "suspended";
  * Resolves the active tenant from the current request's Host header.
  * @returns The resolved TenantContext, or null if no tenant could be matched.
  */
-export async function getTenantContext(): Promise<null | TenantContext> {
+export const getTenantContext = async (): Promise<null | TenantContext> => {
   const requestHeaders = await headers();
   const rawHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
 
@@ -61,7 +61,7 @@ export async function getTenantContext(): Promise<null | TenantContext> {
  * @param context - The resolved TenantContext, or null.
  * @returns A label string such as "Club (club)" or "No tenant resolved".
  */
-export function getTenantLabel(context: null | TenantContext): string {
+export const getTenantLabel = (context: null | TenantContext): string => {
   if (!context) {
     return "No tenant resolved";
   }
@@ -75,7 +75,7 @@ export function getTenantLabel(context: null | TenantContext): string {
  * @param matchedBy - How the slug was obtained ("domain" or "localhost-fallback").
  * @returns The tenant object, or null if the slug does not match any configured tenant.
  */
-function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fallback"): null | TenantContext["tenant"] {
+const getEnvironmentTenant = (slug: string, matchedBy: "domain" | "localhost-fallback"): null | TenantContext["tenant"] => {
   const realSlug = getServerEnvironment("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
   const demoSlug = getServerEnvironment("NEXT_PUBLIC_DEMO_TENANT_SLUG") ?? "demo";
   const defaultLocale = getServerEnvironment("NEXT_PUBLIC_DEFAULT_LOCALE") ?? "en";
@@ -109,7 +109,7 @@ function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fal
  * @param hostname - The normalised hostname from the incoming request.
  * @returns The fallback slug string, or null if the hostname is not a localhost variant.
  */
-function getLocalFallbackSlug(hostname: string): null | string {
+const getLocalFallbackSlug = (hostname: string): null | string => {
   const localhostFallbackEnabled =
     (getServerEnvironment("NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK") ?? "true") === "true";
 
@@ -137,7 +137,7 @@ function getLocalFallbackSlug(hostname: string): null | string {
  * @param hostname - The normalised hostname to look up in the tenant_domains table.
  * @returns The tenant object shaped as TenantContext["tenant"], or null if not found.
  */
-async function lookupSupabaseTenantByHostname(hostname: string): Promise<null | TenantContext["tenant"]> {
+const lookupSupabaseTenantByHostname = async (hostname: string): Promise<null | TenantContext["tenant"]> => {
   const tenantData = await lookupTenantByHostname(hostname);
   if (!tenantData) {
     // eslint-disable-next-line unicorn/no-null -- Supabase lookup returned null/undefined
@@ -158,16 +158,14 @@ async function lookupSupabaseTenantByHostname(hostname: string): Promise<null | 
  * @param host - The raw Host header value (e.g. "example.com:3000").
  * @returns The normalised hostname without port (e.g. "example.com").
  */
-function normalizeHostname(host: string): string {
-  return (host.split(":")[0] ?? host).trim().toLowerCase();
-}
+const normalizeHostname = (host: string): string => (host.split(":")[0] ?? host).trim().toLowerCase();
 
 /**
  * Resolves a tenant from environment configuration when Supabase returns nothing.
  * @param hostname - The normalised hostname to attempt environment-based resolution for.
  * @returns The resolved tenant object, or null if no environment tenant matches.
  */
-function resolveTenantFromEnvironment(hostname: string): null | TenantContext["tenant"] {
+const resolveTenantFromEnvironment = (hostname: string): null | TenantContext["tenant"] => {
   const localhostFallbackSlug = getLocalFallbackSlug(hostname);
   if (localhostFallbackSlug) {
     return getEnvironmentTenant(localhostFallbackSlug, "localhost-fallback");

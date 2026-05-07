@@ -34,6 +34,7 @@ const STATE_TO_STATUS = {
  * Logs an error message and exits the process with status 1.
  * @param {string} message - The error message to print.
  */
+// eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module CLI script; function hoisting used intentionally for procedural readability
 function fail(message) {
   console.error(message);
   process.exit(1);
@@ -44,6 +45,7 @@ function fail(message) {
  * @param {string[]} cliArguments - The arguments to pass to the gh CLI.
  * @returns {string} The stdout output of the command.
  */
+// eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module CLI script; function hoisting used intentionally for procedural readability
 function gh(cliArguments) {
   // eslint-disable-next-line sonarjs/no-os-command-from-path -- gh CLI is a known trusted tool, always resolved from PATH
   return execFileSync("gh", cliArguments, { encoding: "utf8" });
@@ -52,7 +54,7 @@ function gh(cliArguments) {
 /**
  * Main entry point: parses CLI args and syncs the GitHub project Status field.
  */
-// eslint-disable-next-line sonarjs/cyclomatic-complexity -- CLI orchestration function: sequential validation guards are intentionally flat
+// eslint-disable-next-line sonarjs/declarations-in-global-scope, sonarjs/cyclomatic-complexity -- ES module CLI script; function hoisting used intentionally; cyclomatic complexity is unavoidable in sequential CLI orchestration
 function main() {
   const { values } = parseArgs({
     options: {

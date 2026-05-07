@@ -32,7 +32,7 @@ const TEXT = {
  * The homepage server component, rendering tenant and bootstrap information.
  * @returns The rendered homepage markup.
  */
-export default async function HomePage() {
+const HomePage = async () => {
   const tenantContext = await getTenantContext();
   const bootstrapStatus = await getBootstrapStatus();
 
@@ -92,4 +92,6 @@ export default async function HomePage() {
       </section>
     </main>
   );
-}
+};
+
+export default HomePage;

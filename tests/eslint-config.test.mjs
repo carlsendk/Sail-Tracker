@@ -22,8 +22,10 @@ const { default: config } = await import(
 
 /**
  * Collect all plugin keys registered across all flat-config entries.
+ * @param {Array<object>} flatConfig - The flat config array to inspect.
+ * @returns {Set<string>} The set of registered plugin keys.
  */
-function collectPluginKeys(flatConfig) {
+const collectPluginKeys = flatConfig => {
   const keys = new Set();
   for (const entry of flatConfig) {
     if (entry.plugins && typeof entry.plugins === "object") {
@@ -33,7 +35,7 @@ function collectPluginKeys(flatConfig) {
     }
   }
   return keys;
-}
+};
 
 const pluginKeys = collectPluginKeys(config);
 
@@ -41,7 +43,7 @@ const pluginKeys = collectPluginKeys(config);
  * Asserts that a plugin key is registered in the flat config, with a clear failure message.
  * @param {string} key - The plugin key to check.
  */
-function assertPlugin(key) {
+const assertPlugin = key => {
   assert.ok(
     pluginKeys.has(key),
     `Expected plugin key "${key}" to be registered in the flat config. Found keys: ${[...pluginKeys].join(", ")}`

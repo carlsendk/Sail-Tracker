@@ -13,10 +13,10 @@ const appRoot = path.resolve(currentDirectory, "../..");
  * @param runtimeEnvironment - The process.env record to check first.
  * @returns A function that resolves a variable name to its string value or null.
  */
-export function buildEnvironmentLookup(
+export const buildEnvironmentLookup = (
   fileValues: Iterable<Map<string, string>>,
   runtimeEnvironment: Record<string, string | undefined>,
-) {
+) => {
   return (name: string): null | string => {
     // eslint-disable-next-line security/detect-object-injection -- name is a controlled env var key, not user input
     const runtimeValue = runtimeEnvironment[name];
@@ -41,7 +41,7 @@ export function buildEnvironmentLookup(
  * @param contents - Raw text content of the .env file.
  * @returns A map of environment variable names to their string values.
  */
-export function parseEnvironmentContents(contents: string): Map<string, string> {
+export const parseEnvironmentContents = (contents: string): Map<string, string> => {
   const parsed = new Map<string, string>();
 
   // eslint-disable-next-line sonarjs/too-many-break-or-continue-in-loop -- two continues needed: skip blank/comment lines and skip lines without '='
@@ -74,7 +74,7 @@ const loadedEnvironment: Map<string, string>[] = [];
  * Reads and parses an .env file at the given path, if it exists.
  * @param filepath - Absolute path to the env file to load.
  */
-function parseEnvironmentFile(filepath: string) {
+const parseEnvironmentFile = (filepath: string) => {
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is a resolved absolute path, not user input
   if (!existsSync(filepath)) {
     return;
@@ -99,6 +99,4 @@ const lookupServerEnvironment = buildEnvironmentLookup(loadedEnvironment, proces
  * @param name - The environment variable name to resolve.
  * @returns The resolved value, or null if not set.
  */
-export function getServerEnvironment(name: string): null | string {
-  return lookupServerEnvironment(name);
-}
+export const getServerEnvironment = (name: string): null | string => lookupServerEnvironment(name);

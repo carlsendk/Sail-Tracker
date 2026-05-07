@@ -337,10 +337,6 @@ export default [
 
   // ─── SonarJS ──────────────────────────────────────────────────────────────
   // Use recommended preset — includes arrow-function-convention and file-header.
-  // Curated out (not enabled) via filtering:
-  //   - sonarjs/declarations-in-global-scope: produces false positives for ES modules.
-  //     Every file in this repo uses import/export so top-level declarations are
-  //     module-scoped, not globally accessible.
   {
     ...sonarjs.configs.recommended,
     files: allSourceFiles,
@@ -350,7 +346,6 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(sonarjs.configs.recommended.rules ?? {})
-          .filter(([rule]) => rule !== "sonarjs/declarations-in-global-scope")
           .map(([rule]) => [rule, "error"])
       ),
       // Configure file-header to accept /** @file ... */ JSDoc comments.
