@@ -31,9 +31,9 @@ function collectPluginKeys(flatConfig) {
 
 const pluginKeys = collectPluginKeys(config);
 
-// Helper for clearer failure messages
 /**
- *
+ * Asserts that a plugin key is registered in the flat config, with a clear failure message.
+ * @param {string} key - The plugin key to check.
  */
 function assertPlugin(key) {
   assert.ok(

@@ -1,3 +1,5 @@
+/** @file Home page component displaying the resolved tenant context and bootstrap status. */
+
 import { getBootstrapStatus } from "../lib/supabase-admin";
 import { getTenantContext, getTenantLabel } from "../lib/tenant-context";
 
@@ -9,7 +11,8 @@ const foundations = [
 ];
 
 /**
- *
+ * The homepage server component, rendering tenant and bootstrap information.
+ * @returns The rendered homepage markup.
  */
 export default async function HomePage() {
   const tenantContext = await getTenantContext();

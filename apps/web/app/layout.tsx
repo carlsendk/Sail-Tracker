@@ -1,3 +1,5 @@
+/** @file Root layout component that wraps all Next.js pages with the HTML shell. */
+
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -16,7 +18,10 @@ interface RootLayoutProperties {
 }
 
 /**
- *
+ * Root layout wrapping every page with an HTML/body shell.
+ * @param props - Component props.
+ * @param props.children - The active page content to render inside the body.
+ * @returns The HTML document shell.
  */
 export default function RootLayout({ children }: RootLayoutProperties) {
   return (

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { execFileSync } from "node:child_process";
-import process from "node:process";
 /**
- * Map a `state:*` label change to the Sail-Tracker Backlog Project's Status field.
+ * @file Syncs a GitHub issue's Project Status field when a state:* label is applied.
+ *
+ * Maps a `state:*` label change to the Sail-Tracker Backlog Project's Status field.
  *
  * SAFETY:
  *   - Every external value is passed via `execFileSync` arg arrays (no shell, no string
@@ -18,6 +18,9 @@ import process from "node:process";
  *   PROJECT_OWNER    (e.g. "carlsendk")
  *   PROJECT_NUMBER   (e.g. "1")
  */
+
+import { execFileSync } from "node:child_process";
+import process from "node:process";
 import { parseArgs } from "node:util";
 
 const STATE_TO_STATUS = {
@@ -28,7 +31,8 @@ const STATE_TO_STATUS = {
 };
 
 /**
- *
+ * Logs an error message and exits the process with status 1.
+ * @param {string} message - The error message to print.
  */
 function fail(message) {
   console.error(message);
@@ -36,14 +40,16 @@ function fail(message) {
 }
 
 /**
- *
+ * Runs the `gh` CLI with the given arguments and returns stdout as a string.
+ * @param {string[]} arguments_ - The arguments to pass to the gh CLI.
+ * @returns {string} The stdout output of the command.
  */
 function gh(arguments_) {
   return execFileSync("gh", arguments_, { encoding: "utf8" });
 }
 
 /**
- *
+ * Main entry point: parses CLI args and syncs the GitHub project Status field.
  */
 function main() {
   const { values } = parseArgs({

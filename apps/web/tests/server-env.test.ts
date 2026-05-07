@@ -1,3 +1,5 @@
+/** @file Tests for server-side environment variable loading from .env files. */
+
 import { describe, expect, it } from "vitest";
 
 import { buildEnvLookup as buildEnvironmentLookup, parseEnvContents as parseEnvironmentContents } from "../lib/server-env";

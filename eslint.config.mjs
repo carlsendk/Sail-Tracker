@@ -1,5 +1,5 @@
 /**
- * Root ESLint flat config for the Sail-Tracker monorepo.
+ * @file Root ESLint flat config for the Sail-Tracker monorepo.
  *
  * Phase B2 — strict, preset-based config covering the full plugin set.
  * Rules are kept at "warn" severity until all violations are resolved,
@@ -128,6 +128,8 @@ export default [
       ".pnpm-store/**",
       "pnpm-lock.yaml",
       "**/*.min.js",
+      // Next.js auto-generated type declaration — not user-edited code
+      "apps/web/next-env.d.ts",
     ],
   },
 
@@ -345,6 +347,16 @@ export default [
           ([rule, _severity]) => [rule, "warn"]
         )
       ),
+      // Configure file-header to accept /** @file ... */ JSDoc comments.
+      // The pattern allows an optional shebang line and matches @file anywhere in
+      // the opening JSDoc block. Without configuration the rule always fires.
+      "sonarjs/file-header": [
+        "warn",
+        {
+          headerFormat: "^(#![^\\n]*\\n)?/\\*\\*[^]*?@file",
+          isRegularExpression: true,
+        },
+      ],
     },
   },
 

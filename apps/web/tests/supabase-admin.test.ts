@@ -1,3 +1,5 @@
+/** @file Tests for Supabase admin config resolution. */
+
 import { describe, expect, it } from "vitest";
 
 import { resolveSupabaseAdminConfig } from "../lib/supabase-admin";

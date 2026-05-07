@@ -1,3 +1,5 @@
+/** @file Tests for tenant context resolution from hostname. */
+
 import { describe, expect, it } from "vitest";
 
 import { getTenantLabel } from "../lib/tenant-context";

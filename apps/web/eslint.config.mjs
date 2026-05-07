@@ -1,5 +1,5 @@
 /**
- * apps/web ESLint config — extends the root flat config.
+ * @file apps/web ESLint config — extends the root flat config.
  *
  * This file intentionally keeps only Next.js app-specific overrides.
  * All plugin loading and base rule configuration lives in the root

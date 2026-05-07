@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** @file Configures git to use the .githooks directory for hooks. */
 
 import { execFileSync } from "node:child_process";
 

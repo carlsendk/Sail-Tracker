@@ -1,10 +1,12 @@
 #!/usr/bin/env node
+/** @file CLI script to bootstrap the Supabase database with the platform admin and tenants. */
 
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 /**
- *
+ * Reads an .env file and merges its values into process.env (without overwriting existing keys).
+ * @param {string} filename - Relative path to the env file to load.
  */
 function loadEnvironmentFile(filename) {
   const filepath = resolve(process.cwd(), filename);
@@ -63,7 +65,9 @@ const tenantSlugs = [
 const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost";
 
 /**
- *
+ * Returns true if the given value looks like a privileged Supabase secret key.
+ * @param {string | undefined} value - The key to test.
+ * @returns {boolean} True if the value begins with "sb_secret_".
  */
 function isPrivilegedSupabaseKey(value) {
   return Boolean(value && value.startsWith("sb_secret_"));
@@ -77,7 +81,9 @@ if (!isPrivilegedSupabaseKey(secretKey)) {
 }
 
 /**
- *
+ * Assigns a role to a membership record (idempotent).
+ * @param {string} membershipId - The membership record ID.
+ * @param {string} roleId - The role record ID to assign.
  */
 async function assignMembershipRole(membershipId, roleId) {
   await supabaseFetch("/rest/v1/membership_roles", {
@@ -95,7 +101,9 @@ async function assignMembershipRole(membershipId, roleId) {
 }
 
 /**
- *
+ * Assigns a global role to a profile record (idempotent).
+ * @param {string} profileId - The profile record ID.
+ * @param {string} roleId - The role record ID to assign.
  */
 async function assignProfileRole(profileId, roleId) {
   await supabaseFetch("/rest/v1/profile_roles", {
@@ -113,7 +121,10 @@ async function assignProfileRole(profileId, roleId) {
 }
 
 /**
- *
+ * Builds a URL for the Supabase REST API from a path and optional query parameters.
+ * @param {string} pathname - The API endpoint path.
+ * @param {Record<string, string>} searchParameters - Optional query parameters to append.
+ * @returns {URL} The constructed URL.
  */
 function createUrl(pathname, searchParameters = {}) {
   const url = new URL(pathname, supabaseUrl);
@@ -124,7 +135,10 @@ function createUrl(pathname, searchParameters = {}) {
 }
 
 /**
- *
+ * Creates or upserts a membership record for the given profile and tenant.
+ * @param {string} profileId - The profile ID to create a membership for.
+ * @param {string} tenantId - The tenant ID to link to.
+ * @returns {Promise<object>} The resolved membership record.
  */
 async function ensureMembership(profileId, tenantId) {
   await supabaseFetch("/rest/v1/memberships", {
@@ -159,7 +173,8 @@ async function ensureMembership(profileId, tenantId) {
 }
 
 /**
- *
+ * Creates or upserts the platform admin profile record in Supabase.
+ * @returns {Promise<object>} The resolved profile record.
  */
 async function ensureProfile() {
   await supabaseFetch("/rest/v1/profiles", {
@@ -192,7 +207,9 @@ async function ensureProfile() {
 }
 
 /**
- *
+ * Fetches a role record by its key slug.
+ * @param {string} key - The role key to look up (e.g. "platform_admin").
+ * @returns {Promise<object>} The role record.
  */
 async function fetchRole(key) {
   const role = await fetchSingle("/rest/v1/roles", {
@@ -209,7 +226,10 @@ async function fetchRole(key) {
 }
 
 /**
- *
+ * Fetches the first row from a Supabase REST endpoint.
+ * @param {string} pathname - The API endpoint path.
+ * @param {Record<string, string>} searchParameters - Query parameters for filtering.
+ * @returns {Promise<object | null>} The first row, or null if no rows were returned.
  */
 async function fetchSingle(pathname, searchParameters) {
   const rows = await supabaseFetch(pathname, { searchParams: searchParameters });
@@ -217,7 +237,9 @@ async function fetchSingle(pathname, searchParameters) {
 }
 
 /**
- *
+ * Fetches a tenant record by its slug.
+ * @param {string} slug - The tenant slug to look up.
+ * @returns {Promise<object>} The tenant record.
  */
 async function fetchTenant(slug) {
   const tenant = await fetchSingle("/rest/v1/tenants", {
@@ -234,7 +256,7 @@ async function fetchTenant(slug) {
 }
 
 /**
- *
+ * Orchestrates the full bootstrap flow: profile, roles, tenants, and memberships.
  */
 async function main() {
   const profile = await ensureProfile();
@@ -272,7 +294,14 @@ async function main() {
 }
 
 /**
- *
+ * Issues an authenticated fetch request to the Supabase REST API.
+ * @param {string} pathname - The API path to call.
+ * @param {object} [options] - Request options.
+ * @param {unknown} [options.body] - Optional request body (will be JSON-serialised).
+ * @param {Record<string, string>} [options.headers] - Additional headers to merge.
+ * @param {string} [options.method] - HTTP method (default "GET").
+ * @param {Record<string, string>} [options.searchParams] - Optional query parameters.
+ * @returns {Promise<unknown>} Parsed response JSON, or null for 204 No Content.
  */
 async function supabaseFetch(pathname, { body, headers, method = "GET", searchParams } = {}) {
   const response = await fetch(createUrl(pathname, searchParams), {
