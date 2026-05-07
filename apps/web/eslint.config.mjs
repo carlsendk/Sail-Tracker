@@ -13,7 +13,10 @@ export default [
   // Next.js app-specific overrides
   {
     // Next.js uses conventional filenames like page.tsx, layout.tsx, error.tsx, etc.
-    // that differ from the exported component name — suppress the sonarjs rule for app/**
+    // that differ from the exported component name.
+    // NOTE: sonarjs/file-name-differ-from-class reports at loc:{line:0,column:0} —
+    // ESLint inline disables cannot suppress violations reported before line 1.
+    // This scoped config-level override is the only available suppression mechanism.
     files: ["app/**/*.{ts,tsx}"],
     rules: {
       "sonarjs/file-name-differ-from-class": "off",

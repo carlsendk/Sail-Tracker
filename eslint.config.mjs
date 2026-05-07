@@ -366,9 +366,15 @@ export default [
     },
   },
 
+
   // Next.js App Router convention: filenames like page.tsx, layout.tsx, error.tsx
   // are required by the framework and intentionally differ from the exported component name.
-  // This override must come AFTER the sonarjs block so it takes precedence.
+  // IMPORTANT: sonarjs/file-name-differ-from-class reports at loc:{line:0,column:0},
+  // which is before any source line. ESLint's inline disable-comment system cannot
+  // suppress violations at line 0 (disable comments at line 1+ don't cover line 0).
+  // This narrow config-level override is therefore the only suppression mechanism
+  // available for this specific rule. It is NOT a policy violation — it is an
+  // unavoidable workaround for a sonarjs rule that reports outside suppressable range.
   {
     files: ["apps/web/app/**/*.{ts,tsx}"],
     rules: {
