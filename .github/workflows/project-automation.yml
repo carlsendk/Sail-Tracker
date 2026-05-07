@@ -1,0 +1,66 @@
+name: Project automation
+
+on:
+  issues:
+    types: [opened, labeled, unlabeled, closed, reopened]
+  pull_request:
+    types: [opened, ready_for_review, closed, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+  repository-projects: write
+
+jobs:
+  add-to-project:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/users/carlsendk/projects/${{ vars.PROJECT_NUMBER }}
+          github-token: ${{ secrets.PROJECT_PAT }}
+
+  sync-status-from-labels:
+    if: >-
+      github.event_name == 'issues'
+      && (github.event.action == 'labeled' || github.event.action == 'unlabeled')
+      && startsWith(github.event.label.name, 'state:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Map state:* label to Status field
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+          PROJECT_OWNER: carlsendk
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          EVENT_ACTION: ${{ github.event.action }}
+        run: |
+          node scripts/gh-sync-status.mjs \
+            --issue "$ISSUE_NUMBER" \
+            --label "$LABEL_NAME" \
+            --action "$EVENT_ACTION"
+
+  flip-on-pr-open:
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark linked issue state:in-review
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          ISSUE=$(gh pr view "$PR_NUMBER" \
+            --repo carlsendk/Sail-Tracker \
+            --json closingIssuesReferences \
+            --jq '.closingIssuesReferences[0].number // empty')
+          if [ -n "$ISSUE" ]; then
+            gh issue edit "$ISSUE" --repo carlsendk/Sail-Tracker \
+              --remove-label "state:in-progress" \
+              --add-label "state:in-review" || true
+          fi
