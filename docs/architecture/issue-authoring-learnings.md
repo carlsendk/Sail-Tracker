@@ -1,0 +1,103 @@
+# Issue Authoring Learnings
+
+Captured from generating the 14 Phase 0 ("Code Quality Foundation") issues. These are the rules of thumb that should drive Phase B (Infra) and Phase C (Product) issue creation. The aim is consistency and so an agent picking up any issue from any phase finds the same shape and the same surrounding metadata.
+
+## What every issue must have
+
+| Surface | Field / value |
+|---|---|
+| Repo label `state:*` | exactly one of `state:ready`, `state:in-progress`, `state:in-review`, `state:blocked` |
+| Repo label `type:*` | one of `type:infra`, `type:feature`, `type:bug`, `type:chore`, `type:docs`, `type:spike` |
+| Repo label `domain:*` | one matching the project Domain field option (see "Domain parity" below) |
+| Repo label `agent:auto-pickable` | required for `/work-next` to claim it |
+| Repo label `priority:*` | `priority:p0`, `priority:p1`, or `priority:p2` |
+| Milestone | exactly one of the 12 milestones |
+| Project Tier | matches the milestone (Phase-0, Infra-1..4, Tier-1..7) |
+| Project Status | `Ready` (initial), driven by `state:*` label thereafter |
+| Project Domain | one of: members, fleet, trips, equipment, qualifications, platform, backbone, cross-cutting, modules, infra |
+| Project Estimate | `S`, `M`, or `L` — see sizing rubric below |
+| Body | all 8 sections of the agent-task template, self-contained |
+
+## Body shape (8 sections)
+
+Lifted verbatim from `.github/ISSUE_TEMPLATE/agent-task.yml`. Every issue body must include:
+
+1. **Goal** — one sentence describing what the issue produces.
+2. **Context** — 2–3 sentences. Where this fits, why now, what depends on it.
+3. **Embedded Spec** — full quoted excerpt from the source doc, plus any data-model or constraint section that affects implementation. Self-contained — an agent should not need to fetch external docs to implement.
+4. **Files** — explicit `Create:` / `Modify:` / `Test:` paths. Include line ranges for modifications when known.
+5. **Acceptance Criteria** — testable behaviors as checkboxes; the spec reviewer subagent uses these verbatim.
+6. **TDD Steps** — 5–8 numbered steps following write-test → run → implement → run → commit.
+7. **Definition of Done** — `pnpm validate` green, PR with `Closes #<N>`, both reviewer subagents approve.
+8. **Source** — link to source doc + `Depends on:` line referencing other issues by `#N` (comma-separated).
+
+## Sizing rubric (Estimate field)
+
+| Estimate | Heuristic | Examples from Phase 0 |
+|---|---|---|
+| S | Single config file or rule; ≤ 2 file diff; mechanical | B4 (no-inline-SVG rule), B14 (coverage thresholds) |
+| M | 2–5 files; some integration risk; 30–60 min agent session | most Phase 0 issues |
+| L | New tool category, multi-file wiring, may surface real violations to fix | B2 (full ESLint config), B10 (4 monorepo tools), B13 (full CI workflow), B14 here would be S since it's just a config block |
+
+When in doubt: **prefer S over M, M over L**. A small issue that turns out to need follow-up is fine; a large issue that an agent gets bogged down in is expensive.
+
+## Dependency wiring
+
+`Depends on:` is parsed by `.claude/skills/work-next/SKILL.md`. Format strictly:
+
+```
+- Depends on: #5, #6, #7
+```
+
+Or, if no deps:
+
+```
+- Depends on: none
+```
+
+**Author bodies first with logical placeholders** (`B2`, `B7`) — substitute real `#N` references AFTER all issues are created and you know the numbers, then `gh issue edit --body-file` each affected issue. Do NOT commit body files with `B<N>` placeholders to git; commit only the resolved `#N` form so the source-of-truth files match what's live on GitHub.
+
+## Title prefix convention
+
+`[<group>] <short imperative>`. The group is currently:
+
+- `[infra]` for infrastructure / monorepo / CI / dev-tooling (Phase 0, Infra-1..4)
+- For product issues: prefix with the most specific domain segment (e.g. `[trips]`, `[fleet]`, `[members]`)
+
+The prefix is **separate** from the labels — labels are the source of truth for filtering, the title prefix is for human eyeballing.
+
+## Domain parity
+
+The repo's `domain:*` label set must exactly match the project's Domain field options. If a Domain option exists without a matching label (or vice versa), `/work-next --domain X` filtering breaks. Phase 0 surfaced this: project had `infra`, repo did not. We added `domain:infra` to fix.
+
+When introducing a new domain in either place, update both:
+
+- `scripts/gh-bootstrap-labels.sh` — add to the `LABELS` array
+- `scripts/gh-bootstrap-project.sh` (or by hand if already provisioned) — add to the Domain field options
+
+## Process learnings (do these things, in this order)
+
+1. **Smoke-test the first issue before fanning out.** Author B1's body file → create the GH issue → render via `gh issue view` → confirm all 8 sections render as expected → only then batch the rest. Fixing 14 issues with a misshapen body is 14× the work.
+
+2. **Set ALL custom fields, not just the obvious ones.** Setting Tier and Status only (and forgetting Domain and Estimate) leaves the Roadmap/Domain views half-empty. Plan to do all four every time.
+
+3. **PAT scope check before relying on automation.** The `project-automation.yml` workflow needs the `PROJECT_PAT` secret to have **Account-level Projects (read/write)** for user-owned projects — repo-level project permission is not enough. The error you'll see is `Resource not accessible by personal access token (user.projectV2)`. Until that's fixed, all custom-field assignment must be done manually using the operator's `gh auth` token, which already has the `project` scope.
+
+4. **GraphQL is the only reliable way to set project fields.** `gh project item-edit` shells to GraphQL but does honor the user's gh auth scope, which works locally even when the workflow PAT is scoped wrong. For bulk assignment, drive `gh project item-edit` from a `bash -c` block (zsh does not word-split unquoted variables, so the `for x in $LIST` idiom silently passes the entire string as one arg).
+
+5. **`gh api -X PUT` cannot construct deeply nested objects via `-F` flags.** When the body needs a nested object with optional `null` siblings (e.g. `branches/.../protection`), pipe a JSON document through `--input -` instead. Do not try to coerce nested objects via dot-notation `-F` flags; you'll get the cryptic "subschema didn't match" error.
+
+6. **Pre-commit hook runs `pnpm validate`.** Any work-in-progress lint/type/test breakage will block the commit. Either commit incrementally with green steps, or stage only the clean files and leave the rest for a follow-up commit. `--no-verify` is forbidden by branch protection rules and the agent workflow.
+
+## Operator-driven prerequisites the agent cannot do
+
+For each new milestone batch, the operator must:
+
+1. Provision (or rotate) `PROJECT_PAT` if scope was wrong last time.
+2. Confirm the project has the Tier / Domain / Estimate options the upcoming issues will use; add new options via GraphQL (`updateProjectV2Field`) if missing — `gh` CLI does not support editing built-in or custom field options.
+3. Tighten branch protection only after the named status checks have run at least once on `main` (otherwise GH rejects the PUT).
+
+## Open questions to resolve before Phase B starts
+
+- Do Infra (Phase 1–4) issues use `domain:infra` or do we add `domain:database`, `domain:deploy`? **Tentative**: keep `domain:infra` until cardinality justifies splitting.
+- Should `priority:*` reflect dependency depth or operator urgency? **Tentative**: dependency depth (root deps = p0, leaf-most = p2) so that breadth-first pickup naturally drains the bottom of the graph.
