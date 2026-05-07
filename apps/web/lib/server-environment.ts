@@ -45,7 +45,7 @@ export const parseEnvironmentContents = (contents: string): Map<string, string> 
   const parsed = new Map<string, string>();
 
   // eslint-disable-next-line sonarjs/too-many-break-or-continue-in-loop -- two continues needed: skip blank/comment lines and skip lines without '='
-  for (const line of contents.split(/\r?\n/u)) {
+  for (const line of contents.split(/\r?\n/v)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) {
       continue;
@@ -58,7 +58,7 @@ export const parseEnvironmentContents = (contents: string): Map<string, string> 
 
     const key = trimmed.slice(0, separatorIndex).trim();
     const rawValue = trimmed.slice(separatorIndex + 1).trim();
-    const value = rawValue.replaceAll(/^["']|["']$/gu, "");
+    const value = rawValue.replaceAll(/^["']|["']$/gv, "");
 
     if (!parsed.has(key)) {
       parsed.set(key, value);

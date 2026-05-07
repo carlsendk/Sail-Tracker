@@ -129,3 +129,7 @@ The first run of the `work-next → subagent-driven-development` pipeline succee
 5. **Pre-commit hook discipline confirmed**: `pnpm validate` ran via `git commit` and gated the work. No `--no-verify` needed or used. Phase B/C bodies should not bother re-saying "run validate before committing" — the hook handles it.
 
 6. **`flip-on-pr-open` is broken until PAT rotates.** Don't trust automation to flip `state:in-progress` → `state:in-review` on PR open. The controller (you) must manually flip until the PAT is fixed. Phase B/C issue bodies don't need to mention this — it's an operator concern.
+
+## TypeScript and ECMAScript target
+
+The project targets **ES2024** (`tsconfig.base.json` `"target": "ES2024"`). This was set during B2 (ESLint flat config) to enable `regexp/require-unicode-sets-regexp`, which requires the RegExp `v` flag — a syntax introduced in ES2024. Issues that introduce new syntax-level constraints (regex rules, class field rules, etc.) should assume ES2024 as the minimum target. If a proposed rule requires a higher target, escalate before enabling it.

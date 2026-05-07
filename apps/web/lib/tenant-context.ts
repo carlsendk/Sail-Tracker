@@ -123,7 +123,7 @@ const getLocalFallbackSlug = (hostname: string): null | string => {
     return getServerEnvironment("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
   }
 
-  const localhostMatch = /^([\d\-a-z]+)\.localhost$/u.exec(hostname);
+  const localhostMatch = /^([\d\-a-z]+)\.localhost$/v.exec(hostname);
   if (localhostMatch) {
     // eslint-disable-next-line unicorn/no-null -- capture group can be undefined, null matches return type
     return localhostMatch[1] ?? null;

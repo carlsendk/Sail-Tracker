@@ -19,7 +19,7 @@ function loadEnvironmentFile(filename) {
   // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is resolved from controlled CLI argument
   const contents = readFileSync(filepath, "utf8");
   // eslint-disable-next-line sonarjs/too-many-break-or-continue-in-loop -- two continues needed: skip blank/comment lines and lines without '='
-  for (const line of contents.split(/\r?\n/u)) {
+  for (const line of contents.split(/\r?\n/v)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) {
       continue;
@@ -32,7 +32,7 @@ function loadEnvironmentFile(filename) {
 
     const key = trimmed.slice(0, separatorIndex).trim();
     const rawValue = trimmed.slice(separatorIndex + 1).trim();
-    const value = rawValue.replaceAll(/^["']|["']$/gu, "");
+    const value = rawValue.replaceAll(/^["']|["']$/gv, "");
 
     // eslint-disable-next-line security/detect-object-injection -- key is parsed from a controlled .env file, not user input
     if (!process.env[key]) {

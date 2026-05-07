@@ -403,10 +403,10 @@ export default [
         )
       ),
       // Spec-listed: explicitly enable (may not be in recommended)
+      // Both u-flag and v-flag rules are enabled; v-flag (sets regexp) is
+      // supported at ES2024 target which is now the project baseline.
       "regexp/require-unicode-regexp": "error",
-      // require-unicode-sets-regexp (v flag) is NOT enabled: the TypeScript
-      // target is ES2022 which does not support the RegExp v flag. The u flag
-      // (require-unicode-regexp) is the correct choice at this target level.
+      "regexp/require-unicode-sets-regexp": "error",
       "regexp/sort-character-class-elements": "error",
     },
   },
