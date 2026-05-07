@@ -147,16 +147,14 @@ export default [
 
   // ─── Node scripts (mjs/cjs at root and scripts/) ──────────────────────────
   // Need Node globals; these are not browser code.
+  // globals.node includes all Node built-ins so no-undef from eslint:recommended
+  // should not fire on Node-global identifiers in these files.
   {
     files: ["scripts/**/*.{mjs,cjs,js}", "*.{mjs,cjs,js}", "tests/**/*.mjs"],
     languageOptions: {
       globals: {
         ...globals.node,
       },
-    },
-    rules: {
-      // no-undef from recommended fires on Node globals — muted at file level
-      "no-undef": "off",
     },
   },
 
@@ -562,8 +560,6 @@ export default [
           )
           .map(rule => [`testing-library/${rule}`, "error"])
       ),
-      "testing-library/consistent-data-testid": "off",
-      "testing-library/no-dom-import": "off",
       // jest-dom rules at warn
       ...Object.fromEntries(
         Object.keys(jestDom.rules ?? {}).map(rule => [
