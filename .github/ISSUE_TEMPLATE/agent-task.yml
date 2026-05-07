@@ -1,0 +1,83 @@
+name: Agent task
+description: A self-contained, agent-implementable unit of work
+title: "[<domain>] <short imperative>"
+labels: ["state:ready"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every section below is required. The body must be self-contained — an agent should not need to read external docs to implement this issue.
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: One sentence — what this issue produces.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: 2-3 sentences. Where this fits, why now, what depends on it.
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: Embedded Spec
+      description: Full "What it does + Scope" section copied verbatim from the source doc, plus any data-model section that affects implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files
+      value: |
+        - Create: `path/a.ts`
+        - Modify: `path/b.ts:LL-LL`
+        - Test: `path/__tests__/a.test.ts`
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Each line a testable behavior. The spec reviewer subagent uses this verbatim.
+      value: |
+        - [ ] criterion 1
+        - [ ] criterion 2
+    validations:
+      required: true
+  - type: textarea
+    id: tdd
+    attributes:
+      label: TDD Steps
+      value: |
+        1. Write failing test at `path/__tests__/a.test.ts`
+        2. Run `pnpm vitest run path/__tests__/a.test.ts` → expect FAIL
+        3. Implement minimal code in `path/a.ts`
+        4. Re-run → expect PASS
+        5. Commit `feat(<domain>): <message>`; PR `Closes #<this-issue>`
+    validations:
+      required: true
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      value: |
+        - [ ] `pnpm validate` green locally
+        - [ ] PR opened with `Closes #<N>`
+        - [ ] Spec reviewer subagent approval
+        - [ ] Code quality reviewer subagent approval
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Link to source doc + dependency hints.
+      value: |
+        - Spec: `docs/product/.../foo.md`
+        - Depends on: #X, #Y
+    validations:
+      required: true

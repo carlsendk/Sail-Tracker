@@ -1,0 +1,22 @@
+name: Bug report
+description: Something broken in shipped code
+labels: ["type:chore", "state:ready"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What's broken
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true

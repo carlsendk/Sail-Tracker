@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussion / open question
+    url: https://github.com/carlsendk/Sail-Tracker/discussions
+    about: Use Discussions for design questions, not issues.

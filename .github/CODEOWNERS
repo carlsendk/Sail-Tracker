@@ -1,0 +1,8 @@
+# Default reviewer
+*               @carlsendk
+
+# Plans, product specs, GitHub config, and Claude Code skills require author review
+/docs/plans/    @carlsendk
+/docs/product/  @carlsendk
+/.github/       @carlsendk
+/.claude/       @carlsendk
