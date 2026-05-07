@@ -11,8 +11,8 @@ Captured from generating the 14 Phase 0 ("Code Quality Foundation") issues. Thes
 | Repo label `domain:*` | one matching the project Domain field option (see "Domain parity" below) |
 | Repo label `agent:auto-pickable` | required for `/work-next` to claim it |
 | Repo label `priority:*` | `priority:p0`, `priority:p1`, or `priority:p2` |
-| Milestone | exactly one of the 12 milestones |
-| Project Tier | matches the milestone (Phase-0, Infra-1..4, Tier-1..7) |
+| Milestone | exactly one of the 8 milestones (`Foundations` for Phase 0 + Infra-1..4; `Tier-1` … `Tier-7` for product) |
+| Project Tier | finer-grained than milestone — `Phase-0`, `Infra-1`, `Infra-2`, `Infra-3`, `Infra-4`, or `Tier-1` … `Tier-7`. The Tier field is what the project board's Roadmap/Phase views group on. |
 | Project Status | `Ready` (initial), driven by `state:*` label thereafter |
 | Project Domain | one of: members, fleet, trips, equipment, qualifications, platform, backbone, cross-cutting, modules, infra |
 | Project Estimate | `S`, `M`, or `L` — see sizing rubric below |
@@ -61,7 +61,7 @@ Or, if no deps:
 
 `[<group>] <short imperative>`. The group is currently:
 
-- `[infra]` for infrastructure / monorepo / CI / dev-tooling (Phase 0, Infra-1..4)
+- `[infra]` for infrastructure / monorepo / CI / dev-tooling (anything in milestone `Foundations`, regardless of Tier value)
 - For product issues: prefix with the most specific domain segment (e.g. `[trips]`, `[fleet]`, `[members]`)
 
 The prefix is **separate** from the labels — labels are the source of truth for filtering, the title prefix is for human eyeballing.

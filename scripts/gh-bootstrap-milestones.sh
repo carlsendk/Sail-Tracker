@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 # Idempotent milestone bootstrap for the Sail-Tracker agent backlog.
-# Creates 12 milestones (Phase 0, Infra-1..4, Tier-1..7).
+# Creates 8 milestones (Foundations + Tier-1..7).
+# Per-phase granularity within Foundations (Phase-0, Infra-1..4) lives on
+# the project board's Tier custom field, not GitHub milestones.
 # Re-running is safe: gh API returns 422 for duplicates; we suppress that error.
 set -euo pipefail
 REPO="${REPO:-carlsendk/Sail-Tracker}"
 
 MILESTONES=(
-  "Phase 0: Code Quality Foundation|Strict TS, ESLint, Prettier, Stylelint, markdownlint, cspell, commitlint, husky, CI, branch protection."
-  "Infra-1: Local Supabase|Reproducible local dev path via Supabase CLI."
-  "Infra-2: Env Contract Cleanup|One hosted contract, one local contract, resolver layer, no legacy fallbacks."
-  "Infra-3: CI Database Validation|Migrations + seed run on fresh local Supabase in Actions."
-  "Infra-4: Production Deploy Flow|Coordinated Supabase + Vercel rollout with smoke checks."
+  "Foundations|Code quality + infra prerequisites that must clear before product work begins. Covers Phase 0 (strict TS, ESLint, Prettier, Stylelint, markdownlint, cspell, commitlint, husky, CI, branch protection) and infra phases 1-4 (Local Supabase, Env Contract, CI DB Validation, Production Deploy)."
   "Tier-1: Foundation|Membership, permissions, calendar."
   "Tier-2: Core Domains|Vessel registry, trip planning, equipment registry, manifest."
   "Tier-3: Qualifications|Certifications catalog, local approvals."

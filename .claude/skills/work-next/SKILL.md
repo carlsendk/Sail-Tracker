@@ -9,8 +9,8 @@ Pick up the next agent-pickable issue from the Sail-Tracker Backlog and run it t
 
 ## Args
 
-- `--tier <N>` — filter by tier milestone (`Tier-N: <name>`)
-- `--phase <N>` — filter by infra phase milestone (`Phase 0: ...` or `Infra-N: ...`)
+- `--tier <N>` — filter by Tier milestone (`Tier-N: <name>`); also accepts `--tier foundations` for the `Foundations` milestone
+- `--phase <N>` — filter by phase via the project's Tier custom field (`Phase-0`, `Infra-1` … `Infra-4`). All phases share the `Foundations` milestone, so milestone-only filtering is too coarse.
 - `--domain <x>` — filter by domain label (`domain:<x>`)
 
 If no filter is given, picks the highest-priority ready issue across the whole backlog.
@@ -19,9 +19,9 @@ If no filter is given, picks the highest-priority ready issue across the whole b
 
 1. **Resolve filters into `gh issue list` flags.**
    - Look up exact milestone titles via `gh api repos/carlsendk/Sail-Tracker/milestones --jq '.[] | .title'`.
-   - tier `N` → `--milestone "Tier-N: <name>"`
-   - phase `0` → `--milestone "Phase 0: Code Quality Foundation"`
-   - phase `N` (1-4) → `--milestone "Infra-N: <name>"`
+   - tier `N` (1-7) → `--milestone "Tier-N: <name>"`
+   - tier `foundations` → `--milestone "Foundations"`
+   - phase `0` / `1` / … / `4` → `--milestone "Foundations"` AND post-filter the candidate list to issues whose project Tier field equals `Phase-0` / `Infra-1` / … / `Infra-4` respectively. Use `gh project item-list 1 --owner carlsendk --format json` to read each candidate's Tier value.
    - domain → `--label "domain:<x>"`
 
 2. **List candidates:**
