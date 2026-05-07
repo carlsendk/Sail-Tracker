@@ -17,7 +17,7 @@ export type TenantContext = {
 };
 
 function normalizeHostname(host: string): string {
-  return host.split(":")[0].trim().toLowerCase();
+  return (host.split(":")[0] ?? host).trim().toLowerCase();
 }
 
 function getLocalFallbackSlug(hostname: string): string | null {
