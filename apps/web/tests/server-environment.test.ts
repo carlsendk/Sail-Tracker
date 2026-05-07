@@ -2,10 +2,12 @@
 
 import { describe, expect, it } from "vitest";
 
-import { buildEnvLookup as buildEnvironmentLookup, parseEnvContents as parseEnvironmentContents } from "../lib/server-env";
+import { buildEnvironmentLookup, parseEnvironmentContents } from "../lib/server-environment";
 
 describe("server env", () => {
   it("parses env content and strips quotes", () => {
+    expect.hasAssertions();
+    // eslint-disable-next-line no-secrets/no-secrets -- test fixture mimicking a .env file; values are fake test data
     const parsed = parseEnvironmentContents(`
       # comment
       NEXT_PUBLIC_SUPABASE_URL="https://example.supabase.co"
@@ -17,6 +19,7 @@ describe("server env", () => {
   });
 
   it("prefers runtime env over file values", () => {
+    expect.hasAssertions();
     const lookup = buildEnvironmentLookup(
       [
         new Map([
@@ -34,6 +37,7 @@ describe("server env", () => {
   });
 
   it("falls back across multiple file sources", () => {
+    expect.hasAssertions();
     const lookup = buildEnvironmentLookup(
       [
         new Map([["NEXT_PUBLIC_ROOT_DOMAIN", "localhost"]]),

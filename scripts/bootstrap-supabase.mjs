@@ -2,19 +2,22 @@
 /** @file CLI script to bootstrap the Supabase database with the platform admin and tenants. */
 
 import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import path from "node:path";
 
 /**
  * Reads an .env file and merges its values into process.env (without overwriting existing keys).
  * @param {string} filename - Relative path to the env file to load.
  */
 function loadEnvironmentFile(filename) {
-  const filepath = resolve(process.cwd(), filename);
+  const filepath = path.resolve(process.cwd(), filename);
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is resolved from controlled CLI argument
   if (!existsSync(filepath)) {
     return;
   }
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is resolved from controlled CLI argument
   const contents = readFileSync(filepath, "utf8");
+  // eslint-disable-next-line sonarjs/too-many-break-or-continue-in-loop -- two continues needed: skip blank/comment lines and lines without '='
   for (const line of contents.split(/\r?\n/u)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) {
@@ -30,7 +33,9 @@ function loadEnvironmentFile(filename) {
     const rawValue = trimmed.slice(separatorIndex + 1).trim();
     const value = rawValue.replaceAll(/^["']|["']$/gu, "");
 
+    // eslint-disable-next-line security/detect-object-injection -- key is parsed from a controlled .env file, not user input
     if (!process.env[key]) {
+      // eslint-disable-next-line security/detect-object-injection -- same: key is a parsed env var name
       process.env[key] = value;
     }
   }
@@ -46,6 +51,7 @@ const requiredEnvironment = [
 ];
 
 for (const key of requiredEnvironment) {
+  // eslint-disable-next-line security/detect-object-injection -- key is from a hardcoded required-vars array
   if (!process.env[key]) {
     console.error(`Missing required environment variable: ${key}`);
     process.exit(1);
@@ -233,6 +239,7 @@ async function fetchRole(key) {
  */
 async function fetchSingle(pathname, searchParameters) {
   const rows = await supabaseFetch(pathname, { searchParams: searchParameters });
+  // eslint-disable-next-line unicorn/no-null -- fetchSingle returns null to signal "not found" (REST API convention)
   return rows[0] || null;
 }
 
@@ -287,6 +294,7 @@ async function main() {
         profileId: profile.id,
         tenants: membershipSummaries,
       },
+      // eslint-disable-next-line unicorn/no-null -- JSON.stringify replacer argument must be null (built-in API contract)
       null,
       2,
     ),
@@ -322,14 +330,18 @@ async function supabaseFetch(pathname, { body, headers, method = "GET", searchPa
   }
 
   if (response.status === 204) {
+    // eslint-disable-next-line unicorn/no-null -- HTTP 204 No Content returns null by REST API convention
     return null;
   }
 
   const text = await response.text();
+  // eslint-disable-next-line unicorn/no-null -- empty response body returns null by REST API convention
   return text ? JSON.parse(text) : null;
 }
 
-main().catch((error) => {
+try {
+  await main();
+} catch (error) {
   console.error(error.message);
   process.exit(1);
-});
+}

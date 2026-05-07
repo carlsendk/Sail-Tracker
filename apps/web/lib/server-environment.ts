@@ -1,11 +1,11 @@
 /** @file Server-side environment variable loading from .env files and process.env. */
 
 import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import path from "node:path";
 
-const currentDir = import.meta.dirname;
-const workspaceRoot = resolve(currentDir, "../../..");
-const appRoot = resolve(currentDir, "../..");
+const currentDirectory = import.meta.dirname;
+const workspaceRoot = path.resolve(currentDirectory, "../../..");
+const appRoot = path.resolve(currentDirectory, "../..");
 
 /**
  * Builds a lookup function that checks runtime env first, then file-loaded values.
@@ -13,11 +13,12 @@ const appRoot = resolve(currentDir, "../..");
  * @param runtimeEnvironment - The process.env record to check first.
  * @returns A function that resolves a variable name to its string value or null.
  */
-export function buildEnvLookup(
+export function buildEnvironmentLookup(
   fileValues: Iterable<Map<string, string>>,
   runtimeEnvironment: Record<string, string | undefined>,
 ) {
   return (name: string): null | string => {
+    // eslint-disable-next-line security/detect-object-injection -- name is a controlled env var key, not user input
     const runtimeValue = runtimeEnvironment[name];
     if (runtimeValue && runtimeValue.length > 0) {
       return runtimeValue;
@@ -30,6 +31,7 @@ export function buildEnvLookup(
       }
     }
 
+    // eslint-disable-next-line unicorn/no-null -- variable not found in any source
     return null;
   };
 }
@@ -39,9 +41,10 @@ export function buildEnvLookup(
  * @param contents - Raw text content of the .env file.
  * @returns A map of environment variable names to their string values.
  */
-export function parseEnvContents(contents: string): Map<string, string> {
+export function parseEnvironmentContents(contents: string): Map<string, string> {
   const parsed = new Map<string, string>();
 
+  // eslint-disable-next-line sonarjs/too-many-break-or-continue-in-loop -- two continues needed: skip blank/comment lines and skip lines without '='
   for (const line of contents.split(/\r?\n/u)) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) {
@@ -72,27 +75,30 @@ const loadedEnvironment: Map<string, string>[] = [];
  * @param filepath - Absolute path to the env file to load.
  */
 function parseEnvironmentFile(filepath: string) {
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is a resolved absolute path, not user input
   if (!existsSync(filepath)) {
     return;
   }
 
+  // eslint-disable-next-line security/detect-non-literal-fs-filename -- filepath is a resolved absolute path, not user input
   const contents = readFileSync(filepath, "utf8");
-  loadedEnvironment.push(parseEnvContents(contents));
+  loadedEnvironment.push(parseEnvironmentContents(contents));
 }
 
 // Prefer the app-local env file, then fall back to the workspace root env file.
-parseEnvironmentFile(resolve(appRoot, ".env.local"));
-parseEnvironmentFile(resolve(workspaceRoot, ".env.local"));
-parseEnvironmentFile(resolve(appRoot, ".env"));
-parseEnvironmentFile(resolve(workspaceRoot, ".env"));
+parseEnvironmentFile(path.resolve(appRoot, ".env.local"));
+parseEnvironmentFile(path.resolve(workspaceRoot, ".env.local"));
+parseEnvironmentFile(path.resolve(appRoot, ".env"));
+parseEnvironmentFile(path.resolve(workspaceRoot, ".env"));
 
-const lookupServerEnvironment = buildEnvLookup(loadedEnvironment, process.env);
+// eslint-disable-next-line sonarjs/no-reference-error -- process is available in Next.js server-side runtime (Node.js)
+const lookupServerEnvironment = buildEnvironmentLookup(loadedEnvironment, process.env);
 
 /**
  * Looks up an environment variable by name from loaded .env files and process.env.
  * @param name - The environment variable name to resolve.
  * @returns The resolved value, or null if not set.
  */
-export function getServerEnv(name: string): null | string {
+export function getServerEnvironment(name: string): null | string {
   return lookupServerEnvironment(name);
 }

@@ -1,4 +1,5 @@
 /** @file Root layout component that wraps all Next.js pages with the HTML shell. */
+/* eslint-disable react-refresh/only-export-components -- Next.js layout.tsx must export both the component and metadata */
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -23,7 +24,7 @@ interface RootLayoutProperties {
  * @param props.children - The active page content to render inside the body.
  * @returns The HTML document shell.
  */
-export default function RootLayout({ children }: RootLayoutProperties) {
+export default function RootLayout({ children }: Readonly<RootLayoutProperties>) {
   return (
     <html lang="en">
       <body suppressHydrationWarning>{children}</body>

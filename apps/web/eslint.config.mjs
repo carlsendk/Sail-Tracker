@@ -10,6 +10,13 @@ import rootConfig from "../../eslint.config.mjs";
 
 export default [
   ...rootConfig,
-  // Next.js app-specific overrides can go here as B3-B6 issues land.
-  // Example: tightening specific rule families to "error" once cleaned up.
+  // Next.js app-specific overrides
+  {
+    // Next.js uses conventional filenames like page.tsx, layout.tsx, error.tsx, etc.
+    // that differ from the exported component name — suppress the sonarjs rule for app/**
+    files: ["app/**/*.{ts,tsx}"],
+    rules: {
+      "sonarjs/file-name-differ-from-class": "off",
+    },
+  },
 ];

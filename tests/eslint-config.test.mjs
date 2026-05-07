@@ -1,17 +1,23 @@
 /**
  * @file Smoke spec: asserts that eslint.config.mjs loads and registers all required plugins.
  * Run via: node --test tests/eslint-config.test.mjs
+ *
+ * This file runs under the Node.js built-in test runner (node:test), NOT vitest.
+ * Vitest-specific import rules are suppressed accordingly.
  */
+/* eslint-disable vitest/require-hook -- node:test runner: describe/it at top level is the correct pattern */
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 import path from "node:path";
+// eslint-disable-next-line vitest/no-import-node-test -- intentional: this spec uses node:test runner, not vitest
+import { describe, it } from "node:test";
 
+// eslint-disable-next-line sonarjs/variable-name -- __dirname is the Node.js conventional name
 const __dirname = import.meta.dirname;
-const rootDir = path.resolve(__dirname, "..");
+const rootDirectory = path.resolve(__dirname, "..");
 
 // Dynamically import the root eslint config
 const { default: config } = await import(
-  path.join(rootDir, "eslint.config.mjs")
+  path.join(rootDirectory, "eslint.config.mjs")
 );
 
 /**

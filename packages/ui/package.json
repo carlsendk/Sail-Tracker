@@ -1,5 +1,6 @@
 {
   "name": "@sail-tracker/ui",
+  "description": "Shared UI component library for the Sail Tracker platform.",
   "private": true,
   "type": "module"
 }

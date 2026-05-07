@@ -41,16 +41,18 @@ function fail(message) {
 
 /**
  * Runs the `gh` CLI with the given arguments and returns stdout as a string.
- * @param {string[]} arguments_ - The arguments to pass to the gh CLI.
+ * @param {string[]} cliArguments - The arguments to pass to the gh CLI.
  * @returns {string} The stdout output of the command.
  */
-function gh(arguments_) {
-  return execFileSync("gh", arguments_, { encoding: "utf8" });
+function gh(cliArguments) {
+  // eslint-disable-next-line sonarjs/no-os-command-from-path -- gh CLI is a known trusted tool, always resolved from PATH
+  return execFileSync("gh", cliArguments, { encoding: "utf8" });
 }
 
 /**
  * Main entry point: parses CLI args and syncs the GitHub project Status field.
  */
+// eslint-disable-next-line sonarjs/cyclomatic-complexity -- CLI orchestration function: sequential validation guards are intentionally flat
 function main() {
   const { values } = parseArgs({
     options: {
@@ -86,7 +88,7 @@ function main() {
   const itemList = JSON.parse(
     gh(["project", "item-list", projectNumber, "--owner", owner, "--format", "json", "--limit", "500"]),
   );
-  const item = itemList.items.find((index) => index.content?.number === issueNumber);
+  const item = itemList.items.find(index => index.content?.number === issueNumber);
   if (!item) {
     console.log(`Issue #${issueNumber} not in project; nothing to do.`);
     return;
@@ -95,11 +97,11 @@ function main() {
   const fieldList = JSON.parse(
     gh(["project", "field-list", projectNumber, "--owner", owner, "--format", "json"]),
   );
-  const statusField = fieldList.fields.find((f) => f.name === "Status");
+  const statusField = fieldList.fields.find(f => f.name === "Status");
   if (!statusField) {
     fail("Status field not found on project");
   }
-  const option = statusField.options.find((o) => o.name === status);
+  const option = statusField.options.find(o => o.name === status);
   if (!option) {
     fail(`Status option not found: ${status}`);
   }

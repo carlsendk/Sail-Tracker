@@ -1,6 +1,7 @@
 {
   "type": "commonjs",
   "name": "web",
+  "description": "Next.js web application for the Sail Tracker platform.",
   "private": true,
   "scripts": {
     "build": "next build",

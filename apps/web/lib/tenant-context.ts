@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 
-import { getServerEnv as getServerEnvironment } from "./server-env";
+import { getServerEnvironment } from "./server-environment";
 import { lookupTenantByHostname } from "./supabase-admin";
 
 export interface TenantContext {
@@ -28,6 +28,7 @@ export async function getTenantContext(): Promise<null | TenantContext> {
   const rawHost = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
 
   if (!rawHost) {
+    // eslint-disable-next-line unicorn/no-null -- no host header → no tenant
     return null;
   }
 
@@ -42,8 +43,9 @@ export async function getTenantContext(): Promise<null | TenantContext> {
     };
   }
 
-  const environmentTenant = await resolveTenantFromEnvironment(hostname);
+  const environmentTenant = resolveTenantFromEnvironment(hostname);
   if (!environmentTenant) {
+    // eslint-disable-next-line unicorn/no-null -- no environment tenant matched either
     return null;
   }
 
@@ -98,6 +100,7 @@ function getEnvironmentTenant(slug: string, matchedBy: "domain" | "localhost-fal
     };
   }
 
+  // eslint-disable-next-line unicorn/no-null -- no matching tenant slug
   return null;
 }
 
@@ -111,6 +114,7 @@ function getLocalFallbackSlug(hostname: string): null | string {
     (getServerEnvironment("NEXT_PUBLIC_ENABLE_LOCALHOST_TENANT_FALLBACK") ?? "true") === "true";
 
   if (!localhostFallbackEnabled) {
+    // eslint-disable-next-line unicorn/no-null -- feature flag disabled
     return null;
   }
 
@@ -118,11 +122,13 @@ function getLocalFallbackSlug(hostname: string): null | string {
     return getServerEnvironment("NEXT_PUBLIC_REAL_TENANT_SLUG") ?? "club";
   }
 
-  const localhostMatch = /^([a-z\d-]+)\.localhost$/u.exec(hostname);
+  const localhostMatch = /^([\d\-a-z]+)\.localhost$/u.exec(hostname);
   if (localhostMatch) {
+    // eslint-disable-next-line unicorn/no-null -- capture group can be undefined, null matches return type
     return localhostMatch[1] ?? null;
   }
 
+  // eslint-disable-next-line unicorn/no-null -- hostname is not a localhost variant
   return null;
 }
 
@@ -134,6 +140,7 @@ function getLocalFallbackSlug(hostname: string): null | string {
 async function lookupSupabaseTenantByHostname(hostname: string): Promise<null | TenantContext["tenant"]> {
   const tenantData = await lookupTenantByHostname(hostname);
   if (!tenantData) {
+    // eslint-disable-next-line unicorn/no-null -- Supabase lookup returned null/undefined
     return null;
   }
 
@@ -158,9 +165,9 @@ function normalizeHostname(host: string): string {
 /**
  * Resolves a tenant from environment configuration when Supabase returns nothing.
  * @param hostname - The normalised hostname to attempt environment-based resolution for.
- * @returns The tenant object, or null if no environment tenant could be matched.
+ * @returns The resolved tenant object, or null if no environment tenant matches.
  */
-async function resolveTenantFromEnvironment(hostname: string): Promise<null | TenantContext["tenant"]> {
+function resolveTenantFromEnvironment(hostname: string): null | TenantContext["tenant"] {
   const localhostFallbackSlug = getLocalFallbackSlug(hostname);
   if (localhostFallbackSlug) {
     return getEnvironmentTenant(localhostFallbackSlug, "localhost-fallback");

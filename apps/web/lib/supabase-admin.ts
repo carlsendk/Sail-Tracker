@@ -1,6 +1,6 @@
 /** @file Supabase admin API client for server-side tenant and bootstrap queries. */
 
-import { getServerEnv as getServerEnvironment } from "./server-env";
+import { getServerEnvironment } from "./server-environment";
 
 export interface SupabaseTenant {
   default_locale: string;
@@ -71,6 +71,7 @@ export async function lookupTenantByHostname(hostname: string): Promise<null | S
     const response = await supabaseAdminFetch("/rest/v1/tenant_domains?select=hostname,tenants!inner(slug,name,status,default_locale)&limit=1&hostname=eq." + encodeURIComponent(hostname));
 
     if (!response?.ok) {
+      // eslint-disable-next-line unicorn/no-null -- returning null to signal "not found" on error
       return null;
     }
 
@@ -78,8 +79,10 @@ export async function lookupTenantByHostname(hostname: string): Promise<null | S
     const row = rows[0];
     const tenantData = Array.isArray(row?.tenants) ? row.tenants[0] : row?.tenants;
 
+    // eslint-disable-next-line unicorn/no-null -- ?? null matches function return type Promise<null | SupabaseTenant>
     return tenantData ?? null;
   } catch {
+    // eslint-disable-next-line unicorn/no-null -- returning null to signal error/not-found per Supabase convention
     return null;
   }
 }
@@ -94,6 +97,7 @@ export function resolveSupabaseAdminConfig(readEnvironment: (name: string) => nu
   const adminKey = readEnvironment("SUPABASE_SECRET_KEY") ?? readEnvironment("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!url || !adminKey) {
+    // eslint-disable-next-line unicorn/no-null -- returning null to signal missing config (public API contract)
     return null;
   }
 
@@ -117,6 +121,7 @@ function getSupabaseAdminConfig() {
 async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
   const config = getSupabaseAdminConfig();
   if (!config) {
+    // eslint-disable-next-line unicorn/no-null -- returning null to signal unavailable config (callers check for null)
     return null;
   }
 
@@ -127,6 +132,7 @@ async function supabaseAdminFetch(pathname: string, init?: RequestInit) {
     headers: {
       apikey: config.adminKey,
       Authorization: `Bearer ${config.adminKey}`,
+      // eslint-disable-next-line @typescript-eslint/no-misused-spread -- init.headers is always a plain object record in this codebase, never a Headers instance
       ...init?.headers,
     },
   });

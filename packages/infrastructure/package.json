@@ -1,5 +1,6 @@
 {
   "name": "@sail-tracker/infrastructure",
+  "description": "Infrastructure layer — Supabase adapters and external service integrations for Sail Tracker.",
   "private": true,
   "type": "module"
 }
