@@ -101,3 +101,19 @@ For each new milestone batch, the operator must:
 
 - Do Infra (Phase 1–4) issues use `domain:infra` or do we add `domain:database`, `domain:deploy`? **Tentative**: keep `domain:infra` until cardinality justifies splitting.
 - Should `priority:*` reflect dependency depth or operator urgency? **Tentative**: dependency depth (root deps = p0, leaf-most = p2) so that breadth-first pickup naturally drains the bottom of the graph.
+
+## End-to-end workflow validation (issue #5, B1, PR #20)
+
+The first run of the `work-next → subagent-driven-development` pipeline succeeded on the first try — implementer + spec reviewer + code reviewer each approved without re-dispatch. Captured outcomes worth carrying forward:
+
+1. **Pre-flight blast-radius check is cheap and high-value.** Before dispatching the implementer for any issue that introduces a new lint/strict rule, run the rule on the codebase yourself and count violations. For B1 (strict tsconfig flags), this took ~30 seconds and gave the implementer concrete scope expectations ("expect ~1 violation, in `lib/tenant-context.ts`"). For Phase B/C issues that introduce new rules (e.g. ESLint plugins, boundary rules), do the same. Format the result as a "Heads-up" line in the dispatch prompt — it short-circuits hours of speculative subagent exploration.
+
+2. **Sonnet was correct for B1.** Mechanical config + one narrowing fix. Reserve more capable models for issues that need architectural decisions or multi-file refactors.
+
+3. **The body shape held up.** All 8 sections were used by the subagents. The "TDD Steps" section was the single most-referenced part — implementer followed it almost verbatim. Spec reviewer used "Acceptance Criteria" as the checklist. Code reviewer leaned on "Goal" + "Embedded Spec" for context.
+
+4. **A spec gap surfaced that wasn't visible in authoring**: `packages/*` have no `typecheck` script or own `tsconfig.json`, so B1's strict flags only protect `apps/web` today. The acceptance criterion ("`pnpm typecheck` clean across workspace") is met *literally* (typecheck filters to `web`) but not *intentionally*. **Lesson**: when an issue claims workspace-wide effect, the body should explicitly check that the workspace-wide invariant holds, not just rely on `pnpm <script>` succeeding. Fix forward: add a follow-up issue (B1.1: per-package `tsconfig.json` extending base + `typecheck` script) before B2/B3 land.
+
+5. **Pre-commit hook discipline confirmed**: `pnpm validate` ran via `git commit` and gated the work. No `--no-verify` needed or used. Phase B/C bodies should not bother re-saying "run validate before committing" — the hook handles it.
+
+6. **`flip-on-pr-open` is broken until PAT rotates.** Don't trust automation to flip `state:in-progress` → `state:in-review` on PR open. The controller (you) must manually flip until the PAT is fixed. Phase B/C issue bodies don't need to mention this — it's an operator concern.
