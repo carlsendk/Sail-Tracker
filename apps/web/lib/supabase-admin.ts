@@ -2,6 +2,7 @@
 
 import { getServerEnvironment } from "./server-environment";
 
+/** Represents a tenant record returned from the Supabase tenants table. */
 export interface SupabaseTenant {
   default_locale: string;
   name: string;

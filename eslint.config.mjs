@@ -454,8 +454,28 @@ export default [
       "jsdoc/require-asterisk-prefix": "error",
       "jsdoc/require-description": "error",
       "jsdoc/require-file-overview": "error",
-      // Spec-listed
-      "jsdoc/require-jsdoc": "error",
+      // Require JSDoc blocks on named exports (spec intent from Fix 3).
+      // NOTE: jsdoc/no-missing-syntax (originally specified) performs a per-FILE
+      // presence check (reports if a selector is absent from the file), not a
+      // per-OCCURRENCE check. It cannot enforce "every named export has JSDoc".
+      // jsdoc/require-jsdoc with contexts is the correct rule for per-occurrence
+      // coverage. The spec intent is preserved: require JSDoc on every named export.
+      "jsdoc/require-jsdoc": ["error", {
+        contexts: [
+          "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
+          "ExportNamedDeclaration > ClassDeclaration",
+          "ExportNamedDeclaration > TSTypeAliasDeclaration",
+          "ExportNamedDeclaration > TSInterfaceDeclaration",
+        ],
+        publicOnly: false,
+        require: {
+          ArrowFunctionExpression: false,
+          ClassDeclaration: true,
+          FunctionDeclaration: true,
+          FunctionExpression: false,
+          MethodDefinition: false,
+        },
+      }],
       "jsdoc/require-param-name": "error",
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-yields-check": "error",

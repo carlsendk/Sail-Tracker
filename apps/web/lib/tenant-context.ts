@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { getServerEnvironment } from "./server-environment";
 import { lookupTenantByHostname } from "./supabase-admin";
 
+/** Represents the resolved tenant for the current request, including lookup metadata. */
 export interface TenantContext {
   hostname: string;
   lookup: "environment" | "supabase";
