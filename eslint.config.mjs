@@ -299,16 +299,42 @@ export default [
       ),
     },
   },
-  // ─── Custom architectural rules: no inline <svg> ─────────────────────────
-  // Inline `<svg>` JSX is forbidden in component code — icons must live under
-  // `packages/ui/src/icons/` and be imported as components. This keeps diffs
-  // small, makes accessibility audits tractable, and enables shared-icon reuse.
-  // The override block below opts the icon directory out of the rule.
+  // ─── Custom architectural rules via no-restricted-syntax ────────────────
+  // Two architectural constraints share this rule entry because flat-config
+  // merges `no-restricted-syntax` by last-match override (a later block setting
+  // the rule fully replaces the earlier value, NOT merging the option arrays).
+  // Splitting into a second rule entry would silently disable whichever rule
+  // lost the last-match race. Combining keeps both active simultaneously;
+  // override blocks below turn the entire rule off where legitimate violations
+  // live (icons dir, test files).
   //
-  // Selector matches the lowercase JSX intrinsic `<svg>` only — uppercase
-  // `<SVG>` (which JSX treats as a custom-component reference) and JSX
-  // namespaced `<svg:x>` are out of scope. Both are vanishingly rare in real
-  // code; this rule targets the standard inline-SVG-markup anti-pattern.
+  // (1) No inline <svg>: icons must live under `packages/ui/src/icons/` and
+  //     be imported as components. Keeps diffs small, accessibility audits
+  //     tractable, shared-icon reuse possible. The selector matches the
+  //     lowercase JSX intrinsic `<svg>` only — uppercase `<SVG>` (which JSX
+  //     treats as a custom-component reference) and namespaced `<svg:x>`
+  //     are out of scope (vanishingly rare).
+  //
+  // (2) data-testid required on interactive elements: `<button>`, `<a>`, and
+  //     any JSX element with `role="button"` must carry a `data-testid`
+  //     attribute outside test files, so e2e tests have stable selectors.
+  //     Selectors fire on JSXOpeningElement that does NOT have a child
+  //     JSXAttribute named `data-testid` (esquery `:not(:has(...))`).
+  //
+  //     Known limits of the AST approach (acceptable scope):
+  //     - `<a>` fires regardless of `href` — pure structural anchors get a
+  //       false-positive. Spec wants blanket `<a>` coverage; tighten to
+  //       `:has(JSXAttribute[name.name='href'])` if structural anchors
+  //       become common.
+  //     - `role={"button"}` (expression form) is NOT caught; only the bare
+  //       Literal `role="button"` is. Locked in by a negative-coverage
+  //       test in tests/eslint-data-testid.test.mjs.
+  //     - `<button {...props}>` may have `data-testid` forwarded via spread;
+  //       the rule cannot introspect spread props and will fire. Use
+  //       `eslint-disable-next-line no-restricted-syntax -- testid forwarded
+  //       via {...props}` at call sites where the wrapper guarantees it.
+  //     - `<button role="button">` (legal but redundant) double-fires
+  //       selectors 2 and 4. Acceptable noise.
   {
     files: ["**/*.{jsx,tsx}"],
     rules: {
@@ -319,14 +345,45 @@ export default [
             "Inline <svg> JSX is not allowed. Add the icon as a component under packages/ui/src/icons/ and import it.",
           selector: "JSXElement[openingElement.name.name='svg']",
         },
+        {
+          message:
+            "Interactive element requires a `data-testid`: <button> needs a stable test selector.",
+          selector:
+            "JSXOpeningElement[name.name='button']:not(:has(JSXAttribute[name.name='data-testid']))",
+        },
+        {
+          message:
+            "Interactive element requires a `data-testid`: <a> needs a stable test selector.",
+          selector:
+            "JSXOpeningElement[name.name='a']:not(:has(JSXAttribute[name.name='data-testid']))",
+        },
+        {
+          message:
+            'Interactive element requires a `data-testid`: any JSX with role="button" needs a stable test selector.',
+          selector:
+            "JSXOpeningElement:has(JSXAttribute[name.name='role'][value.value='button']):not(:has(JSXAttribute[name.name='data-testid']))",
+        },
       ],
     },
   },
   // Icon directory is the canonical home for inline <svg>; opt it out of the
-  // restricted-syntax rule above. This block must come AFTER the rule block so
-  // its override wins under flat-config last-match semantics.
+  // restricted-syntax rule above. Override blocks must come AFTER the rule
+  // block so they win under flat-config last-match semantics.
+  // Side-effect: data-testid checks are also off here. Acceptable — icons
+  // are not interactive elements.
   {
     files: ["packages/ui/src/icons/**/*.{jsx,tsx}"],
+    rules: {
+      "no-restricted-syntax": "off",
+    },
+  },
+  // Test files are exempt from the data-testid requirement (and from the
+  // no-inline-svg rule too — test fixtures occasionally need inline markup).
+  // Reuses the canonical `testFiles` glob set defined above. The widening
+  // beyond the spec's literal `**/*.{test,spec}.{ts,tsx}` + `apps/web/__tests__/**`
+  // matches how the rest of this config defines "test file."
+  {
+    files: testFiles,
     rules: {
       "no-restricted-syntax": "off",
     },
