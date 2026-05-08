@@ -457,26 +457,33 @@ export default [
       "jsdoc/require-asterisk-prefix": "error",
       "jsdoc/require-description": "error",
       "jsdoc/require-file-overview": "error",
-      // Require JSDoc blocks on named exports (spec intent from Fix 3).
-      // NOTE: jsdoc/no-missing-syntax (originally specified) performs a per-FILE
-      // presence check (reports if a selector is absent from the file), not a
-      // per-OCCURRENCE check. It cannot enforce "every named export has JSDoc".
-      // jsdoc/require-jsdoc with contexts is the correct rule for per-occurrence
-      // coverage. The spec intent is preserved: require JSDoc on every named export.
+      // Require JSDoc on the public surface of exports only — internal symbols are exempt.
+      // The selectors below scope coverage to the export keyword (named + default),
+      // including methods on exported classes (per B6 #10).
+      // The bare `require:` switches are all `false` so we never flag non-exported
+      // FunctionDeclaration / ClassDeclaration / etc; coverage comes solely from
+      // the AST contexts listed below.
       "jsdoc/require-jsdoc": [
         "error",
         {
           contexts: [
-            "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
+            "ExportNamedDeclaration > FunctionDeclaration",
             "ExportNamedDeclaration > ClassDeclaration",
+            "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
             "ExportNamedDeclaration > TSTypeAliasDeclaration",
             "ExportNamedDeclaration > TSInterfaceDeclaration",
+            "ExportDefaultDeclaration > FunctionDeclaration",
+            "ExportDefaultDeclaration > ClassDeclaration",
+            // eslint-disable-next-line no-secrets/no-secrets -- ESLint AST selector, not a secret; high entropy is incidental
+            "ExportNamedDeclaration > ClassDeclaration > ClassBody > MethodDefinition[kind!='constructor'][key.type!='PrivateIdentifier']",
+            // eslint-disable-next-line no-secrets/no-secrets -- ESLint AST selector, not a secret; high entropy is incidental
+            "ExportDefaultDeclaration > ClassDeclaration > ClassBody > MethodDefinition[kind!='constructor'][key.type!='PrivateIdentifier']",
           ],
           publicOnly: false,
           require: {
             ArrowFunctionExpression: false,
-            ClassDeclaration: true,
-            FunctionDeclaration: true,
+            ClassDeclaration: false,
+            FunctionDeclaration: false,
             FunctionExpression: false,
             MethodDefinition: false,
           },
