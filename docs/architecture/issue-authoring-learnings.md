@@ -176,3 +176,66 @@ No source changes. Our tests use only stable APIs (`describe`/`it`/`expect`, bas
 The vitest plugin actually breaks at runtime: its transitive `@typescript-eslint/utils@7.18.0` does `class extends LegacyESLint`, but `LegacyESLint` was removed in ESLint 10. Errors with `TypeError: Class extends value undefined is not a constructor`. Working around it (switching to `@vitest/eslint-plugin`) doesn't fix the other 4 peer-dep warnings, which violates the lint policy.
 
 **Action to take when revisiting**: open a fresh issue (B2.2) once at least 4 of the 5 plugins have published v10-compatible majors. Watch their changelogs / GitHub releases. Re-run the same compatibility audit script (`pnpm add -Dw eslint@latest @eslint/js@latest` then inspect peer warnings).
+
+## B7+B15 learnings (Prettier, Stylelint, Tailwind v4)
+
+Captured during PR #47 (B7 Prettier+Stylelint + B15 Tailwind v4 adoption, merged 2026-05-08). Each subsection below corresponds to a feedback memory and should drive future tooling-introduction issue authoring.
+
+### Verify spec wording against the actual codebase before adopting
+
+Issue authors hedge for foreseeable futures, naming tools that aren't in the repo yet. B7's spec mentioned configuring stylelint "as fits Tailwind/PostCSS layout" — neither was actually present. Following the spec literally would have wired Tailwind-aware rules into a plain-CSS repo, producing dead config + confusion for future readers.
+
+**Authoring rule:** before mentioning a tool/framework/file by name in an `Embedded Spec`, verify it exists. Grep `package.json` deps, `*.config.*` files, and source imports. If absent, choose one of:
+
+- Open a sibling issue to actually adopt the tool (B15 case — Tailwind v4 got its own slot when B7 surfaced the gap mid-implementation).
+- Redefine scope to exclude the speculative wording.
+- Bundle the missing-tool adoption into the current PR (operator decision; only when work overlaps materially — see "Bundling unplanned issues" below).
+
+### Two-commit dance for chaining a new gate into `validate`
+
+Adding `format:check`, `stylelint`, or any new gate into `pnpm validate` must split across two commits:
+
+1. **Commit 1 — config only.** Add config files + standalone `pnpm <tool>` scripts + dev deps. Do **NOT** modify the `validate` script. Pre-commit runs the *current* validate (without the new gate) — passes because nothing's chained in yet.
+2. **Commit 2 — fix pass + chain.** Run the new gate's fix/format pass to bring the repo to a clean state. Then edit `validate` to chain in the new gate. Pre-commit runs the *new* validate — passes because the repo just got cleaned.
+
+**Why:** the pre-commit hook runs `pnpm validate`. If you add the gate to `validate` AND the repo isn't yet in a state that passes the gate, you can't land the commit at all (chicken-and-egg). The split unlocks the chain-in. Generalizes beyond Prettier — applies to markdownlint, depcruise, knip, and any future repo-wide validator.
+
+**Authoring rule:** any issue introducing a new gate into `validate` must enumerate this two-commit ordering explicitly in `TDD Steps`.
+
+### Prettier `arrowParens: "avoid"` to align with sonarjs
+
+Prettier's default `arrowParens: "always"` collides with `eslint-plugin-sonarjs/arrow-function-convention`, which forbids parens around single-parameter arrows. After the B7 baseline format pass this combination surfaced 19 errors. Setting `arrowParens: "avoid"` in `prettier.config.mjs` resolves it.
+
+**Authoring rule:** any issue introducing a new formatter alongside existing linters must list known interactions in the new `Known formatter/linter conflicts` template field. The agent-task template prompts for this explicitly so the conflict matrix is captured at authoring time, not rediscovered at implementation time.
+
+### Audit `eslint-disable-next-line` directives after a baseline format pass
+
+`eslint-disable-next-line` only disables the directly following line. If the original code is `const x = foo(a, b);` and Prettier wraps it to `const x = foo(\n  a,\n  b,\n);`, the directive now sits above `const x = foo(` while the actual lint-flagged reference (e.g. `b,`) sits two lines below. The disable becomes ineffective AND emits "Unused eslint-disable directive" at its original location.
+
+**Authoring rule:** the TDD Steps for any issue running a repo-wide format pass must include "Run `pnpm lint` and reposition any `eslint-disable-next-line` directives flagged as unused." Caught in `apps/web/lib/server-environment.ts` during B7+B15.
+
+### Visual verification mandatory for CSS / Tailwind / Preflight changes
+
+Static checks (typecheck, lint, unit tests) cannot detect a missing `<ul>` bullet, a botched gradient, or any element silently zeroed by Tailwind Preflight. The B15 Preflight collision (`ul` lost `list-style`) was found ONLY by browser screenshot.
+
+**Authoring rule:** any UI-adjacent issue (CSS, Tailwind, global stylesheets, Preflight changes, theme tokens, component visual changes) must tick the new "Visual verification required (UI-adjacent)" template checkbox. Standard procedure:
+
+1. Start dev server (`pnpm --filter web dev`).
+2. Use Playwright (`browser_navigate` → `browser_take_screenshot fullPage: true`) to capture each affected route.
+3. Compare to a pre-change baseline.
+4. For Tailwind v4 specifically, focus on Preflight-targeted elements: `h1`–`h6`, `ul`, `ol`, `p`, `a`, form controls.
+5. Document collisions and fixes in the PR body.
+
+### Bundling unplanned issues into the current PR
+
+When a foundational gap surfaces mid-implementation (B15 Tailwind adoption emerged during B7), two policies apply:
+
+1. **B-numbering can grow.** Open a new B-numbered slot in the same milestone (B15, B16, …) rather than retrofitting into the original issue. Keeps the board cleanly traceable; preserves "one ticket = one bounded scope" for retrospectives.
+2. **Bundling adjacent unplanned issues into the current PR is OK** when the work overlaps materially AND the operator approves. Track each as its own issue for board visibility, ship in one PR. Validated on B7+B15 (PR #47, 2026-05-08).
+
+## Optional template fields (added 2026-05-08)
+
+Two **optional** fields were added to `.github/ISSUE_TEMPLATE/agent-task.yml` to surface B7+B15 learnings at authoring time. They sit between `TDD Steps` and `Definition of Done` and do not change the 8 required sections:
+
+- **Known formatter/linter conflicts** (textarea, optional) — populate when introducing or extending a formatter/linter so the conflict matrix is captured up-front. Default value is `- none`; leave as-is when not applicable.
+- **Visual verification required (UI-adjacent)** (checkbox, optional) — tick when the issue touches CSS, Tailwind, Preflight, global stylesheets, theme tokens, or rendered UI. The PR must then include a Playwright screenshot before merge.
