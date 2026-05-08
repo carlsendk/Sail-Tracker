@@ -2,8 +2,14 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const currentDirectory = import.meta.dirname;
+// Use fileURLToPath rather than import.meta.dirname: Next's webpack server
+// bundle does not propagate import.meta.dirname (it resolves to undefined),
+// which causes "paths[0] argument must be of type string" at build time
+// during page-data collection.
+// eslint-disable-next-line unicorn/prefer-import-meta-properties -- import.meta.dirname is undefined in Next's server webpack bundle (verified at build time); see comment above
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = path.resolve(currentDirectory, "../../..");
 const appRoot = path.resolve(currentDirectory, "../..");
 
