@@ -309,11 +309,20 @@ export default [
     rules: {
       "import/no-cycle": "error",
       "import/no-duplicates": "error",
-      "import/no-unresolved": "off", // TypeScript handles this
-      // Turn off base no-unused-vars in favour of unused-imports version
-      "no-unused-vars": "off",
+      "import/no-unresolved": "error",
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": "error",
+    },
+    settings: {
+      "import/resolver": {
+        node: true,
+        typescript: {
+          project: [
+            "./tsconfig.base.json",
+            "./apps/web/tsconfig.json",
+          ],
+        },
+      },
     },
   },
 
@@ -359,15 +368,13 @@ export default [
     },
   },
 
-
-  // Next.js App Router convention: filenames like page.tsx, layout.tsx, error.tsx
-  // are required by the framework and intentionally differ from the exported component name.
-  // IMPORTANT: sonarjs/file-name-differ-from-class reports at loc:{line:0,column:0},
-  // which is before any source line. ESLint's inline disable-comment system cannot
-  // suppress violations at line 0 (disable comments at line 1+ don't cover line 0).
-  // This narrow config-level override is therefore the only suppression mechanism
-  // available for this specific rule. It is NOT a policy violation — it is an
-  // unavoidable workaround for a sonarjs rule that reports outside suppressable range.
+  // sonarjs/file-name-differ-from-class reports at loc:{line:0,column:0} (before any
+  // source line). Inline `eslint-disable` directives only suppress reports at line 1+,
+  // so violations on the Next.js App Router convention files (page.tsx, layout.tsx, etc.)
+  // are physically unsuppressable inline. Verified empirically: a file-level disable
+  // directive at line 1 was reported as unused and the violation still fired.
+  // This narrow scoped override is the only mechanism available. Per lint-policy memo,
+  // this is the documented "rule reports outside suppressable range" exception class.
   {
     files: ["apps/web/app/**/*.{ts,tsx}"],
     rules: {
