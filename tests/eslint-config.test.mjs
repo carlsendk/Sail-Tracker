@@ -46,9 +46,9 @@ const pluginKeys = collectPluginKeys(config);
 const assertPlugin = key => {
   assert.ok(
     pluginKeys.has(key),
-    `Expected plugin key "${key}" to be registered in the flat config. Found keys: ${[...pluginKeys].join(", ")}`
+    `Expected plugin key "${key}" to be registered in the flat config. Found keys: ${[...pluginKeys].join(", ")}`,
   );
-}
+};
 
 describe("root eslint.config.mjs", () => {
   it("exports an array (flat config format)", () => {

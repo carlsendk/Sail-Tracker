@@ -20,7 +20,7 @@
     "stylelint": "stylelint \"**/*.css\"",
     "test": "node --test 'tests/*.mjs' && pnpm --filter web test",
     "typecheck": "pnpm --filter web typecheck",
-    "validate": "pnpm lint && pnpm typecheck && pnpm test"
+    "validate": "pnpm format:check && pnpm stylelint && pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",

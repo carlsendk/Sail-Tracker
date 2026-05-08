@@ -35,7 +35,8 @@ export const getBootstrapStatus = async () => {
 
   try {
     const response = await supabaseAdminFetch(
-      "/rest/v1/profiles?select=id,email&limit=1&email=eq." + encodeURIComponent(platformAdminEmail),
+      "/rest/v1/profiles?select=id,email&limit=1&email=eq." +
+        encodeURIComponent(platformAdminEmail),
     );
 
     if (!response?.ok) {
@@ -46,7 +47,7 @@ export const getBootstrapStatus = async () => {
       };
     }
 
-    const rows = (await response.json()) as { email: string; id: string; }[];
+    const rows = (await response.json()) as { email: string; id: string }[];
 
     return {
       isConfigured: true,
@@ -60,16 +61,21 @@ export const getBootstrapStatus = async () => {
       source: "supabase" as const,
     };
   }
-}
+};
 
 /**
  * Looks up a tenant record by hostname via the Supabase REST API.
  * @param hostname - The fully-qualified hostname to look up.
  * @returns The matched tenant, or null if not found or on error.
  */
-export const lookupTenantByHostname = async (hostname: string): Promise<null | SupabaseTenant> => {
+export const lookupTenantByHostname = async (
+  hostname: string,
+): Promise<null | SupabaseTenant> => {
   try {
-    const response = await supabaseAdminFetch("/rest/v1/tenant_domains?select=hostname,tenants!inner(slug,name,status,default_locale)&limit=1&hostname=eq." + encodeURIComponent(hostname));
+    const response = await supabaseAdminFetch(
+      "/rest/v1/tenant_domains?select=hostname,tenants!inner(slug,name,status,default_locale)&limit=1&hostname=eq." +
+        encodeURIComponent(hostname),
+    );
 
     if (!response?.ok) {
       // eslint-disable-next-line unicorn/no-null -- returning null to signal "not found" on error
@@ -78,7 +84,9 @@ export const lookupTenantByHostname = async (hostname: string): Promise<null | S
 
     const rows = (await response.json()) as SupabaseTenantDomainRow[];
     const row = rows[0];
-    const tenantData = Array.isArray(row?.tenants) ? row.tenants[0] : row?.tenants;
+    const tenantData = Array.isArray(row?.tenants)
+      ? row.tenants[0]
+      : row?.tenants;
 
     // eslint-disable-next-line unicorn/no-null -- ?? null matches function return type Promise<null | SupabaseTenant>
     return tenantData ?? null;
@@ -86,16 +94,20 @@ export const lookupTenantByHostname = async (hostname: string): Promise<null | S
     // eslint-disable-next-line unicorn/no-null -- returning null to signal error/not-found per Supabase convention
     return null;
   }
-}
+};
 
 /**
  * Resolves the Supabase admin URL and key from the given env reader.
  * @param readEnvironment - A function to read an environment variable by name.
  * @returns An object with url and adminKey, or null if either is missing.
  */
-export const resolveSupabaseAdminConfig = (readEnvironment: (name: string) => null | string) => {
+export const resolveSupabaseAdminConfig = (
+  readEnvironment: (name: string) => null | string,
+) => {
   const url = readEnvironment("NEXT_PUBLIC_SUPABASE_URL");
-  const adminKey = readEnvironment("SUPABASE_SECRET_KEY") ?? readEnvironment("SUPABASE_SERVICE_ROLE_KEY");
+  const adminKey =
+    readEnvironment("SUPABASE_SECRET_KEY") ??
+    readEnvironment("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!url || !adminKey) {
     // eslint-disable-next-line unicorn/no-null -- returning null to signal missing config (public API contract)
@@ -103,13 +115,14 @@ export const resolveSupabaseAdminConfig = (readEnvironment: (name: string) => nu
   }
 
   return { adminKey, url };
-}
+};
 
 /**
  * Retrieves the Supabase admin config from the server environment.
  * @returns The resolved admin config, or null if env vars are missing.
  */
-const getSupabaseAdminConfig = () => resolveSupabaseAdminConfig(getServerEnvironment);
+const getSupabaseAdminConfig = () =>
+  resolveSupabaseAdminConfig(getServerEnvironment);
 
 /**
  * Issues an authenticated fetch request to the Supabase REST API.
@@ -135,4 +148,4 @@ const supabaseAdminFetch = async (pathname: string, init?: RequestInit) => {
       ...init?.headers,
     },
   });
-}
+};

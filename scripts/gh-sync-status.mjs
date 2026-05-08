@@ -88,16 +88,36 @@ function main() {
   }
 
   const itemList = JSON.parse(
-    gh(["project", "item-list", projectNumber, "--owner", owner, "--format", "json", "--limit", "500"]),
+    gh([
+      "project",
+      "item-list",
+      projectNumber,
+      "--owner",
+      owner,
+      "--format",
+      "json",
+      "--limit",
+      "500",
+    ]),
   );
-  const item = itemList.items.find(index => index.content?.number === issueNumber);
+  const item = itemList.items.find(
+    index => index.content?.number === issueNumber,
+  );
   if (!item) {
     console.log(`Issue #${issueNumber} not in project; nothing to do.`);
     return;
   }
 
   const fieldList = JSON.parse(
-    gh(["project", "field-list", projectNumber, "--owner", owner, "--format", "json"]),
+    gh([
+      "project",
+      "field-list",
+      projectNumber,
+      "--owner",
+      owner,
+      "--format",
+      "json",
+    ]),
   );
   const statusField = fieldList.fields.find(f => f.name === "Status");
   if (!statusField) {

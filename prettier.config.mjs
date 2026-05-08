@@ -12,4 +12,8 @@
  */
 
 /** @type {import("prettier").Config} */
-export default {};
+export default {
+  // Align with eslint-plugin-sonarjs `arrow-function-convention` which forbids
+  // parentheses around single-parameter arrow function arguments.
+  arrowParens: "avoid",
+};

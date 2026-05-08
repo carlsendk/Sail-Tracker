@@ -222,8 +222,8 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(react.configs.flat.recommended.rules ?? {}).map(
-          ([rule]) => [rule, "error"]
-        )
+          ([rule]) => [rule, "error"],
+        ),
       ),
     },
     settings: {
@@ -278,7 +278,7 @@ export default [
         Object.keys(jsxA11y.flatConfigs.strict.rules ?? {}).map(rule => [
           rule,
           "error",
-        ])
+        ]),
       ),
     },
   },
@@ -295,7 +295,7 @@ export default [
         Object.keys(nextPlugin.rules ?? {}).map(name => [
           `@next/next/${name}`,
           "error",
-        ])
+        ]),
       ),
     },
   },
@@ -317,10 +317,7 @@ export default [
       "import/resolver": {
         node: true,
         typescript: {
-          project: [
-            "./tsconfig.base.json",
-            "./apps/web/tsconfig.json",
-          ],
+          project: ["./tsconfig.base.json", "./apps/web/tsconfig.json"],
         },
       },
     },
@@ -336,8 +333,8 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(unicorn.configs.recommended.rules ?? {}).map(
-          ([rule]) => [rule, "error"]
-        )
+          ([rule]) => [rule, "error"],
+        ),
       ),
     },
   },
@@ -352,8 +349,9 @@ export default [
     },
     rules: {
       ...Object.fromEntries(
-        Object.entries(sonarjs.configs.recommended.rules ?? {})
-          .map(([rule]) => [rule, "error"])
+        Object.entries(sonarjs.configs.recommended.rules ?? {}).map(
+          ([rule]) => [rule, "error"],
+        ),
       ),
       // Configure file-header to accept /** @file ... */ JSDoc comments.
       // The pattern allows an optional shebang line and matches @file anywhere in
@@ -404,8 +402,8 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(regexp.configs["flat/recommended"].rules ?? {}).map(
-          ([rule]) => [rule, "error"]
-        )
+          ([rule]) => [rule, "error"],
+        ),
       ),
       // Spec-listed: explicitly enable (may not be in recommended)
       // Both u-flag and v-flag rules are enabled; v-flag (sets regexp) is
@@ -428,8 +426,8 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(
-          perfectionist.configs["recommended-alphabetical"].rules ?? {}
-        ).map(([rule]) => [rule, "error"])
+          perfectionist.configs["recommended-alphabetical"].rules ?? {},
+        ).map(([rule]) => [rule, "error"]),
       ),
     },
   },
@@ -465,22 +463,25 @@ export default [
       // per-OCCURRENCE check. It cannot enforce "every named export has JSDoc".
       // jsdoc/require-jsdoc with contexts is the correct rule for per-occurrence
       // coverage. The spec intent is preserved: require JSDoc on every named export.
-      "jsdoc/require-jsdoc": ["error", {
-        contexts: [
-          "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
-          "ExportNamedDeclaration > ClassDeclaration",
-          "ExportNamedDeclaration > TSTypeAliasDeclaration",
-          "ExportNamedDeclaration > TSInterfaceDeclaration",
-        ],
-        publicOnly: false,
-        require: {
-          ArrowFunctionExpression: false,
-          ClassDeclaration: true,
-          FunctionDeclaration: true,
-          FunctionExpression: false,
-          MethodDefinition: false,
+      "jsdoc/require-jsdoc": [
+        "error",
+        {
+          contexts: [
+            "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
+            "ExportNamedDeclaration > ClassDeclaration",
+            "ExportNamedDeclaration > TSTypeAliasDeclaration",
+            "ExportNamedDeclaration > TSInterfaceDeclaration",
+          ],
+          publicOnly: false,
+          require: {
+            ArrowFunctionExpression: false,
+            ClassDeclaration: true,
+            FunctionDeclaration: true,
+            FunctionExpression: false,
+            MethodDefinition: false,
+          },
         },
-      }],
+      ],
       "jsdoc/require-param-name": "error",
       "jsdoc/require-returns-check": "error",
       "jsdoc/require-yields-check": "error",
@@ -549,9 +550,10 @@ export default [
     rules: {
       // vitest recommended rules
       ...Object.fromEntries(
-        Object.entries(vitest.configs.recommended.rules ?? {}).map(
-          ([rule]) => [rule, "error"]
-        )
+        Object.entries(vitest.configs.recommended.rules ?? {}).map(([rule]) => [
+          rule,
+          "error",
+        ]),
       ),
       // Spec-listed vitest rules not in recommended
       "vitest/prefer-expect-assertions": "error",
@@ -562,17 +564,16 @@ export default [
       ...Object.fromEntries(
         Object.keys(testingLibrary.rules ?? {})
           .filter(
-            rule =>
-              !["consistent-data-testid", "no-dom-import"].includes(rule)
+            rule => !["consistent-data-testid", "no-dom-import"].includes(rule),
           )
-          .map(rule => [`testing-library/${rule}`, "error"])
+          .map(rule => [`testing-library/${rule}`, "error"]),
       ),
       // jest-dom rules at warn
       ...Object.fromEntries(
         Object.keys(jestDom.rules ?? {}).map(rule => [
           `jest-dom/${rule}`,
           "error",
-        ])
+        ]),
       ),
       "no-only-tests/no-only-tests": "error",
     },
@@ -589,7 +590,7 @@ export default [
         Object.keys(playwright.rules ?? {}).map(rule => [
           `playwright/${rule}`,
           "error",
-        ])
+        ]),
       ),
     },
   },
@@ -605,7 +606,7 @@ export default [
     }),
     rules: {
       ...Object.fromEntries(
-        Object.keys(mdx.rules ?? {}).map(rule => [`mdx/${rule}`, "error"])
+        Object.keys(mdx.rules ?? {}).map(rule => [`mdx/${rule}`, "error"]),
       ),
     },
   },
@@ -618,7 +619,7 @@ export default [
       ...cfg.rules,
       // Downgrade all yml rules to warn
       ...Object.fromEntries(
-        Object.entries(cfg.rules ?? {}).map(([rule]) => [rule, "error"])
+        Object.entries(cfg.rules ?? {}).map(([rule]) => [rule, "error"]),
       ),
     },
   })),
@@ -643,8 +644,8 @@ export default [
     rules: {
       ...Object.fromEntries(
         Object.entries(packageJsonPlugin.configs.recommended.rules ?? {}).map(
-          ([rule]) => [rule, "error"]
-        )
+          ([rule]) => [rule, "error"],
+        ),
       ),
       // Spec-listed
       "package-json/require-description": "error",
