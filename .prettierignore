@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+out/
+dist/
+coverage/
+
+# Lockfiles / generated
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Vendored / temp
+supabase/.temp/
+.vercel/
+
+# Binary / non-text
+*.svg
+*.png
+*.jpg
+*.jpeg
+*.ico
+*.gif
+*.webp
+
+# Owned by tooling other than Prettier
+CHANGELOG.md
+release-please-manifest.json
+
+# Plain Markdown is hand-authored (Prettier scope is TS/MDX/JSON/YAML per spec)
+*.md

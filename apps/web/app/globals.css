@@ -1,13 +1,16 @@
+@import "tailwindcss";
+
 :root {
   color-scheme: light;
+
   --bg: #f5f2ea;
-  --surface: rgba(255, 255, 255, 0.78);
+  --surface: rgb(255 255 255 / 78%);
   --text: #173042;
   --muted: #4f6675;
-  --line: rgba(23, 48, 66, 0.12);
+  --line: rgb(23 48 66 / 12%);
   --accent: #0a7c86;
   --accent-strong: #04535a;
-  --shadow: 0 24px 80px rgba(23, 48, 66, 0.12);
+  --shadow: 0 24px 80px rgb(23 48 66 / 12%);
   --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
 }
@@ -24,7 +27,7 @@ body {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(10, 124, 134, 0.16), transparent 34%),
+    radial-gradient(circle at top left, rgb(10 124 134 / 16%), transparent 34%),
     linear-gradient(180deg, #f8f5ef 0%, var(--bg) 100%);
   color: var(--text);
   font-family: var(--font-body);
@@ -66,7 +69,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.62);
+  background: rgb(255 255 255 / 62%);
 }
 
 .details dt {
@@ -120,6 +123,7 @@ h2 {
 }
 
 ul {
+  list-style: disc;
   margin: 1.25rem 0 0;
   padding-left: 1.2rem;
   color: var(--muted);
@@ -130,7 +134,7 @@ li + li {
   margin-top: 0.5rem;
 }
 
-@media (max-width: 640px) {
+@media (width <= 640px) {
   .shell {
     padding: 2rem 1rem 4rem;
   }
