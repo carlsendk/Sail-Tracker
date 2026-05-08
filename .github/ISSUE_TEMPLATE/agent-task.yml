@@ -61,6 +61,25 @@ body:
     validations:
       required: true
   - type: textarea
+    id: conflicts
+    attributes:
+      label: Known formatter/linter conflicts (optional)
+      description: |
+        If this issue introduces or extends a formatter or linter, list known interactions with existing tools so the implementer doesn't rediscover them. Captures the B7 case where Prettier `arrowParens: "always"` clashed with `sonarjs/arrow-function-convention`. Leave as `- none` when not applicable. See `docs/architecture/issue-authoring-learnings.md` § "B7+B15 learnings".
+      value: |
+        - none
+    validations:
+      required: false
+  - type: checkboxes
+    id: ui_adjacent
+    attributes:
+      label: Visual verification required (UI-adjacent)
+      description: |
+        Tick if this issue touches CSS, Tailwind, Preflight, global stylesheets, theme tokens, or any rendered UI element. Static checks (typecheck/lint/unit tests) cannot catch missing styles or Preflight collisions; ticking adds a Playwright screenshot gate to the PR. See `docs/architecture/issue-authoring-learnings.md` § "Visual verification mandatory".
+      options:
+        - label: "Yes — PR must include a Playwright `fullPage: true` screenshot of each affected route before merge."
+          required: false
+  - type: textarea
     id: dod
     attributes:
       label: Definition of Done
