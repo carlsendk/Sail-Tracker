@@ -12,6 +12,7 @@
 /* eslint-disable vitest/require-hook -- node:test runner: describe/it at top level is the correct pattern */
 import { ESLint } from "eslint";
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import path from "node:path";
 // eslint-disable-next-line vitest/no-import-node-test -- intentional: this spec uses node:test runner, not vitest
 import { describe, it } from "node:test";
@@ -22,7 +23,20 @@ const rootDirectory = path.resolve(__dirname, "..");
 
 const eslint = new ESLint({ cwd: rootDirectory });
 
-const fixtureFile = path.join(rootDirectory, "docs/synthetic-fixture.mdx");
+// Synthetic file path — must NEVER exist on disk. The `.synthetic.` infix
+// distinguishes test fixtures from real docs files.
+const fixtureFile = path.join(
+  rootDirectory,
+  "docs/__lint-fixture__.synthetic.mdx",
+);
+
+// eslint-disable-next-line security/detect-non-literal-fs-filename -- path is built from import.meta.dirname + a constant string; no user input
+if (existsSync(fixtureFile)) {
+  throw new Error(
+    `Synthetic test fixture path "${fixtureFile}" must not exist on disk; ` +
+      "rename or delete the real file. See tests/eslint-mdx.test.mjs.",
+  );
+}
 
 describe("eslint-plugin-mdx — flat-config wiring", () => {
   it("calculates a config for .mdx files that includes mdx/* rules", async () => {
