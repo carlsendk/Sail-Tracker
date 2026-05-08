@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and releases use Semantic Versioning.
 
+## [0.2.1](https://github.com/carlsendk/Sail-Tracker/compare/sail-tracker-v0.2.0...sail-tracker-v0.2.1) (2026-05-08)
+
+
+### Bug Fixes
+
+* **build:** unblock next build (skip duplicate lint, fix import.meta.dirname) ([6bc6a01](https://github.com/carlsendk/Sail-Tracker/commit/6bc6a01ef61b0dc5775b3b1f9d52d2e806a31486))
+
 ## [0.2.0](https://github.com/carlsendk/Sail-Tracker/compare/sail-tracker-v0.1.1...sail-tracker-v0.2.0) (2026-05-07)
 
 
