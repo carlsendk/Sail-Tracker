@@ -299,6 +299,39 @@ export default [
       ),
     },
   },
+  // ─── Custom architectural rules: no inline <svg> ─────────────────────────
+  // Inline `<svg>` JSX is forbidden in component code — icons must live under
+  // `packages/ui/src/icons/` and be imported as components. This keeps diffs
+  // small, makes accessibility audits tractable, and enables shared-icon reuse.
+  // The override block below opts the icon directory out of the rule.
+  //
+  // Selector matches the lowercase JSX intrinsic `<svg>` only — uppercase
+  // `<SVG>` (which JSX treats as a custom-component reference) and JSX
+  // namespaced `<svg:x>` are out of scope. Both are vanishingly rare in real
+  // code; this rule targets the standard inline-SVG-markup anti-pattern.
+  {
+    files: ["**/*.{jsx,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          message:
+            "Inline <svg> JSX is not allowed. Add the icon as a component under packages/ui/src/icons/ and import it.",
+          selector: "JSXElement[openingElement.name.name='svg']",
+        },
+      ],
+    },
+  },
+  // Icon directory is the canonical home for inline <svg>; opt it out of the
+  // restricted-syntax rule above. This block must come AFTER the rule block so
+  // its override wins under flat-config last-match semantics.
+  {
+    files: ["packages/ui/src/icons/**/*.{jsx,tsx}"],
+    rules: {
+      "no-restricted-syntax": "off",
+    },
+  },
+
   // ─── Import / unused-imports ──────────────────────────────────────────────
   {
     files: allSourceFiles,
