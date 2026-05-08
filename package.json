@@ -1,5 +1,5 @@
 {
-  "type": "commonjs",
+  "type": "module",
   "name": "sail-tracker",
   "description": "Multi-tenant sailing trip management platform — monorepo root.",
   "private": true,
