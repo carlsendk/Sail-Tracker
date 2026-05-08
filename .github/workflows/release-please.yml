@@ -19,7 +19,7 @@ jobs:
 
     steps:
       # release-please opens its PR using this token. We use a PAT
-      # (RELEASE_PAT) instead of the default GITHUB_TOKEN so the resulting
+      # (PROJECT_PAT) instead of the default GITHUB_TOKEN so the resulting
       # `pull_request` event triggers downstream workflows (notably ci.yml's
       # `validate` job, which is required by branch protection). Events
       # produced by the default GITHUB_TOKEN are deliberately suppressed by
@@ -28,20 +28,20 @@ jobs:
       # status checks reported.
       #
       # Setup required: create a fine-grained PAT with `contents: write` and
-      # `pull_requests: write` on this repo, store it as `RELEASE_PAT` in
+      # `pull_requests: write` on this repo, store it as `PROJECT_PAT` in
       # repository secrets.
       - name: Release Please
         id: release
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.RELEASE_PAT }}
+          token: ${{ secrets.PROJECT_PAT }}
           config-file: .release-please-config.json
           manifest-file: release-please-manifest.json
 
       - name: Enable auto-merge on release PR
         if: steps.release.outputs.pr
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
+          GH_TOKEN: ${{ secrets.PROJECT_PAT }}
           PR_JSON: ${{ steps.release.outputs.pr }}
         run: |
           pr_number=$(jq -r '.number' <<<"$PR_JSON")
