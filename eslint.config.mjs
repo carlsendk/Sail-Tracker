@@ -457,26 +457,41 @@ export default [
       "jsdoc/require-asterisk-prefix": "error",
       "jsdoc/require-description": "error",
       "jsdoc/require-file-overview": "error",
-      // Require JSDoc blocks on named exports (spec intent from Fix 3).
-      // NOTE: jsdoc/no-missing-syntax (originally specified) performs a per-FILE
-      // presence check (reports if a selector is absent from the file), not a
-      // per-OCCURRENCE check. It cannot enforce "every named export has JSDoc".
-      // jsdoc/require-jsdoc with contexts is the correct rule for per-occurrence
-      // coverage. The spec intent is preserved: require JSDoc on every named export.
+      // Require JSDoc on the public surface of exports only — internal symbols are exempt.
+      // The selectors below scope coverage to the export keyword (named + default),
+      // including methods on exported classes (per B6 #10).
+      // The bare `require:` switches are all `false` so we never flag non-exported
+      // FunctionDeclaration / ClassDeclaration / etc; coverage comes solely from
+      // the AST contexts listed below.
       "jsdoc/require-jsdoc": [
         "error",
         {
           contexts: [
-            "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
+            "ExportNamedDeclaration > FunctionDeclaration",
             "ExportNamedDeclaration > ClassDeclaration",
+            "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator > ArrowFunctionExpression",
             "ExportNamedDeclaration > TSTypeAliasDeclaration",
             "ExportNamedDeclaration > TSInterfaceDeclaration",
+            "ExportDefaultDeclaration > FunctionDeclaration",
+            "ExportDefaultDeclaration > ClassDeclaration",
+            // Methods on exported classes must have JSDoc — but only public ones.
+            // The four [...] filters chain to exempt:
+            //   - constructors (documented via the class JSDoc)
+            //   - JS-private (`#name`) methods (key.type === "PrivateIdentifier")
+            //   - TS-private methods (accessibility === "private")
+            //   - TS-protected methods (accessibility === "protected")
+            // The [accessibility!='X'] form also matches the absent-modifier case, so
+            // unannotated public methods are still required to have JSDoc.
+            // eslint-disable-next-line no-secrets/no-secrets -- ESLint AST selector, not a secret; high entropy is incidental
+            "ExportNamedDeclaration > ClassDeclaration > ClassBody > MethodDefinition[kind!='constructor'][key.type!='PrivateIdentifier'][accessibility!='private'][accessibility!='protected']",
+            // eslint-disable-next-line no-secrets/no-secrets -- ESLint AST selector, not a secret; high entropy is incidental
+            "ExportDefaultDeclaration > ClassDeclaration > ClassBody > MethodDefinition[kind!='constructor'][key.type!='PrivateIdentifier'][accessibility!='private'][accessibility!='protected']",
           ],
           publicOnly: false,
           require: {
             ArrowFunctionExpression: false,
-            ClassDeclaration: true,
-            FunctionDeclaration: true,
+            ClassDeclaration: false,
+            FunctionDeclaration: false,
             FunctionExpression: false,
             MethodDefinition: false,
           },
