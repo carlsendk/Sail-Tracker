@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * Map a `state:*` label change to the Sail-Tracker Backlog Project's Status field.
+ * @file Syncs a GitHub issue's Project Status field when a state:* label is applied.
+ *
+ * Maps a `state:*` label change to the Sail-Tracker Backlog Project's Status field.
  *
  * SAFETY:
  *   - Every external value is passed via `execFileSync` arg arrays (no shell, no string
@@ -16,32 +18,49 @@
  *   PROJECT_OWNER    (e.g. "carlsendk")
  *   PROJECT_NUMBER   (e.g. "1")
  */
-import { parseArgs } from "node:util";
+
 import { execFileSync } from "node:child_process";
 import process from "node:process";
+import { parseArgs } from "node:util";
 
 const STATE_TO_STATUS = {
-  "state:ready": "Ready",
+  "state:blocked": "Blocked",
   "state:in-progress": "In Progress",
   "state:in-review": "In Review",
-  "state:blocked": "Blocked",
+  "state:ready": "Ready",
 };
 
-function gh(args) {
-  return execFileSync("gh", args, { encoding: "utf8" });
-}
-
+/**
+ * Logs an error message and exits the process with status 1.
+ * @param {string} message - The error message to print.
+ */
+// eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module CLI script; function hoisting used intentionally for procedural readability
 function fail(message) {
   console.error(message);
   process.exit(1);
 }
 
+/**
+ * Runs the `gh` CLI with the given arguments and returns stdout as a string.
+ * @param {string[]} cliArguments - The arguments to pass to the gh CLI.
+ * @returns {string} The stdout output of the command.
+ */
+// eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module CLI script; function hoisting used intentionally for procedural readability
+function gh(cliArguments) {
+  // eslint-disable-next-line sonarjs/no-os-command-from-path -- gh CLI is a known trusted tool, always resolved from PATH
+  return execFileSync("gh", cliArguments, { encoding: "utf8" });
+}
+
+/**
+ * Main entry point: parses CLI args and syncs the GitHub project Status field.
+ */
+// eslint-disable-next-line sonarjs/declarations-in-global-scope, sonarjs/cyclomatic-complexity -- ES module CLI script; function hoisting used intentionally; cyclomatic complexity is unavoidable in sequential CLI orchestration
 function main() {
   const { values } = parseArgs({
     options: {
+      action: { type: "string" },
       issue: { type: "string" },
       label: { type: "string" },
-      action: { type: "string" },
     },
   });
 
@@ -71,7 +90,7 @@ function main() {
   const itemList = JSON.parse(
     gh(["project", "item-list", projectNumber, "--owner", owner, "--format", "json", "--limit", "500"]),
   );
-  const item = itemList.items.find((i) => i.content?.number === issueNumber);
+  const item = itemList.items.find(index => index.content?.number === issueNumber);
   if (!item) {
     console.log(`Issue #${issueNumber} not in project; nothing to do.`);
     return;
@@ -80,11 +99,11 @@ function main() {
   const fieldList = JSON.parse(
     gh(["project", "field-list", projectNumber, "--owner", owner, "--format", "json"]),
   );
-  const statusField = fieldList.fields.find((f) => f.name === "Status");
+  const statusField = fieldList.fields.find(f => f.name === "Status");
   if (!statusField) {
     fail("Status field not found on project");
   }
-  const option = statusField.options.find((o) => o.name === status);
+  const option = statusField.options.find(o => o.name === status);
   if (!option) {
     fail(`Status option not found: ${status}`);
   }

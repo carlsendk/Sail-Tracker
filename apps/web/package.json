@@ -1,13 +1,15 @@
 {
+  "type": "commonjs",
   "name": "web",
+  "description": "Next.js web application for the Sail Tracker platform.",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1 --port 3002",
     "build": "next build",
+    "dev": "next dev --hostname 127.0.0.1 --port 3002",
+    "lint": "eslint .",
     "start": "next start --hostname 127.0.0.1 --port 3002",
-    "lint": "next lint",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
     "next": "15.2.2",
@@ -19,7 +21,7 @@
     "@types/node": "22.13.10",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "eslint": "9.22.0",
+    "eslint": "^9.38.0",
     "eslint-config-next": "15.2.2",
     "typescript": "5.8.2",
     "vitest": "3.0.8"

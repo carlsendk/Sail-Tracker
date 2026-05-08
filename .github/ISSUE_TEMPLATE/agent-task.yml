@@ -66,6 +66,7 @@ body:
       label: Definition of Done
       value: |
         - [ ] `pnpm validate` green locally
+        - [ ] If this issue introduces or extends a lint/static-analysis ruleset: lint exits with **zero warnings AND zero errors**, all enabled rules at `'error'` severity, and no rule is disabled at config level (`'off'`) to silence violations. Curation = choose which rules to enable; "warn-as-deferral" is not allowed.
         - [ ] PR opened with `Closes #<N>`
         - [ ] Spec reviewer subagent approval
         - [ ] Code quality reviewer subagent approval

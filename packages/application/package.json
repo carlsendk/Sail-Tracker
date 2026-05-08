@@ -1,5 +1,6 @@
 {
   "name": "@sail-tracker/application",
+  "description": "Application layer — use cases and command/query handlers for Sail Tracker.",
   "private": true,
   "type": "module"
 }

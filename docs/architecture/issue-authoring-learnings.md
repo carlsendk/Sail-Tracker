@@ -102,6 +102,20 @@ For each new milestone batch, the operator must:
 - Do Infra (Phase 1–4) issues use `domain:infra` or do we add `domain:database`, `domain:deploy`? **Tentative**: keep `domain:infra` until cardinality justifies splitting.
 - Should `priority:*` reflect dependency depth or operator urgency? **Tentative**: dependency depth (root deps = p0, leaf-most = p2) so that breadth-first pickup naturally drains the bottom of the graph.
 
+## Lint policy: zero warnings, no rules disabled at config level
+
+When an issue introduces or extends a static-analysis ruleset (ESLint, Stylelint, markdownlint, cspell, commitlint, etc.), the issue MUST end with the linter exiting **0 warnings AND 0 errors**, all enabled rules at `'error'` severity, and no rule set to `'off'` in config to silence violations.
+
+**Curation = choose which rules to enable** before enabling them. If a plugin's `recommended` preset includes rules that don't apply to the codebase (e.g. `react/react-in-jsx-scope` under Next 15's automatic JSX runtime), use a more specific preset that already excludes them (`react.configs['jsx-runtime']`) or hand-curate the rule list. Don't apply the noisy preset and then override individual rules to `'off'`.
+
+**Don't split "wiring" from "fixing".** Each lint/quality issue owns both: enabling its rules AND clearing every violation those rules surface. If the violation count from a pre-flight check is too large for one issue, escalate scope to the operator BEFORE dispatching the implementer — propose splitting the rule set into multiple issues, each with their own clean-to-zero contract.
+
+**Inline `// eslint-disable-next-line <rule> -- <justification>` IS acceptable** when a specific violation reflects intentional design (e.g. `react-hooks/rules-of-hooks` violation in test code that explicitly tests hook misuse). Blanket config-level `'rule': 'off'` is not.
+
+**One narrow config-level exception class: rules that report at `loc:{line:0,column:0}`**. Some ESLint rules (e.g. `sonarjs/file-name-differ-from-class`, `unicorn/filename-case`) attribute violations to the file itself rather than a code location. Inline `// eslint-disable-next-line` and even file-top `/* eslint-disable */` comments cannot suppress these — the disable directive lives at line 1+, which is AFTER the line-0 report; ESLint flags the directive as "unused" while the violation still fires. Verified empirically during B2 (#6): the `sonarjs/file-name-differ-from-class` violation on `apps/web/app/page.tsx` fires at `0:1`, and a `/* eslint-disable */` block comment at line 1 was reported as "unused directive" while the original error remained. For this exception class, a narrow `files:`-scoped config override is acceptable. The override block must include a comment documenting (a) the line-0 behavior, (b) the empirical inline-disable attempt and observed "unused directive" warning, and (c) the scope is as tight as the framework constraint requires (e.g. `apps/web/app/**/*.{ts,tsx}` for Next.js App Router conventions, not workspace-wide).
+
+This was learned the hard way during B2 (#6): the original issue body said "violations are expected; this issue is about wiring not a clean run." That framing produced a config with 620 surfaced warnings, all rules at `'warn'` severity, which the operator rejected. The reauthored B2 body curates which rules to enable up-front (drops `react/react-in-jsx-scope` as wrong-for-stack, defers Prettier-overlap formatting rules to B7, enables the rest at `'error'`) and requires the implementer to clean up to zero. The `agent-task.yml` Definition of Done now spells out this contract.
+
 ## End-to-end workflow validation (issue #5, B1, PR #20)
 
 The first run of the `work-next → subagent-driven-development` pipeline succeeded on the first try — implementer + spec reviewer + code reviewer each approved without re-dispatch. Captured outcomes worth carrying forward:
@@ -117,3 +131,7 @@ The first run of the `work-next → subagent-driven-development` pipeline succee
 5. **Pre-commit hook discipline confirmed**: `pnpm validate` ran via `git commit` and gated the work. No `--no-verify` needed or used. Phase B/C bodies should not bother re-saying "run validate before committing" — the hook handles it.
 
 6. **`flip-on-pr-open` is broken until PAT rotates.** Don't trust automation to flip `state:in-progress` → `state:in-review` on PR open. The controller (you) must manually flip until the PAT is fixed. Phase B/C issue bodies don't need to mention this — it's an operator concern.
+
+## TypeScript and ECMAScript target
+
+The project targets **ES2024** (`tsconfig.base.json` `"target": "ES2024"`). This was set during B2 (ESLint flat config) to enable `regexp/require-unicode-sets-regexp`, which requires the RegExp `v` flag — a syntax introduced in ES2024. Issues that introduce new syntax-level constraints (regex rules, class field rules, etc.) should assume ES2024 as the minimum target. If a proposed rule requires a higher target, escalate before enabling it.

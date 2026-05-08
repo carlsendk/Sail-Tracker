@@ -1,3 +1,5 @@
+/** @file Vitest configuration for the apps/web package. */
+
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
