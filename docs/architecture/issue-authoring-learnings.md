@@ -135,3 +135,44 @@ The first run of the `work-next → subagent-driven-development` pipeline succee
 ## TypeScript and ECMAScript target
 
 The project targets **ES2024** (`tsconfig.base.json` `"target": "ES2024"`). This was set during B2 (ESLint flat config) to enable `regexp/require-unicode-sets-regexp`, which requires the RegExp `v` flag — a syntax introduced in ES2024. Issues that introduce new syntax-level constraints (regex rules, class field rules, etc.) should assume ES2024 as the minimum target. If a proposed rule requires a higher target, escalate before enabling it.
+
+## Migration notes from B2.1 bump (#41)
+
+Major-version bumps captured here so future operators don't relearn the per-major surprise list. Sequenced one major at a time, each ending at green `pnpm validate` before the next started.
+
+### react/react-dom 19.0 → 19.2
+
+No source changes. Pure dependency bump (warm-up). Also bumped paired `@types/react` and `@types/react-dom` to track the runtime versions.
+
+### typescript 5.8 → 6.0
+
+1. **`baseUrl` is now an error**, not a warning. TS 6 emits `TS5101` on the option (to be removed in TS 7). Removed `baseUrl: "."` from `tsconfig.base.json`. To compensate, all `paths` entries gained a leading `./` (TS 6 emits `TS5090: Non-relative paths are not allowed when 'baseUrl' is not set` otherwise). Resolution semantics preserved — paths still resolve from the tsconfig file's directory.
+2. **Side-effect imports of non-JS files now require ambient module declarations.** `import "./globals.css"` in `app/layout.tsx` started erroring as `TS2882`. Added `apps/web/types/globals.d.ts` with `declare module "*.css";`. Required a `/** @file ... */` JSDoc header on the `.d.ts` to satisfy `jsdoc/require-file-overview` and `sonarjs/file-header`.
+
+### vitest 3 → 4
+
+No source changes. Our tests use only stable APIs (`describe`/`it`/`expect`, basic `vi.spyOn`/`vi.fn`); none of the v4 mock-API or `expect.poll` breaking changes apply. Default zero-config preset; no `vitest.config.*` to update.
+
+### next 15 → 16 (+ eslint-config-next 15 → 16)
+
+1. **`"type": "commonjs"` → `"type": "module"` in root and `apps/web/package.json`.** Next 16's default Turbopack bundler is strict about module-format mismatches; the codebase has been ESM throughout (matching all `packages/*/package.json` which are already `"type": "module"`), and the CommonJS declaration was a Next 15 default that lingered. Without the flip, every server import errors with "Specified module format (CommonJs) is not matching the module format of the source code (EcmaScript Modules)".
+2. **`eslint: { ignoreDuringBuilds: true }` removed from `next.config.ts`.** Next 16 removes the `next lint` command and the `eslint` config-shape key (`TS2353` if you leave it). `next build` no longer runs ESLint, so the workaround from B2 is moot. We continue to run `eslint .` directly in `pnpm lint`.
+3. **`next-env.d.ts` auto-regenerates** to include `import "./.next/types/routes.d.ts";` (Next 16 ships typed routes by default). Commit the regenerated file.
+
+### `@types/node` 22 → 25 — DEFERRED, kept at 22.x
+
+`@types/node` 25.x ships typings for APIs added through Node 25 (e.g. fresh stdlib additions, `node:sqlite`, etc.). Our `engines.node` is `">=22.0.0"` and CI pins to Node 22. If a contributor used a typed-but-not-yet-runtime API, TypeScript would happily compile it and the program would crash on Node 22. Pin the types major to track the runtime major. Bump to 23/24/25 only when the engine pin moves.
+
+### ESLint 10 — DEFERRED to a follow-up issue
+
+`eslint@10` is *empirically* incompatible with our toolchain as of 2026-05-08. Five plugins have peer-dep ranges that cap at ESLint 9 with no v10-compatible release published yet:
+
+- `eslint-plugin-import 2.32.0` (peer `^2-^9`)
+- `eslint-plugin-jest-dom 5.5.0` (peer `^6-^9`)
+- `eslint-plugin-jsx-a11y 6.10.2` (peer `^3-^9`)
+- `eslint-plugin-react 7.37.5` (peer `^3-^9.7`)
+- `eslint-plugin-vitest 0.5.4` (peer `^8.57.0 || ^9`)
+
+The vitest plugin actually breaks at runtime: its transitive `@typescript-eslint/utils@7.18.0` does `class extends LegacyESLint`, but `LegacyESLint` was removed in ESLint 10. Errors with `TypeError: Class extends value undefined is not a constructor`. Working around it (switching to `@vitest/eslint-plugin`) doesn't fix the other 4 peer-dep warnings, which violates the lint policy.
+
+**Action to take when revisiting**: open a fresh issue (B2.2) once at least 4 of the 5 plugins have published v10-compatible majors. Watch their changelogs / GitHub releases. Re-run the same compatibility audit script (`pnpm add -Dw eslint@latest @eslint/js@latest` then inspect peer warnings).
