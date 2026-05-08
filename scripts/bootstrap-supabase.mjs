@@ -62,7 +62,8 @@ for (const key of requiredEnvironment) {
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const secretKey = process.env.SUPABASE_SECRET_KEY;
 const platformAdminEmail = process.env.PLATFORM_ADMIN_EMAIL;
-const bootstrapDisplayName = process.env.SUPABASE_BOOTSTRAP_DISPLAY_NAME || "Platform Admin";
+const bootstrapDisplayName =
+  process.env.SUPABASE_BOOTSTRAP_DISPLAY_NAME || "Platform Admin";
 
 const tenantSlugs = [
   process.env.NEXT_PUBLIC_REAL_TENANT_SLUG || "club",
@@ -247,7 +248,9 @@ async function fetchRole(key) {
  */
 // eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module script using function hoisting; reordering all helpers would harm readability
 async function fetchSingle(pathname, searchParameters) {
-  const rows = await supabaseFetch(pathname, { searchParams: searchParameters });
+  const rows = await supabaseFetch(pathname, {
+    searchParams: searchParameters,
+  });
   // eslint-disable-next-line unicorn/no-null -- fetchSingle returns null to signal "not found" (REST API convention)
   return rows[0] || null;
 }
@@ -323,7 +326,10 @@ async function main() {
  * @returns {Promise<unknown>} Parsed response JSON, or null for 204 No Content.
  */
 // eslint-disable-next-line sonarjs/declarations-in-global-scope -- ES module script using function hoisting; declared after callers intentionally for readability
-async function supabaseFetch(pathname, { body, headers, method = "GET", searchParams } = {}) {
+async function supabaseFetch(
+  pathname,
+  { body, headers, method = "GET", searchParams } = {},
+) {
   const response = await fetch(createUrl(pathname, searchParams), {
     body: body ? JSON.stringify(body) : undefined,
     headers: {

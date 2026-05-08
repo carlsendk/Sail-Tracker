@@ -8,4 +8,3 @@ describe("foundation", () => {
     expect("Sail Tracker").toContain("Tracker");
   });
 });
-

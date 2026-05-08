@@ -19,10 +19,11 @@
     "paths": {
       "@sail-tracker/domain": ["./packages/domain/src/index.ts"],
       "@sail-tracker/application": ["./packages/application/src/index.ts"],
-      "@sail-tracker/infrastructure": ["./packages/infrastructure/src/index.ts"],
+      "@sail-tracker/infrastructure": [
+        "./packages/infrastructure/src/index.ts"
+      ],
       "@sail-tracker/ui": ["./packages/ui/src/index.ts"],
       "@sail-tracker/testkit": ["./packages/testkit/src/index.ts"]
     }
   }
 }
-

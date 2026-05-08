@@ -2,7 +2,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { buildEnvironmentLookup, parseEnvironmentContents } from "../lib/server-environment";
+import {
+  buildEnvironmentLookup,
+  parseEnvironmentContents,
+} from "../lib/server-environment";
 
 describe("server env", () => {
   it("parses env content and strips quotes", () => {
@@ -14,7 +17,9 @@ describe("server env", () => {
       PLATFORM_ADMIN_EMAIL=test@example.com
     `);
 
-    expect(parsed.get("NEXT_PUBLIC_SUPABASE_URL")).toBe("https://example.supabase.co");
+    expect(parsed.get("NEXT_PUBLIC_SUPABASE_URL")).toBe(
+      "https://example.supabase.co",
+    );
     expect(parsed.get("PLATFORM_ADMIN_EMAIL")).toBe("test@example.com");
   });
 

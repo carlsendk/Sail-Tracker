@@ -12,12 +12,15 @@
     "bootstrap:supabase": "node scripts/bootstrap-supabase.mjs",
     "build": "pnpm --filter web build",
     "dev": "pnpm --filter web dev",
+    "format": "prettier --write \"**/*.{ts,tsx,mts,cts,mjs,cjs,js,jsx,mdx,json,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mts,cts,mjs,cjs,js,jsx,mdx,json,yml,yaml}\"",
     "hooks:install": "node scripts/install-git-hooks.mjs",
     "lint": "eslint .",
     "start": "pnpm --filter web start",
+    "stylelint": "stylelint \"**/*.css\"",
     "test": "node --test 'tests/*.mjs' && pnpm --filter web test",
     "typecheck": "pnpm --filter web typecheck",
-    "validate": "pnpm lint && pnpm typecheck && pnpm test"
+    "validate": "pnpm format:check && pnpm stylelint && pnpm lint && pnpm typecheck && pnpm test"
   },
   "devDependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.1",
@@ -48,6 +51,9 @@
     "eslint-plugin-vitest": "^0.5.4",
     "eslint-plugin-yml": "^3.3.2",
     "globals": "^17.6.0",
+    "prettier": "^3.8.3",
+    "stylelint": "^17.11.0",
+    "stylelint-config-standard": "^40.0.0",
     "supabase": "^2.78.1",
     "typescript-eslint": "^8.59.2"
   },
