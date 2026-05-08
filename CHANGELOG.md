@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and releases use Semantic Versioning.
 
+## [0.2.0](https://github.com/carlsendk/Sail-Tracker/compare/sail-tracker-v0.1.1...sail-tracker-v0.2.0) (2026-05-07)
+
+
+### Features
+
+* **skills:** add work-next slash command ([9fc1404](https://github.com/carlsendk/Sail-Tracker/commit/9fc1404e6e3752ca5056580fcf97b05186e1ed38))
+
+
+### Bug Fixes
+
+* **ci:** install pnpm before setup-node ([e703cff](https://github.com/carlsendk/Sail-Tracker/commit/e703cff6cf783b70e156ebb00be4d3ba27d88843))
+
 ## [0.1.1](https://github.com/carlsendk/Sail-Tracker/compare/sail-tracker-v0.1.0...sail-tracker-v0.1.1) (2026-03-12)
 
 
